@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f3">
+  <meta name="description" content="Conheça a Cubic Maker: decoração, organização, presentes e peças personalizadas em impressão 3D. Explore o catálogo e peça um orçamento pelo WhatsApp.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Cubic Maker">
+  <meta property="og:title" content="Cubic Maker | Impressão 3D, decoração e peças personalizadas">
+  <meta property="og:description" content="Objetos para organizar, decorar e facilitar sua rotina. Explore categorias e solicite peças personalizadas em impressão 3D.">
+  <meta property="og:image" content="assets/photos/categories/decoracao.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Cubic Maker | Impressão 3D, decoração e peças personalizadas</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Cubic Maker",
+    "description": "Peças decorativas, organizadores, utilidades domésticas e projetos personalizados em impressão 3D.",
+    "knowsAbout": ["Impressão 3D", "Decoração", "Organização", "Peças personalizadas"]
+  }
+  </script>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="products.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="catalogo.html">Ir para o catálogo</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#inicio" aria-label="Cubic Maker, início">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="m20 3 16 9v16l-16 9L4 28V12l16-9Z"/><path d="m4 12 16 9 16-9M20 21v16m-8-29 16 9v9l-8 5-8-5v-9"/></svg></span>
+        <span class="brand-name">cubic<span>maker</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a href="catalogo.html">Catálogo</a><a href="#tendencias">Tendências</a><a href="#sobre">Sobre</a><a href="#personalizados">Personalizados</a>
+      </nav>
+      <div class="header-actions">
+        <a class="button button-outline contact-link" href="#contato">Fale com a gente <span aria-hidden="true">↗</span></a>
+        <button class="bag-button" id="openCart" type="button" aria-label="Abrir lista de interesse, 0 itens" aria-controls="cartPanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="bag-count" id="bagCount">0</span>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" type="button"><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav"><a href="catalogo.html">Catálogo</a><a href="#tendencias">Tendências</a><a href="#sobre">Sobre</a><a href="#personalizados">Personalizados</a><a href="#contato">Fale com a gente</a></div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span></span> DESIGN QUE GANHA FORMA</div>
+          <h1>Ideias únicas,<br><em>feitas camada</em><br>por camada.</h1>
+          <p>Objetos que organizam, decoram e facilitam o dia a dia. Descubra as possibilidades da impressão 3D.</p>
+          <div class="hero-actions"><a href="catalogo.html" class="button button-dark">Explorar catálogo <span aria-hidden="true">↓</span></a><a class="text-link" href="#personalizados">Crie algo só seu <span aria-hidden="true">↗</span></a></div>
+          <div class="hero-note"><span class="note-line"></span><span>Pequenos detalhes. Grandes ideias.</span></div>
+        </div>
+        <div class="hero-art" aria-label="Representação visual de uma peça geométrica criada em impressão 3D" role="img">
+          <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+          <div class="hero-object"><div class="object-top"></div><div class="object-front"></div><div class="object-side"></div><div class="object-slot"></div></div>
+          <div class="art-label label-top">DESENHADO COM INTENÇÃO <span>01 / 03</span></div><div class="art-label label-bottom">IMPRESSÃO 3D <span>↗</span></div>
+          <div class="art-dot dot-a"></div><div class="art-dot dot-b"></div><span class="art-cross">✳</span>
+        </div>
+      </div>
+      <div class="hero-bottom container"><span>DESIGN AUTORAL</span><span class="hero-bottom-rule"></span><span>PRODUÇÃO SOB DEMANDA</span><span class="hero-bottom-rule"></span><span>FEITO NO BRASIL</span></div>
+    </section>
+
+    <section class="trending-section" id="tendencias" aria-labelledby="trendingTitle">
+      <div class="container">
+        <div class="trending-heading">
+          <div><p class="section-kicker">02 / EM DESTAQUE</p><h2 id="trendingTitle">Tendências <em>do momento.</em></h2><p>Uma seleção dinâmica das peças que despertam interesse no catálogo.</p></div>
+          <div class="trending-controls" aria-label="Navegar pelas tendências"><button class="trending-arrow" id="trendingPrev" type="button" aria-label="Ver tendências anteriores"><span aria-hidden="true">←</span></button><button class="trending-arrow" id="trendingNext" type="button" aria-label="Ver próximas tendências"><span aria-hidden="true">→</span></button></div>
+        </div>
+        <div class="trending-window" id="trendingCarousel"><div class="trending-track" id="trendingTrack" aria-label="Até dez produtos em tendência"></div></div>
+      </div>
+    </section>
+
+    <section class="intro-section" id="sobre">
+      <div class="container intro-grid"><p class="section-kicker">01 / SOBRE A CUBIC MAKER</p><div><h2>O cotidiano merece<br>um pouco mais de <em>forma.</em></h2><p class="intro-text">A Cubic Maker transforma ideias em objetos funcionais e cheios de personalidade. Cada peça é pensada para encontrar seu lugar na sua rotina — e pode ser adaptada ao seu espaço.</p></div><div class="intro-stamp"><span>CM</span><small>CRIATIVIDADE<br>EM 3 DIMENSÕES</small></div></div>
+    </section>
+
+
+    <section class="custom-section" id="personalizados">
+      <div class="custom-pattern" aria-hidden="true"></div>
+      <div class="container custom-grid"><div class="custom-copy"><p class="section-kicker">03 / UMA IDEIA SUA</p><h2>Tem uma ideia?<br><em>Nós imprimimos.</em></h2><p>Conte pra gente o que você gostaria de criar. Vamos avaliar juntos a viabilidade, as medidas e os melhores materiais para transformar sua ideia em uma peça.</p><div class="custom-aside"><span class="aside-mark">✳</span><span>Cada projeto é único.<br>A produção depende de avaliação.</span></div></div>
+        <form class="custom-form" id="customForm"><label for="customIdea">O que você imaginou? <span>(opcional)</span></label><textarea id="customIdea" rows="3" maxlength="500" placeholder="Descreva sua ideia, como pretende usar ou compartilhe uma referência..."></textarea><div class="form-row"><label for="customDimensions">Dimensões aproximadas <span>(opcional)</span><input id="customDimensions" maxlength="100" placeholder="Ex.: 12 × 8 × 5 cm"></label><label for="customColor">Cor desejada <span>(opcional)</span><input id="customColor" maxlength="60" placeholder="Ex.: verde oliva"></label></div><button class="button button-light" type="submit">Incluir ideia na solicitação <span aria-hidden="true">↗</span></button><p class="form-hint" id="customFeedback" aria-live="polite">Sua ideia será incluída junto com os produtos selecionados.</p></form>
+      </div>
+    </section>
+    <section class="closing-section" id="contato"><div class="container closing-inner"><span class="closing-spark">✳</span><p>UM OBJETO, UMA NOVA POSSIBILIDADE.</p><a href="catalogo.html">Vamos encontrar a sua? <span aria-hidden="true">↗</span></a><span class="closing-note">Fale com a gente pelo WhatsApp</span></div></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand-block"><a class="brand footer-brand" href="#inicio" title="Cubic Maker — voltar ao início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="m20 3 16 9v16l-16 9L4 28V12l16-9Z"/><path d="m4 12 16 9 16-9M20 21v16m-8-29 16 9v9l-8 5-8-5v-9"/></svg></span><span class="brand-name">cubic<span>maker</span></span></a><p>Peças em impressão 3D para decorar, organizar e dar forma a novas ideias. Projetos personalizados passam por avaliação de medidas e viabilidade antes da produção.</p><nav class="footer-socials" aria-label="Redes sociais e contatos da Cubic Maker">
+        <a href="https://www.instagram.com/cubicmaker/" target="_blank" rel="noopener noreferrer" aria-label="Instagram: cubicmaker" title="Instagram · https://www.instagram.com/cubicmaker/"><img src="assets/icons/instagram.svg" alt="" width="15" height="15" loading="lazy"></a>
+        <a href="https://www.facebook.com/cubicmaker" target="_blank" rel="noopener noreferrer" aria-label="Facebook: cubicmaker" title="Facebook · https://www.facebook.com/cubicmaker"><img src="assets/icons/facebook.svg" alt="" width="15" height="15" loading="lazy"></a>
+        <a href="https://www.tiktok.com/@cubicmaker" target="_blank" rel="noopener noreferrer" aria-label="TikTok: cubicmaker" title="TikTok · https://www.tiktok.com/@cubicmaker"><img src="assets/icons/tiktok.svg" alt="" width="15" height="15" loading="lazy"></a>
+        <a href="https://www.youtube.com/@cubicmaker" target="_blank" rel="noopener noreferrer" aria-label="YouTube: cubicmaker" title="YouTube · https://www.youtube.com/@cubicmaker"><img src="assets/icons/youtube.svg" alt="" width="15" height="15" loading="lazy"></a>
+        <a class="social-whatsapp" data-whatsapp-social href="#contato" aria-label="WhatsApp da Cubic Maker" title="WhatsApp da Cubic Maker"><img src="assets/icons/whatsapp.svg" alt="" width="15" height="15" loading="lazy"></a>
+        <button class="social-email" type="button" data-info="contact" aria-label="E-mail Cubic Maker" title="E-mail comercial: veja os dados em Fale conosco"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></button>
+      </nav></div>
+      <div class="footer-column"><h2>Explore</h2><a href="catalogo.html" title="Ver todas as categorias do catálogo">Catálogo de produtos</a><a href="catalogo.html#catalogo/personalizados" title="Solicitar avaliação de uma peça personalizada">Peças personalizadas</a><a href="#sobre">Sobre a Cubic Maker</a></div>
+      <div class="footer-column footer-favorites"><h2>Mais procurados</h2><a title="Decoração natalina e presentes para o Natal" href="catalogo.html#catalogo/natal">Natal</a><a title="Ideias de presentes para o Dia das Mães" href="catalogo.html#catalogo/dia-das-maes">Dia das Mães</a><a title="Peças e presentes para o Dia dos Pais" href="catalogo.html#catalogo/dia-dos-pais">Dia dos Pais</a><a title="Decoração e lembranças de Páscoa" href="catalogo.html#catalogo/pascoa">Páscoa</a><a title="Presentes e peças para o Dia das Crianças" href="catalogo.html#catalogo/dia-das-criancas">Dia das Crianças</a><a title="Presentes para o Dia dos Namorados" href="catalogo.html#catalogo/dia-dos-namorados">Dia dos Namorados</a><a title="Lembranças personalizadas para festas e eventos" href="catalogo.html#catalogo/lembrancinhas">Lembrancinhas</a><a title="Objetos para casa e decoração" href="catalogo.html#catalogo/decoracao">Casa e decoração</a><a title="Ideias de acessórios e organização para pets" href="catalogo.html#catalogo/pets">Pets</a></div>
+      <div class="footer-column footer-payment">
+        <h2>Pagamento</h2>
+        <ul class="payment-list" aria-label="Visa, Mastercard, American Express, Elo, boleto, Hipercard e Pix">
+          <li class="payment-mark payment-visa" title="Visa"><img src="assets/icons/payment-visa.svg" alt="Visa" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-mastercard" title="Mastercard"><img src="assets/icons/payment-mastercard.svg" alt="Mastercard" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-amex" title="American Express"><img src="assets/icons/payment-amex.svg" alt="American Express" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-elo" title="Elo"><img src="assets/icons/payment-elo.svg" alt="Elo" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-boleto" title="Boleto"><img src="assets/icons/payment-boleto.svg" alt="Boleto" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-hipercard" title="Hipercard"><img src="assets/icons/payment-hipercard.svg" alt="Hipercard" width="37" height="24" loading="lazy"></li>
+          <li class="payment-mark payment-pix" title="Pix"><img src="assets/icons/pix.svg" alt="Pix" width="18" height="18" loading="lazy"></li>
+        </ul>
+      </div>
+      <div class="footer-column footer-contact"><h2>Ajuda</h2><button class="footer-info-trigger" type="button" data-info="contact" title="WhatsApp, e-mail e redes sociais da Cubic Maker">Fale conosco</button><button class="footer-info-trigger" type="button" data-info="faq" title="Respostas sobre produtos, personalização e pedidos">Perguntas frequentes</button><button class="footer-info-trigger" type="button" data-info="delivery" title="Como solicitar, confirmar e receber um pedido">Compra e entrega</button><button class="footer-info-trigger" type="button" data-info="privacy" title="Como o catálogo usa os dados da sua seleção">Privacidade</button></div>
+      <div class="footer-bottom"><span>© <span id="year"></span> Cubic Maker. Todos os direitos reservados.</span></div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="cart-panel" id="cartPanel" aria-labelledby="cartTitle" aria-hidden="true" inert>
+    <div class="panel-header"><div><p class="section-kicker">SUA SELEÇÃO</p><h2 id="cartTitle">Lista de interesse <span id="cartTitleCount">(0)</span></h2></div><button class="icon-button" id="closeCart" aria-label="Fechar lista" type="button">×</button></div>
+    <div class="cart-content" id="cartContent"></div>
+    <div class="cart-footer" id="cartFooter"><div class="cart-total" id="cartTotal"></div><button class="button button-whatsapp" id="requestQuote" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 11.8a8.3 8.3 0 0 1-12.3 7.3L3 20.3l1.3-4.9a8.3 8.3 0 1 1 16.1-3.6Z"/><path d="M8.5 8.1c.3-.6.6-.6.9-.6h.4c.2 0 .4.1.5.4l.7 1.7c.1.2.1.4-.1.6l-.5.6c-.2.2-.2.4 0 .7.6 1 1.3 1.6 2.3 2.1.2.1.5.1.6-.1l.8-.9c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.2.4.4 0 .2-.1 1-.7 1.5-.5.5-1.2.7-2 .6-1.1-.1-2.4-.7-3.6-1.6-1.4-1.1-2.5-2.8-2.8-3.7-.4-.9-.3-1.8 0-2.4Z"/></svg>Solicitar orçamento pelo WhatsApp</button><p>O WhatsApp abrirá com sua mensagem pronta. Você confirma o envio no aplicativo.</p></div>
+  </aside>
+
+  <dialog class="product-dialog" id="productDialog" aria-labelledby="dialogName"><button class="icon-button dialog-close" id="closeDialog" type="button" aria-label="Fechar detalhes">×</button><div id="dialogContent"></div></dialog>
+  <dialog class="info-dialog" id="infoDialog" aria-labelledby="infoTitle"><button class="icon-button info-dialog-close" id="closeInfoDialog" type="button" aria-label="Fechar informações">×</button><div id="infoDialogContent"></div></dialog>
+  <button class="floating-whatsapp" id="floatingWhatsApp" aria-label="Abrir lista de interesse para orçamento pelo WhatsApp" title="Orçamento pelo WhatsApp" type="button"><img src="assets/brand/whatsapp-glyph-white.svg" alt="" width="25" height="25"></button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
