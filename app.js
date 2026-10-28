@@ -61,12 +61,19 @@
   function money(value) {
     return Number(value).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
   }
-  function productSubtotal(product, quantity = 1) {
+  function versionName(version) { return version === 'reforcada' ? 'Reforçada' : 'Econômica'; }
+  function versionDescription(version) { return version === 'reforcada' ? 'Mais material, paredes espessas e maior tempo de produção.' : 'Menor consumo de material, paredes mais finas e preço mais acessível.'; }
+  function versionPrice(product, version = 'economica') {
+    if (product?.price == null) return null;
+    return Number(product.price) * (version === 'reforcada' ? 2 : 1);
+  }
+  function productSubtotal(product, quantity = 1, version = 'economica') {
     if (product?.price == null) return null;
     const count = Math.min(99, Math.max(1, Number.parseInt(quantity, 10) || 1));
+    const multiplier = version === 'reforcada' ? 2 : 1;
     return product.bundleOffer && count === Number(product.bundleOffer.quantity)
-      ? Number(product.bundleOffer.price)
-      : Number(product.price) * count;
+      ? Number(product.bundleOffer.price) * multiplier
+      : versionPrice(product, version) * count;
   }
   function productImages(product) {
     const images = Array.isArray(product?.images) ? product.images.filter(Boolean) : [];
@@ -83,9 +90,9 @@
   function colorSwatchStyle(color = '') {
     return `--swatch-color:${PRODUCT_COLOR_SWATCHES[color] || '#e7e9e3'}`;
   }
-  function productPriceMarkup(product) {
+  function productPriceMarkup(product, version = 'economica') {
     if (product.price == null) return '<span class="price-consult">Consulte disponibilidade</span>';
-    return money(product.price);
+    return money(versionPrice(product, version));
   }
   function normalizeSearch(value = '') {
     return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').replace(/\bpra\b/g, 'para').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -180,6 +187,7 @@
       if (!Array.isArray(saved)) return [];
       return saved.filter(item => item && getProduct(item.productId)).map(item => ({
         key: String(item.key || item.productId), productId: item.productId,
+        version: item.version === 'reforcada' ? 'reforcada' : 'economica',
         quantity: Math.max(1, Math.min(99, Number.parseInt(item.quantity, 10) || 1)),
         color: String(item.color || ''), size: String(item.size || ''), note: String(item.note || '').slice(0, 500)
       }));
@@ -328,12 +336,13 @@
   function addProduct(product, opts = {}) {
     const color = opts.color || '';
     const size = opts.size || '';
-    const key = `${product.id}::${color}::${size}`;
+    const version = opts.version === 'reforcada' ? 'reforcada' : 'economica';
+    const key = `${product.id}::${version}::${color}::${size}`;
     let existing = cart.find(item => item.key === key);
     if (existing) {
       existing.quantity = Math.min(99, existing.quantity + (Number(opts.quantity) || 1));
       if (opts.note) existing.note = opts.note.slice(0,500);
-    } else cart.push({ key, productId:product.id, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, note:(opts.note || '').slice(0,500) });
+    } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, note:(opts.note || '').slice(0,500) });
     saveCart(); renderCart(); showToast(`${product.name} adicionado à sua lista.`);
   }
   function renderCart() {
@@ -350,17 +359,17 @@
     const productRows = cart.map(item => {
       const product = getProduct(item.productId);
       if (!product) return '';
-      const subtotal = productSubtotal(product, item.quantity);
+      const subtotal = productSubtotal(product, item.quantity, item.version);
       const image = productImages(product)[0];
       return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
-        <div class="cart-options"><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>
+        <div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
-        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${product.price == null ? 'Consulte disponibilidade' : product.bundleOffer ? `1 un. ${money(product.price)} · exatamente ${product.bundleOffer.quantity} por ${money(product.bundleOffer.price)}; demais ${money(product.price)}/un.` : `${money(product.price)} / un.${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
+        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${product.price == null ? 'Consulte disponibilidade' : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
     }).join('');
     const customHtml = customRequest ? `<article class="cart-item custom-cart-item"><div class="custom-cart-icon">✳</div><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">PERSONALIZADO</span><h3>Projeto personalizado</h3></div><button class="remove-item" type="button" data-remove-custom aria-label="Remover pedido personalizado">×</button></div><p class="custom-summary">${escapeHTML(customRequest.idea || 'Solicitação de avaliação')}${customRequest.dimensions ? ` · ${escapeHTML(customRequest.dimensions)}` : ''}${customRequest.color ? ` · ${escapeHTML(customRequest.color)}` : ''}</p><span class="cart-unit">Valor a definir após avaliação</span></div></article>` : '';
     $('#cartContent').innerHTML = productRows + customHtml;
     const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity) || 0), 0);
+    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity, item.version) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
     $('#cartTotal').innerHTML = `<span>${known ? 'Total estimado dos produtos' : 'Total parcial dos produtos'}</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong>${known ? `<small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>` : '<small>Há itens sem preço cadastrado; consulte o orçamento.</small>'}`;
     $('#requestQuote').disabled = false;
@@ -432,18 +441,17 @@
     const arrows = images.length > 1 ? `<button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button>` : '';
     return `<div class="product-gallery"><div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}${arrows}</div>${thumbs}</div>`;
   }
-  function openDetails(id) {
+  function openDetails(id, selectedVersion = 'economica') {
     const product = getProduct(id); if (!product) return;
+    selectedVersion = selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
-    const priceDetails = product.price == null ? 'Consulte disponibilidade' : product.bundleOffer
-      ? `<strong>1 unidade: ${money(product.price)} · ${product.bundleOffer.quantity} unidades: ${money(product.bundleOffer.price)}</strong><small>Para outras quantidades, aplica-se ${money(product.price)} por unidade. A oferta de ${money(product.bundleOffer.price)} vale somente para exatamente ${product.bundleOffer.quantity} unidades.</small>`
-      : `${money(product.price)} <small>${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}</small>`;
+    const priceDetails = product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))} · ${versionName(selectedVersion)}</strong><small data-detail-pricing-note>${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}${product.bundleOffer ? ` · ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (selectedVersion === 'reforcada' ? 2 : 1))}` : ''}</small>`;
     const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
-    const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.material ? `<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material)}</strong></div>` : ''}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
-    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields"><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price" id="detailQuantityPrice" aria-live="polite">${product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1))}`}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
+    const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material || 'A confirmar para esta peça')}</strong></div>${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
+    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price" id="detailQuantityPrice" aria-live="polite">${product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
     if (!dialog.open) dialog.showModal();
     $('#closeDialog').focus();
   }
@@ -453,16 +461,17 @@
     cart.forEach(item => {
       const product = getProduct(item.productId); if (!product) return;
       itemNumber += 1;
-      const subtotal = productSubtotal(product, item.quantity);
+      const subtotal = productSubtotal(product, item.quantity, item.version);
       lines.push(`${itemNumber}. ${product.name}`, `   Quantidade: ${item.quantity}`);
       lines.push(`   Cor: ${item.color || 'a definir'}`, `   Tamanho: ${item.size || 'a definir'}`);
       if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-      lines.push(`   Preço unitário: ${product.price == null ? 'A consultar' : `${money(product.price)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
-      if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price)}; outras quantidades a ${money(product.price)} por unidade.`);
+      lines.push(`   Versão: ${versionName(item.version)}`);
+      lines.push(`   Preço unitário: ${product.price == null ? 'A consultar' : `${money(versionPrice(product,item.version))}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
+      if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}; outras quantidades a ${money(versionPrice(product,item.version))} por unidade.`);
       lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`, '');
     });
     const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity) || 0), 0);
+    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity, item.version) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
     if (cart.length) lines.push(`Total estimado dos produtos: ${known ? `${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}` : `parcial ${money(total)} (há itens a consultar)`}`, '');
     if (customRequest) {
@@ -494,12 +503,27 @@
   if ($('#backToCategories')) $('#backToCategories').addEventListener('click', openCatalog);
   if ($('#emptyCategoryRequest')) $('#emptyCategoryRequest').addEventListener('click', () => { const category = categoryBySlug.get(currentCategory); sendCategoryWhatsApp(category?.name || 'Outras ideias'); });
   window.addEventListener('hashchange', routeFromHash);
-  [productGrid,trendingTrack].filter(Boolean).forEach(grid => grid.addEventListener('click', event => { const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]'); if (add) { const product=getProduct(add.dataset.add); if (product) addProduct(product); } if (details) openDetails(details.dataset.details); }));
+  [productGrid,trendingTrack].filter(Boolean).forEach(grid => {
+    grid.addEventListener('click', event => {
+      const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]');
+      if (add) { const product=getProduct(add.dataset.add); if (product) addProduct(product); }
+      if (details) openDetails(details.dataset.details);
+    });
+  });
   if ($('#searchInput')) $('#searchInput').addEventListener('input', renderProducts);
   if ($('#sortSelect')) $('#sortSelect').addEventListener('change', renderProducts);
   $('#openCart').addEventListener('click', openCart); $('#closeCart').addEventListener('click', closeCart); overlay.addEventListener('click', closeCart);
   $('#cartContent').addEventListener('click', event => { if (event.target.closest('[data-close-cart]')) { closeCart(); if (isCatalogPage) openCatalog(); return; } const step=event.target.closest('[data-quantity-step]'); if (step) { const item=cart.find(entry=>entry.key===step.dataset.key); if (!item) return; item.quantity=Math.min(99,Math.max(1,item.quantity + Number(step.dataset.quantityStep))); saveCart(); renderCart(); return; } const remove=event.target.closest('[data-remove]'); if (remove) { cart=cart.filter(item=>item.key !== remove.dataset.remove); saveCart(); renderCart(); showToast('Produto removido da lista.'); } if (event.target.closest('[data-remove-custom]')) { customRequest=null; saveCart(); renderCart(); showToast('Solicitação personalizada removida.'); } });
-  $('#cartContent').addEventListener('change', event => { const input=event.target.closest('[data-field]'); if (!input) return; const item=cart.find(entry=>entry.key===input.dataset.key); if (!item) return; const product=getProduct(item.productId); if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1)); else if (input.dataset.field==='color' || input.dataset.field==='size') { item[input.dataset.field]=input.value; item.key=`${item.productId}::${item.color}::${item.size}`; } else item[input.dataset.field]=input.value; saveCart(); renderCart(); });
+  $('#cartContent').addEventListener('change', event => {
+    const input=event.target.closest('[data-field]'); if (!input) return;
+    const item=cart.find(entry=>entry.key===input.dataset.key); if (!item) return;
+    if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1));
+    else item[input.dataset.field]=input.value;
+    item.key=`${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}`;
+    const duplicate=cart.find(entry=>entry!==item&&entry.key===item.key);
+    if (duplicate) { duplicate.quantity=Math.min(99,duplicate.quantity+item.quantity); if (item.note) duplicate.note=item.note; cart=cart.filter(entry=>entry!==item); }
+    saveCart(); renderCart();
+  });
   $('#cartContent').addEventListener('input', event => { const input=event.target.closest('[data-field="note"]'); if (!input) return; const item=cart.find(entry=>entry.key===input.dataset.key); if (item) { item.note=input.value.slice(0,500); saveCart(); } });
   function sendCategoryWhatsApp(categoryName) {
     if (!/^\d{12,13}$/.test(CONFIG.WHATSAPP_NUMBER)) { showToast('O número de WhatsApp precisa ser configurado com DDI e DDD.'); return; }
@@ -531,7 +555,8 @@
     const value = Number.parseInt(quantity.value, 10);
     const output = $('#detailQuantityPrice');
     if (!product || !output) return;
-    output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `Subtotal: ${money(productSubtotal(product,value))}` : 'Informe de 1 a 99 unidades';
+    const version = $('#detailForm [name="version"]')?.value || 'economica';
+    output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `Subtotal: ${money(productSubtotal(product,value,version))}` : 'Informe de 1 a 99 unidades';
   });
   $('#dialogContent').addEventListener('click', event => {
     const button = event.target.closest('[data-detail-quantity-step]');
@@ -542,6 +567,19 @@
     input.dispatchEvent(new Event('input', { bubbles:true }));
   });
   $('#dialogContent').addEventListener('change', event => {
+    const version = event.target.closest('#detailForm [name="version"]');
+    if (version) {
+      const product = getProduct($('#detailForm')?.dataset.product);
+      const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
+      const unitPrice = $('[data-detail-unit-price]');
+      if (product?.price != null && unitPrice) unitPrice.textContent = `${money(versionPrice(product,version.value))} · ${versionName(version.value)}`;
+      const pricingNote = $('[data-detail-pricing-note]');
+      if (product?.price != null && pricingNote) pricingNote.textContent = `${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}${product.bundleOffer ? ` · ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (version.value === 'reforcada' ? 2 : 1))}` : ''}`;
+      const detailDescription = $('[data-detail-version-description]');
+      if (detailDescription) detailDescription.textContent = product?.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(version.value);
+      const output = $('#detailQuantityPrice');
+      if (output) output.textContent = product?.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,quantity,version.value))}`;
+    }
     const select = event.target.closest('#detailForm [name="color"]');
     if (!select) return;
     const swatch = $('[data-color-swatch]', select.parentElement);
@@ -556,7 +594,7 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
-  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } addProduct(product,{color:data.get('color'),size:data.get('size'),quantity,note:data.get('note')}); });
+  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } addProduct(product,{version:data.get('version'),color:data.get('color'),size:data.get('size'),quantity,note:data.get('note')}); });
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));
