@@ -419,9 +419,9 @@
     const dimensions = product.dimensions;
     const entries = [
       ['height','Altura'],
-      [Number.isFinite(Number(dimensions.width)) ? 'width' : 'length',Number.isFinite(Number(dimensions.width)) ? 'Largura' : 'Comprimento'],
+      [dimensions.length != null ? 'length' : dimensions.width != null ? 'width' : dimensions.diameter != null ? 'diameter' : null,dimensions.length != null ? 'Comprimento' : dimensions.width != null ? 'Largura' : 'Diâmetro da base'],
       ['depth','Profundidade']
-    ].filter(([key]) => dimensions[key] != null && Number.isFinite(Number(dimensions[key])));
+    ].filter(([key]) => key && dimensions[key] != null && Number.isFinite(Number(dimensions[key])));
     if (!entries.length) return '';
     return `<div class="detail-spec"><span>DIMENSÕES</span><strong>${entries.map(([key]) => escapeHTML(dimensions[key])).join(' × ')} mm</strong><small>${entries.map(([,label]) => label).join(' × ')}</small></div>`;
   }
@@ -440,7 +440,8 @@
       ? `<strong>1 unidade: ${money(product.price)} · ${product.bundleOffer.quantity} unidades: ${money(product.bundleOffer.price)}</strong><small>Para outras quantidades, aplica-se ${money(product.price)} por unidade. A oferta de ${money(product.bundleOffer.price)} vale somente para exatamente ${product.bundleOffer.quantity} unidades.</small>`
       : `${money(product.price)} <small>${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}</small>`;
     const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
-    const dimensionInDescription = product.detailContent?.features?.some(text => normalizeSearch(text).includes('dimensoes'));
+    const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
+    const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.material ? `<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material)}</strong></div>` : ''}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
     $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields"><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price" id="detailQuantityPrice" aria-live="polite">${product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1))}`}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
     if (!dialog.open) dialog.showModal();
