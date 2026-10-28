@@ -1,6 +1,9 @@
 (() => {
   'use strict';
-  const CONFIG = { WHATSAPP_NUMBER: '5547991611628', CONTACT_EMAIL: '', TRENDING_ENDPOINT: '' }; // Endpoint opcional: GET retorna {items:[{id,clicks}]} e POST recebe {productId,event}.
+  const CONFIG = { WHATSAPP_NUMBER: '5547991611628', CONTACT_EMAIL: 'admcubicmaker@gmail.com', TRENDING_ENDPOINT: '' }; // Endpoint opcional: GET retorna {items:[{id,clicks}]} e POST recebe {productId,event}.
+  const PRODUCT_COLORS = ['Preto','Branco','Areia','Verde oliva','Vermelho'];
+  const PRODUCT_COLOR_SWATCHES = { 'Preto':'#272927','Branco':'#ffffff','Areia':'#cbb99a','Verde oliva':'#78825b','Vermelho':'#bd493e' };
+  const PRODUCT_SIZES = ['P (8 cm)','M (12 cm)','G (16 cm)'];
   const products = Array.isArray(window.CUBIC_PRODUCTS) ? window.CUBIC_PRODUCTS : [];
   const categoryGroups = Array.isArray(window.CUBIC_CATEGORY_GROUPS) ? window.CUBIC_CATEGORY_GROUPS : [];
   const categoryEntries = categoryGroups.flatMap(group => group.categories.map(category => ({ ...category, groupTitle:group.title, groupIntro:group.intro })));
@@ -57,6 +60,29 @@
   }
   function money(value) {
     return Number(value).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+  }
+  function productSubtotal(product, quantity = 1) {
+    if (product?.price == null) return null;
+    const count = Math.min(99, Math.max(1, Number.parseInt(quantity, 10) || 1));
+    return product.bundleOffer && count === Number(product.bundleOffer.quantity)
+      ? Number(product.bundleOffer.price)
+      : Number(product.price) * count;
+  }
+  function productImages(product) {
+    const images = Array.isArray(product?.images) ? product.images.filter(Boolean) : [];
+    return images.length ? images : (product?.image ? [product.image] : []);
+  }
+  function productDescriptionMarkup(product) {
+    const content = product?.detailContent;
+    if (!content) return `<p class="dialog-description">${escapeHTML(product.fullDescription || product.description || '')}</p>`;
+    return `<div class="dialog-description dialog-description-structured">${(content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('')}${content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}</div>`;
+  }
+  function colorSwatchStyle(color = '') {
+    return `--swatch-color:${PRODUCT_COLOR_SWATCHES[color] || '#e7e9e3'}`;
+  }
+  function productPriceMarkup(product) {
+    if (product.price == null) return '<span class="price-consult">Consulte disponibilidade</span>';
+    return money(product.price);
   }
   function normalizeSearch(value = '') {
     return String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').replace(/\bpra\b/g, 'para').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -171,13 +197,16 @@
     catch { showToast('Não foi possível salvar sua seleção neste dispositivo.'); }
   }
   function optionList(options, selected = '', placeholder = 'Consulte disponibilidade') {
-    if (!Array.isArray(options) || !options.length) return `<option value="">${placeholder}</option>`;
-    return options.map(value => `<option value="${escapeHTML(value)}" ${value === selected ? 'selected' : ''}>${escapeHTML(value)}</option>`).join('');
+    if (!Array.isArray(options) || !options.length) return `<option value="">${escapeHTML(placeholder)}</option>`;
+    const values = selected && !options.includes(selected) ? [selected, ...options] : options;
+    return `<option value="" ${selected ? '' : 'selected'}>${escapeHTML(placeholder)}</option>${values.map(value => `<option value="${escapeHTML(value)}" ${value === selected ? 'selected' : ''}>${escapeHTML(value)}</option>`).join('')}`;
   }
   function productCard(product) {
+    const image = productImages(product)[0];
+    const demonstrative = product.demonstrative !== false;
     return `<article class="product-card">
-      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}"><img src="${escapeHTML(product.image || 'assets/photos/categories/decoracao.webp')}" alt="${escapeHTML(product.name)} — imagem ilustrativa demonstrativa" loading="lazy" width="640" height="480"><span class="demo-tag">DEMONSTRAÇÃO</span></button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à lista">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${(product.colors?.length || product.sizes?.length) ? `<div class="product-variations">${product.colors?.length ? `<span>Cores: ${escapeHTML(product.colors.join(', '))}</span>` : ''}${product.sizes?.length ? `<span>Opções: ${escapeHTML(product.sizes.join(', '))}</span>` : ''}</div>` : ''}<div class="product-bottom"><div class="price">${product.price == null ? '<span class="price-consult">Consulte disponibilidade</span>' : `${money(product.price)}<small> preço demonstrativo</small>`}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à lista">+</button></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p><div class="product-variations"><span>Cores: ${escapeHTML(PRODUCT_COLORS.join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span></div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
@@ -294,8 +323,8 @@
     }
   }
   function addProduct(product, opts = {}) {
-    const color = opts.color || product.colors?.[0] || '';
-    const size = opts.size || product.sizes?.[0] || '';
+    const color = opts.color || '';
+    const size = opts.size || '';
     const key = `${product.id}::${color}::${size}`;
     let existing = cart.find(item => item.key === key);
     if (existing) {
@@ -318,17 +347,19 @@
     const productRows = cart.map(item => {
       const product = getProduct(item.productId);
       if (!product) return '';
-      const subtotal = product.price == null ? null : product.price * item.quantity;
-      return `<article class="cart-item" data-key="${escapeHTML(item.key)}"><img src="${escapeHTML(product.image || 'assets/photos/categories/decoracao.webp')}" alt="" loading="lazy" width="96" height="72"><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
-        <div class="cart-options"><label>Cor<select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(product.colors,item.color)}</select></label><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(product.sizes,item.size)}</select></label></div>
+      const subtotal = productSubtotal(product, item.quantity);
+      const image = productImages(product)[0];
+      return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
+        <div class="cart-options"><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_COLORS,item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
-        <div class="cart-item-bottom"><label class="quantity-field">Qtd.<input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"></label><span class="cart-unit">${product.price == null ? 'Consulte disponibilidade' : `${money(product.price)} / un.`}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}</strong></div></div></article>`;
+        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${product.price == null ? 'Consulte disponibilidade' : product.bundleOffer ? `1 un. ${money(product.price)} · exatamente ${product.bundleOffer.quantity} por ${money(product.bundleOffer.price)}; demais ${money(product.price)}/un.` : `${money(product.price)} / un.${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
     }).join('');
     const customHtml = customRequest ? `<article class="cart-item custom-cart-item"><div class="custom-cart-icon">✳</div><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">PERSONALIZADO</span><h3>Projeto personalizado</h3></div><button class="remove-item" type="button" data-remove-custom aria-label="Remover pedido personalizado">×</button></div><p class="custom-summary">${escapeHTML(customRequest.idea || 'Solicitação de avaliação')}${customRequest.dimensions ? ` · ${escapeHTML(customRequest.dimensions)}` : ''}${customRequest.color ? ` · ${escapeHTML(customRequest.color)}` : ''}</p><span class="cart-unit">Valor a definir após avaliação</span></div></article>` : '';
     $('#cartContent').innerHTML = productRows + customHtml;
     const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (getProduct(item.productId)?.price || 0) * item.quantity, 0);
-    $('#cartTotal').innerHTML = `<span>${known ? 'Total estimado dos produtos' : 'Total parcial dos produtos'}</span><strong>${money(total)}</strong>${known ? '<small>Preços demonstrativos, sujeitos a confirmação.</small>' : '<small>Há itens sem preço cadastrado; consulte o orçamento.</small>'}`;
+    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity) || 0), 0);
+    const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
+    $('#cartTotal').innerHTML = `<span>${known ? 'Total estimado dos produtos' : 'Total parcial dos produtos'}</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong>${known ? `<small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>` : '<small>Há itens sem preço cadastrado; consulte o orçamento.</small>'}`;
     $('#requestQuote').disabled = false;
   }
   function showToast(message) {
@@ -383,14 +414,29 @@
   function dimensionsMarkup(product) {
     if (!product.dimensions) return '';
     const {height,width,depth} = product.dimensions;
-    if (![height,width,depth].every(value => Number.isFinite(Number(value)))) return '';
-    return `<div class="detail-spec"><span>DIMENSÕES</span><strong>${escapeHTML(height)} × ${escapeHTML(width)} × ${escapeHTML(depth)} mm</strong><small>Altura × largura × profundidade</small></div>`;
+    if (![height,width].some(value => Number.isFinite(Number(value)))) return '';
+    const dims = [height,width,depth].filter(value => Number.isFinite(Number(value)));
+    const labels = dims.length === 3 ? 'Altura × largura × profundidade' : 'Altura × largura';
+    return `<div class="detail-spec"><span>DIMENSÕES</span><strong>${dims.map(escapeHTML).join(' × ')} mm</strong><small>${labels}</small></div>`;
+  }
+  function galleryMarkup(product) {
+    const images = productImages(product);
+    if (!images.length) return '<div class="dialog-image"><div class="product-image-placeholder">Imagem não cadastrada</div></div>';
+    const thumbs = images.length > 1 ? `<div class="product-gallery-thumbs" aria-label="Outras imagens do produto">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div>` : '';
+    const arrows = images.length > 1 ? `<button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button>` : '';
+    return `<div class="product-gallery"><div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}${arrows}</div>${thumbs}</div>`;
   }
   function openDetails(id) {
     const product = getProduct(id); if (!product) return;
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
-    $('#dialogContent').innerHTML = `<div class="dialog-layout"><div class="dialog-image"><img src="${escapeHTML(product.image || 'assets/photos/categories/decoracao.webp')}" alt="${escapeHTML(product.name)} — foto ilustrativa demonstrativa" width="640" height="480"><span class="demo-tag">DEMONSTRAÇÃO</span></div><div class="dialog-info"><p class="section-kicker">${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${product.price == null ? 'Consulte disponibilidade' : `${money(product.price)} <small>preço demonstrativo</small>`}</div><p class="dialog-description">${escapeHTML(product.fullDescription || product.description || '')}</p><div class="detail-specs">${dimensionsMarkup(product)}${product.material ? `<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material)}</strong></div>` : ''}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}</div><form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields">${product.colors?.length ? `<label>Cor<select name="color">${optionList(product.colors,product.colors[0])}</select></label>` : '<label>Cor<select name="color"><option value="">Consulte disponibilidade</option></select></label>'}${product.sizes?.length ? `<label>Tamanho<select name="size">${optionList(product.sizes,product.sizes[0])}</select></label>` : '<label>Tamanho<select name="size"><option value="">Consulte disponibilidade</option></select></label>'}</div><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<input name="quantity" type="number" min="1" max="99" value="1"></label><button class="button button-dark" type="submit">Adicionar à lista <span aria-hidden="true">＋</span></button></div></form></div></div>`;
+    const priceDetails = product.price == null ? 'Consulte disponibilidade' : product.bundleOffer
+      ? `<strong>1 unidade: ${money(product.price)} · ${product.bundleOffer.quantity} unidades: ${money(product.bundleOffer.price)}</strong><small>Para outras quantidades, aplica-se ${money(product.price)} por unidade. A oferta de ${money(product.bundleOffer.price)} vale somente para exatamente ${product.bundleOffer.quantity} unidades.</small>`
+      : `${money(product.price)} <small>${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}</small>`;
+    const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
+    const dimensionInDescription = product.detailContent?.features?.some(text => normalizeSearch(text).includes('dimensoes'));
+    const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.material ? `<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material)}</strong></div>` : ''}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
+    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields"><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(PRODUCT_COLORS,'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price" id="detailQuantityPrice" aria-live="polite">${product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1))}`}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
     if (!dialog.open) dialog.showModal();
     $('#closeDialog').focus();
   }
@@ -400,17 +446,18 @@
     cart.forEach(item => {
       const product = getProduct(item.productId); if (!product) return;
       itemNumber += 1;
-      const subtotal = product.price == null ? null : product.price * item.quantity;
+      const subtotal = productSubtotal(product, item.quantity);
       lines.push(`${itemNumber}. ${product.name}`, `   Quantidade: ${item.quantity}`);
-      if (item.color) lines.push(`   Cor: ${item.color}`);
-      if (item.size) lines.push(`   Tamanho: ${item.size}`);
+      lines.push(`   Cor: ${item.color || 'a definir'}`, `   Tamanho: ${item.size || 'a definir'}`);
       if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-      lines.push(`   Preço unitário: ${product.price == null ? 'A consultar' : `${money(product.price)} (demonstrativo)`}`);
-      lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)} (demonstrativo)`}`, '');
+      lines.push(`   Preço unitário: ${product.price == null ? 'A consultar' : `${money(product.price)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
+      if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price)}; outras quantidades a ${money(product.price)} por unidade.`);
+      lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`, '');
     });
     const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (getProduct(item.productId)?.price || 0) * item.quantity, 0);
-    if (cart.length) lines.push(`Total estimado dos produtos: ${known ? `${money(total)} (demonstrativo)` : `parcial ${money(total)} (há itens a consultar)`}`, '');
+    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity) || 0), 0);
+    const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
+    if (cart.length) lines.push(`Total estimado dos produtos: ${known ? `${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}` : `parcial ${money(total)} (há itens a consultar)`}`, '');
     if (customRequest) {
       lines.push(`${itemNumber ? `${itemNumber + 1}. ` : ''}Projeto personalizado`, '   Solicitação de avaliação');
       if (customRequest.idea) lines.push(`   Ideia: ${customRequest.idea}`);
@@ -419,7 +466,8 @@
       lines.push('   Preço: a definir após avaliação', '');
     }
     lines.push('Gostaria de confirmar a disponibilidade, o prazo de produção e o valor do frete.');
-    lines.push('', 'Abri esta mensagem pelo catálogo. Os valores demonstrativos precisam ser confirmados.');
+    if (cart.some(item => getProduct(item.productId)?.demonstrative !== false)) lines.push('', 'Os valores demonstrativos precisam ser confirmados.');
+    lines.push('', 'A abertura do WhatsApp não envia a mensagem automaticamente; confirme o envio no aplicativo.');
     return lines.join('\n');
   }
   function sendWhatsApp() {
@@ -443,7 +491,7 @@
   if ($('#searchInput')) $('#searchInput').addEventListener('input', renderProducts);
   if ($('#sortSelect')) $('#sortSelect').addEventListener('change', renderProducts);
   $('#openCart').addEventListener('click', openCart); $('#closeCart').addEventListener('click', closeCart); overlay.addEventListener('click', closeCart);
-  $('#cartContent').addEventListener('click', event => { if (event.target.closest('[data-close-cart]')) { closeCart(); if (isCatalogPage) openCatalog(); return; } const remove=event.target.closest('[data-remove]'); if (remove) { cart=cart.filter(item=>item.key !== remove.dataset.remove); saveCart(); renderCart(); showToast('Produto removido da lista.'); } if (event.target.closest('[data-remove-custom]')) { customRequest=null; saveCart(); renderCart(); showToast('Solicitação personalizada removida.'); } });
+  $('#cartContent').addEventListener('click', event => { if (event.target.closest('[data-close-cart]')) { closeCart(); if (isCatalogPage) openCatalog(); return; } const step=event.target.closest('[data-quantity-step]'); if (step) { const item=cart.find(entry=>entry.key===step.dataset.key); if (!item) return; item.quantity=Math.min(99,Math.max(1,item.quantity + Number(step.dataset.quantityStep))); saveCart(); renderCart(); return; } const remove=event.target.closest('[data-remove]'); if (remove) { cart=cart.filter(item=>item.key !== remove.dataset.remove); saveCart(); renderCart(); showToast('Produto removido da lista.'); } if (event.target.closest('[data-remove-custom]')) { customRequest=null; saveCart(); renderCart(); showToast('Solicitação personalizada removida.'); } });
   $('#cartContent').addEventListener('change', event => { const input=event.target.closest('[data-field]'); if (!input) return; const item=cart.find(entry=>entry.key===input.dataset.key); if (!item) return; const product=getProduct(item.productId); if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1)); else if (input.dataset.field==='color' || input.dataset.field==='size') { item[input.dataset.field]=input.value; item.key=`${item.productId}::${item.color}::${item.size}`; } else item[input.dataset.field]=input.value; saveCart(); renderCart(); });
   $('#cartContent').addEventListener('input', event => { const input=event.target.closest('[data-field="note"]'); if (!input) return; const item=cart.find(entry=>entry.key===input.dataset.key); if (item) { item.note=input.value.slice(0,500); saveCart(); } });
   function sendCategoryWhatsApp(categoryName) {
@@ -453,6 +501,45 @@
   }
   $('#requestQuote').addEventListener('click', sendWhatsApp); $('#floatingWhatsApp').addEventListener('click', openCart);
   $('#closeDialog').addEventListener('click', () => dialog.close());
+  $('#dialogContent').addEventListener('click', event => {
+    const thumb = event.target.closest('[data-gallery-image]');
+    const arrow = event.target.closest('[data-gallery-step]');
+    if (!thumb && !arrow) return;
+    const form = $('#detailForm');
+    const product = getProduct(form?.dataset.product);
+    const images = productImages(product);
+    const main = $('#dialogMainImage');
+    let index = thumb ? Number(thumb.dataset.galleryImage) : images.findIndex(src => new URL(src, document.baseURI).href === main?.src);
+    if (arrow) index = ((index < 0 ? 0 : index) + Number(arrow.dataset.galleryStep) + images.length) % images.length;
+    const image = images[index];
+    if (!image || !main) return;
+    main.src = image;
+    main.alt = product?.imageAlts?.[index] || product?.imageAlt || product?.name || '';
+    $$('#dialogContent [data-gallery-image]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.galleryImage) === index)));
+  });
+  $('#dialogContent').addEventListener('input', event => {
+    const quantity = event.target.closest('#detailForm [name="quantity"]');
+    if (!quantity) return;
+    const product = getProduct($('#detailForm')?.dataset.product);
+    const value = Number.parseInt(quantity.value, 10);
+    const output = $('#detailQuantityPrice');
+    if (!product || !output) return;
+    output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `Subtotal: ${money(productSubtotal(product,value))}` : 'Informe de 1 a 99 unidades';
+  });
+  $('#dialogContent').addEventListener('click', event => {
+    const button = event.target.closest('[data-detail-quantity-step]');
+    if (!button) return;
+    const input = $('#detailForm [name="quantity"]');
+    if (!input) return;
+    input.value = String(Math.min(99, Math.max(1, (Number.parseInt(input.value,10) || 1) + Number(button.dataset.detailQuantityStep))));
+    input.dispatchEvent(new Event('input', { bubbles:true }));
+  });
+  $('#dialogContent').addEventListener('change', event => {
+    const select = event.target.closest('#detailForm [name="color"]');
+    if (!select) return;
+    const swatch = $('[data-color-swatch]', select.parentElement);
+    if (swatch) swatch.style.setProperty('--swatch-color', PRODUCT_COLOR_SWATCHES[select.value] || '#e7e9e3');
+  });
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   dialog.addEventListener('close', () => {
     renderTrendingCarousel();
@@ -462,7 +549,7 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
-  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } addProduct(product,{color:data.get('color'),size:data.get('size'),quantity,note:data.get('note')}); dialog.close(); });
+  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } addProduct(product,{color:data.get('color'),size:data.get('size'),quantity,note:data.get('note')}); });
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));
