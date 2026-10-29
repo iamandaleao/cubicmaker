@@ -75,6 +75,18 @@
       ? Number(product.bundleOffer.price) * multiplier
       : versionPrice(product, version) * count;
   }
+  function configuredUnitPrice(product, item) {
+    const options = product?.orderOptions;
+    if (!options) return versionPrice(product, item?.version);
+    if ((item?.size || options.fixedSize) !== options.pricedSize) return null;
+    return options.finishes.find(finish => finish.value === item?.finish)?.price ?? null;
+  }
+  function configuredSubtotal(product, item) {
+    const unitPrice = configuredUnitPrice(product,item);
+    return unitPrice == null ? null : unitPrice * Math.min(99,Math.max(1,Number.parseInt(item?.quantity,10)||1));
+  }
+  function cartUnitPrice(product,item) { return product?.orderOptions ? configuredUnitPrice(product,item) : versionPrice(product,item?.version); }
+  function cartSubtotal(product,item) { return product?.orderOptions ? configuredSubtotal(product,item) : productSubtotal(product,item?.quantity,item?.version); }
   function productImages(product) {
     const images = Array.isArray(product?.images) ? product.images.filter(Boolean) : [];
     return images.length ? images : (product?.image ? [product.image] : []);
@@ -91,6 +103,13 @@
     return `--swatch-color:${PRODUCT_COLOR_SWATCHES[color] || '#e7e9e3'}`;
   }
   function productPriceMarkup(product, version = 'economica') {
+    if (product.orderOptions) {
+      const prices = product.orderOptions.finishes.map(finish => Number(finish.price)).filter(Number.isFinite);
+      if (!prices.length) return '';
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? money(min) : `${money(min)} - ${money(max)}`;
+    }
     if (product.price == null) return '<span class="price-consult">Consulte disponibilidade</span>';
     return money(versionPrice(product, version));
   }
@@ -185,12 +204,22 @@
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       const saved = Array.isArray(stored) ? stored : stored?.items;
       if (!Array.isArray(saved)) return [];
-      return saved.filter(item => item && getProduct(item.productId)).map(item => ({
-        key: String(item.key || item.productId), productId: item.productId,
-        version: item.version === 'reforcada' ? 'reforcada' : 'economica',
-        quantity: Math.max(1, Math.min(99, Number.parseInt(item.quantity, 10) || 1)),
-        color: String(item.color || ''), size: String(item.size || ''), note: String(item.note || '').slice(0, 500)
-      }));
+      return saved.filter(item => item && getProduct(item.productId)).map(item => {
+        const product=getProduct(item.productId);
+        const version=item.version === 'reforcada' ? 'reforcada' : 'economica';
+        let color=String(item.color || '');
+        let size=String(item.size || '');
+        let finish=String(item.finish || '');
+        let key=String(item.key || item.productId);
+        if (product.orderOptions) {
+          size=product.orderOptions.fixedSize;
+          if (finish === 'branco') finish='sem-cor';
+          if (finish === 'pintado') finish='colorido';
+          if (finish === 'sem-cor') color='';
+          key=`${item.productId}::${version}::${color}::${size}::${finish}`;
+        }
+        return { key, productId:item.productId, version, quantity:Math.max(1,Math.min(99,Number.parseInt(item.quantity,10)||1)), color, size, finish, note:String(item.note || '').slice(0,500) };
+      });
     } catch { return []; }
   }
   function loadCustomRequest() {
@@ -215,21 +244,24 @@
   function productCard(product) {
     const image = productImages(product)[0];
     const demonstrative = product.demonstrative !== false;
+    const variations = product.orderOptions
+      ? `<span>Opções: ${escapeHTML(product.orderOptions.finishes.map(finish => finish.label).join(', '))}</span>`
+      : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span>`;
     return `<article class="product-card">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à lista">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p><div class="product-variations"><span>Cores: ${escapeHTML(productColors(product).join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span></div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p>${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
     if (!isCatalogPage) return;
-    $('#categoryGroups').innerHTML = categoryGroups.map(group => `<section class="category-group" aria-labelledby="group-${escapeHTML(group.categories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(group.categories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${group.categories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"><span class="category-illustration-label">FOTO ILUSTRATIVA</span></span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`).join('');
+    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"><span class="category-illustration-label">FOTO ILUSTRATIVA</span></span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
   }
   function renderCategories() {
     if (!isCatalogPage) return;
     if (!currentCategory) { $('#categoryFilters').innerHTML = ''; return; }
     const category = categoryBySlug.get(currentCategory);
     const group = categoryGroups.find(entry => entry.categories.some(item => item.slug === currentCategory));
-    const siblings = group?.categories || [category];
+    const siblings = group?.categories.filter(entry => !entry.hidden) || [category];
     $('#categoryFilters').innerHTML = siblings.map(entry => `<button class="category-chip ${entry.slug === currentCategory ? 'is-active' : ''}" type="button" data-category="${escapeHTML(entry.slug)}" aria-pressed="${entry.slug === currentCategory}">${escapeHTML(entry.name)}</button>`).join('');
   }
   function renderCatalogLanding() {
@@ -335,14 +367,15 @@
   }
   function addProduct(product, opts = {}) {
     const color = opts.color || '';
-    const size = opts.size || '';
+    const size = opts.size || product.orderOptions?.fixedSize || '';
     const version = opts.version === 'reforcada' ? 'reforcada' : 'economica';
-    const key = `${product.id}::${version}::${color}::${size}`;
+    const finish = opts.finish || '';
+    const key = product.orderOptions ? `${product.id}::${version}::${color}::${size}::${finish}` : `${product.id}::${version}::${color}::${size}`;
     let existing = cart.find(item => item.key === key);
     if (existing) {
       existing.quantity = Math.min(99, existing.quantity + (Number(opts.quantity) || 1));
       if (opts.note) existing.note = opts.note.slice(0,500);
-    } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, note:(opts.note || '').slice(0,500) });
+    } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, finish, note:(opts.note || '').slice(0,500) });
     saveCart(); renderCart(); showToast(`${product.name} adicionado à sua lista.`);
   }
   function renderCart() {
@@ -359,17 +392,24 @@
     const productRows = cart.map(item => {
       const product = getProduct(item.productId);
       if (!product) return '';
-      const subtotal = productSubtotal(product, item.quantity, item.version);
+      const subtotal = cartSubtotal(product,item);
       const image = productImages(product)[0];
+      const orderOptions = product.orderOptions;
+      const cartOptionMarkup = orderOptions
+        ? `<div class="cart-options"><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}"><option value="" ${item.finish ? '' : 'selected'}>Selecione uma opção</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' ? `<label>Cor do manto<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
+        : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>`;
+      const unitPrice = cartUnitPrice(product,item);
+      const selectedFinish = orderOptions?.finishes.find(finish => finish.value === item.finish);
+      const unitLabel = orderOptions ? (unitPrice == null ? '' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`;
       return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
-        <div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>
+        ${cartOptionMarkup}
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
-        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${product.price == null ? 'Consulte disponibilidade' : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
+        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${escapeHTML(unitLabel)}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
     }).join('');
     const customHtml = customRequest ? `<article class="cart-item custom-cart-item"><div class="custom-cart-icon">✳</div><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">PERSONALIZADO</span><h3>Projeto personalizado</h3></div><button class="remove-item" type="button" data-remove-custom aria-label="Remover pedido personalizado">×</button></div><p class="custom-summary">${escapeHTML(customRequest.idea || 'Solicitação de avaliação')}${customRequest.dimensions ? ` · ${escapeHTML(customRequest.dimensions)}` : ''}${customRequest.color ? ` · ${escapeHTML(customRequest.color)}` : ''}</p><span class="cart-unit">Valor a definir após avaliação</span></div></article>` : '';
     $('#cartContent').innerHTML = productRows + customHtml;
-    const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity, item.version) || 0), 0);
+    const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
+    const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
     $('#cartTotal').innerHTML = `<span>${known ? 'Total estimado dos produtos' : 'Total parcial dos produtos'}</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong>${known ? `<small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>` : '<small>Há itens sem preço cadastrado; consulte o orçamento.</small>'}`;
     $('#requestQuote').disabled = false;
@@ -446,12 +486,18 @@
     selectedVersion = selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
-    const priceDetails = product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))} · ${versionName(selectedVersion)}</strong><small data-detail-pricing-note>${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}${product.bundleOffer ? ` · ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (selectedVersion === 'reforcada' ? 2 : 1))}` : ''}</small>`;
+    const priceDetails = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))}</strong>`;
     const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
-    const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}<div class="detail-spec"><span>MATERIAL</span><strong>${escapeHTML(product.material || 'A confirmar para esta peça')}</strong></div>${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
-    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}"><div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a><label class="dialog-note">Observações ou personalização<textarea name="note" rows="2" maxlength="500" placeholder="Opcional"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price" id="detailQuantityPrice" aria-live="polite">${product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
+    const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
+    const orderFields = product.orderOptions
+      ? `<p class="detail-version-description"><strong>Observações:</strong> Temos outros tamanhos disponíveis (3 cm, 7,5 cm e 10 cm). Se quiser um deles, mande mensagem pelo WhatsApp e informe o tamanho no campo abaixo. Para comprar mais unidades, consulte os descontos pelo WhatsApp e informe a quantidade no campo abaixo para cotar.</p><div class="dialog-fields"><label>Acabamento<select name="finish" required><option value="" selected>Selecione Colorido ou Sem cor</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select></label><label data-sash-field hidden>Cor do manto<select name="color">${optionList(product.orderOptions.colors,'','Selecione uma cor')}</select></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
+      : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
+    const initialSubtotal = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`;
+    const noteLabel = product.orderOptions ? 'Observações para cotação' : 'Observações ou personalização';
+    const notePlaceholder = product.orderOptions ? 'Informe aqui outro tamanho ou a quantidade para consultar pelo WhatsApp.' : 'Opcional';
+    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}">${orderFields}<label class="dialog-note">${noteLabel}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price${product.orderOptions ? ' detail-price-highlight' : ''}" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
     if (!dialog.open) dialog.showModal();
     $('#closeDialog').focus();
   }
@@ -461,8 +507,19 @@
     cart.forEach(item => {
       const product = getProduct(item.productId); if (!product) return;
       itemNumber += 1;
-      const subtotal = productSubtotal(product, item.quantity, item.version);
-      lines.push(`${itemNumber}. ${product.name}`, `   Quantidade: ${item.quantity}`);
+      const subtotal = cartSubtotal(product,item);
+      lines.push(`${itemNumber}. ${product.whatsappName || product.name}`, `   Quantidade: ${item.quantity}`);
+      if (product.orderOptions) {
+        const finish = product.orderOptions.finishes.find(entry => entry.value === item.finish);
+        lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Cor do manto / acabamento: ${finish?.label || 'a definir'}`);
+        if (finish?.value === 'colorido') lines.push(`   Cor do manto: ${item.color || 'a definir'}`, '   A cor escolhida altera somente a faixa do manto; as demais partes permanecem conforme o modelo original.');
+        if (finish?.value === 'sem-cor') lines.push('   O boneco inteiro será branco, sem pintura.');
+        if (item.note.trim()) lines.push(`   Observações para cotação: ${item.note.trim()}`);
+        const unitPrice = cartUnitPrice(product,item);
+        lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`);
+        lines.push(`   ${product.orderOptions.discountNote}`,'');
+        return;
+      }
       lines.push(`   Cor: ${item.color || 'a definir'}`, `   Tamanho: ${item.size || 'a definir'}`);
       if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
       lines.push(`   Versão: ${versionName(item.version)}`);
@@ -470,8 +527,8 @@
       if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}; outras quantidades a ${money(versionPrice(product,item.version))} por unidade.`);
       lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`, '');
     });
-    const known = cart.every(item => getProduct(item.productId)?.price != null);
-    const total = cart.reduce((sum,item) => sum + (productSubtotal(getProduct(item.productId), item.quantity, item.version) || 0), 0);
+    const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
+    const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
     if (cart.length) lines.push(`Total estimado dos produtos: ${known ? `${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}` : `parcial ${money(total)} (há itens a consultar)`}`, '');
     if (customRequest) {
@@ -488,6 +545,11 @@
   }
   function sendWhatsApp() {
     if (!cart.length && !customRequest) { showToast('Adicione produtos à lista antes de solicitar um orçamento.'); return; }
+    const incomplete = cart.some(item => {
+      const product = getProduct(item.productId);
+      return product?.orderOptions && (!item.size || !item.finish || (item.finish === 'colorido' && !item.color));
+    });
+    if (incomplete) { showToast('Selecione o acabamento e a cor do manto se escolher a opção colorido.'); return; }
     if (!/^\d{12,13}$/.test(CONFIG.WHATSAPP_NUMBER)) { showToast('O número de WhatsApp precisa ser configurado com DDI e DDD.'); return; }
     const url = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -506,7 +568,7 @@
   [productGrid,trendingTrack].filter(Boolean).forEach(grid => {
     grid.addEventListener('click', event => {
       const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]');
-      if (add) { const product=getProduct(add.dataset.add); if (product) addProduct(product); }
+      if (add) { const product=getProduct(add.dataset.add); if (product?.orderOptions) openDetails(product.id); else if (product) addProduct(product); }
       if (details) openDetails(details.dataset.details);
     });
   });
@@ -517,9 +579,11 @@
   $('#cartContent').addEventListener('change', event => {
     const input=event.target.closest('[data-field]'); if (!input) return;
     const item=cart.find(entry=>entry.key===input.dataset.key); if (!item) return;
+    const itemProduct=getProduct(item.productId);
     if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1));
     else item[input.dataset.field]=input.value;
-    item.key=`${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}`;
+    if (itemProduct?.orderOptions && input.dataset.field === 'finish' && item.finish !== 'colorido') item.color='';
+    item.key=itemProduct?.orderOptions ? `${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}::${item.finish || ''}` : `${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}`;
     const duplicate=cart.find(entry=>entry!==item&&entry.key===item.key);
     if (duplicate) { duplicate.quantity=Math.min(99,duplicate.quantity+item.quantity); if (item.note) duplicate.note=item.note; cart=cart.filter(entry=>entry!==item); }
     saveCart(); renderCart();
@@ -555,6 +619,15 @@
     const value = Number.parseInt(quantity.value, 10);
     const output = $('#detailQuantityPrice');
     if (!product || !output) return;
+    if (product.orderOptions) {
+      const finish = $('#detailForm [name="finish"]')?.value;
+      const size = product.orderOptions.fixedSize;
+      const color = $('#detailForm [name="color"]')?.value || '';
+      const ready = finish === 'sem-cor' || (finish === 'colorido' && color);
+      const unitPrice = ready && size === product.orderOptions.pricedSize ? product.orderOptions.finishes.find(entry => entry.value === finish)?.price : null;
+      output.textContent = !Number.isFinite(value) || value < 1 || value > 99 ? 'Informe de 1 a 99 unidades' : unitPrice == null ? '' : `${value > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * value)}`;
+      return;
+    }
     const version = $('#detailForm [name="version"]')?.value || 'economica';
     output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `Subtotal: ${money(productSubtotal(product,value,version))}` : 'Informe de 1 a 99 unidades';
   });
@@ -567,14 +640,35 @@
     input.dispatchEvent(new Event('input', { bubbles:true }));
   });
   $('#dialogContent').addEventListener('change', event => {
+    const product = getProduct($('#detailForm')?.dataset.product);
+    if (product?.orderOptions && event.target.matches('#detailForm [name="finish"], #detailForm [name="color"]')) {
+      const finishValue = $('#detailForm [name="finish"]').value;
+      const finish = product.orderOptions.finishes.find(entry => entry.value === finishValue);
+      const sashField = $('[data-sash-field]');
+      const colorSelect = $('#detailForm [name="color"]');
+      const showColor = finishValue === 'colorido';
+      if (sashField) sashField.hidden = !showColor;
+      if (colorSelect) {
+        colorSelect.required = showColor;
+        if (!showColor) colorSelect.value = '';
+      }
+      const output = $('#detailQuantityPrice');
+      const ready = finishValue === 'sem-cor' || (finishValue === 'colorido' && colorSelect?.value);
+      const unitPrice = ready && product.orderOptions.fixedSize === product.orderOptions.pricedSize ? finish?.price : null;
+      const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
+      if (output) output.textContent = unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
+      const unitLabel = $('[data-detail-unit-price]');
+      if (unitLabel) unitLabel.textContent = unitPrice == null ? 'Selecione uma opção' : money(unitPrice);
+      const choiceNote = $('[data-detail-version-description]');
+      if (choiceNote) choiceNote.textContent = finish?.value === 'sem-cor' ? 'Sem cor: o boneco inteiro será branco, sem pintura.' : finish?.value === 'colorido' ? 'Colorido: escolha a cor do manto; somente a faixa muda de cor.' : 'Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.';
+      return;
+    }
     const version = event.target.closest('#detailForm [name="version"]');
     if (version) {
       const product = getProduct($('#detailForm')?.dataset.product);
       const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
       const unitPrice = $('[data-detail-unit-price]');
-      if (product?.price != null && unitPrice) unitPrice.textContent = `${money(versionPrice(product,version.value))} · ${versionName(version.value)}`;
-      const pricingNote = $('[data-detail-pricing-note]');
-      if (product?.price != null && pricingNote) pricingNote.textContent = `${product.demonstrative === false ? 'por unidade' : 'preço demonstrativo'}${product.bundleOffer ? ` · ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (version.value === 'reforcada' ? 2 : 1))}` : ''}`;
+      if (product?.price != null && unitPrice) unitPrice.textContent = money(versionPrice(product,version.value));
       const detailDescription = $('[data-detail-version-description]');
       if (detailDescription) detailDescription.textContent = product?.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(version.value);
       const output = $('#detailQuantityPrice');
@@ -594,7 +688,7 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
-  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } addProduct(product,{version:data.get('version'),color:data.get('color'),size:data.get('size'),quantity,note:data.get('note')}); });
+  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } if (product.orderOptions && (!data.get('finish') || (data.get('finish') === 'colorido' && !data.get('color')))) { showToast('Selecione o acabamento e a cor do manto para a opção colorida.'); return; } addProduct(product,{version:data.get('version'),finish:data.get('finish'),color:data.get('color'),size:product.orderOptions?.fixedSize || data.get('size'),quantity,note:data.get('note')}); });
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));

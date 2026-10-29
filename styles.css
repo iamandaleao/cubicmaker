@@ -278,6 +278,12 @@
 .product-variations{height:2.9em;min-height:2.9em;overflow:hidden}
 .product-variations>span{min-height:1.45em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .product-title-link{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.detail-price-highlight:empty{display:none}
+.detail-price-highlight:not(:empty){grid-column:1/-1;justify-self:stretch;align-self:stretch;order:-1;padding:14px 18px;border:2px solid var(--orange);border-radius:4px;background:#fff5ed;color:var(--orange-dark);font-size:20px;font-weight:800;line-height:1.2;text-align:center;white-space:normal;box-shadow:0 3px 12px rgba(120,65,36,.1)}
+.dialog-add-row:has(.detail-price-highlight:not(:empty)) .detail-price-highlight{grid-row:1}
+.dialog-add-row:has(.detail-price-highlight:not(:empty)) .quantity-field{grid-column:1;grid-row:2}
+.dialog-add-row:has(.detail-price-highlight:not(:empty))>button{grid-column:3;grid-row:2}
+@media(max-width:600px){.detail-price-highlight:not(:empty){padding:12px;font-size:18px}}
 .product-title-link:hover,.product-title-link:focus-visible{color:var(--orange-dark);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:1100px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:29px 36px}.footer-bottom{grid-column:1/-1}}
 @media(max-width:600px){.site-footer{padding:36px 0 18px}.footer-grid{gap:25px 18px}.footer-brand-block{grid-column:1/-1}.footer-brand-block,.footer-column{min-width:0}.footer-column h2{font-size:8px}.footer-column>a,.footer-info-trigger,.footer-brand-block>p,.footer-column>p{font-size:9px}.footer-bottom{flex-direction:column;gap:6px;padding-top:14px}.footer-socials{flex-wrap:nowrap;gap:6px}.footer-favorites{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 9px}.footer-socials>a,.footer-socials>button{width:29px;height:29px;flex:0 0 29px}.social-handle{white-space:nowrap}.floating-whatsapp{right:14px;bottom:14px;width:52px;height:52px}.floating-whatsapp img{width:23px;height:23px}.info-dialog{padding:35px 21px 25px}.info-dialog-content p,.info-dialog-content li{font-size:11px}}
