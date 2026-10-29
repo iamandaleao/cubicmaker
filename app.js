@@ -108,7 +108,8 @@
       if (!prices.length) return '';
       const min = Math.min(...prices);
       const max = Math.max(...prices);
-      return min === max ? money(min) : `${money(min)} - ${money(max)}`;
+      const priceText = min === max ? money(min) : `${money(min)} - ${money(max)}`;
+      return `<span class="option-price-range">${priceText}</span>`;
     }
     if (product.price == null) return '<span class="price-consult">Consulte disponibilidade</span>';
     return money(versionPrice(product, version));
@@ -492,11 +493,11 @@
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
     const orderFields = product.orderOptions
-      ? `<p class="detail-version-description"><strong>Observações:</strong> Temos outros tamanhos disponíveis (3 cm, 7,5 cm e 10 cm). Se quiser um deles, mande mensagem pelo WhatsApp e informe o tamanho no campo abaixo. Para comprar mais unidades, consulte os descontos pelo WhatsApp e informe a quantidade no campo abaixo para cotar.</p><div class="dialog-fields"><label>Acabamento<select name="finish" required><option value="" selected>Selecione Colorido ou Sem cor</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select></label><label data-sash-field hidden>Cor do manto<select name="color">${optionList(product.orderOptions.colors,'','Selecione uma cor')}</select></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
+      ? `<p class="detail-version-description detail-order-observation">Tamanhos disponíveis: 3 cm, 7,5 cm e 10 cm.<br><br>Para mais quantidades, consulte pelo WhatsApp.</p><div class="dialog-fields"><label><span class="sr-only">Acabamento</span><select name="finish" aria-label="Acabamento" required><option value="" selected hidden>Acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select></label><label data-sash-field hidden><span class="sr-only">Cor do manto</span><select name="color" aria-label="Cor do manto"><option value="" selected hidden>Cor do manto</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
       : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
     const initialSubtotal = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`;
     const noteLabel = product.orderOptions ? 'Observações para cotação' : 'Observações ou personalização';
-    const notePlaceholder = product.orderOptions ? 'Informe aqui outro tamanho ou a quantidade para consultar pelo WhatsApp.' : 'Opcional';
+    const notePlaceholder = product.orderOptions ? 'Informe outro tamanho ou quantidade para consultar pelo WhatsApp.' : 'Opcional';
     $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}">${orderFields}<label class="dialog-note">${noteLabel}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price${product.orderOptions ? ' detail-price-highlight' : ''}" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
     if (!dialog.open) dialog.showModal();
     $('#closeDialog').focus();
@@ -656,7 +657,16 @@
       const ready = finishValue === 'sem-cor' || (finishValue === 'colorido' && colorSelect?.value);
       const unitPrice = ready && product.orderOptions.fixedSize === product.orderOptions.pricedSize ? finish?.price : null;
       const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
-      if (output) output.textContent = unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
+      if (output) {
+        output.textContent = unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
+        output.classList.remove('is-updating');
+        if (output.textContent) {
+          void output.offsetWidth;
+          output.classList.add('is-updating');
+          window.clearTimeout(output.priceAnimationTimer);
+          output.priceAnimationTimer = window.setTimeout(() => output.classList.remove('is-updating'), 500);
+        }
+      }
       const unitLabel = $('[data-detail-unit-price]');
       if (unitLabel) unitLabel.textContent = unitPrice == null ? 'Selecione uma opção' : money(unitPrice);
       const choiceNote = $('[data-detail-version-description]');
