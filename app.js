@@ -25,6 +25,7 @@
   let currentCategory = null;
   let toastTimer;
   let lastFocus = null;
+  let quoteSubmitPending = false;
   let productClickCounts = loadProductClickCounts();
   let sharedTrendingCounts = null;
   let trendingTimer = null;
@@ -235,7 +236,8 @@
   }
   function saveCart() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ items:cart, customRequest })); }
-    catch { showToast('Não foi possível salvar sua seleção neste dispositivo.'); }
+    catch { showToast('Não foi possível salvar a cotação neste navegador. Tente novamente.'); return false; }
+    return true;
   }
   function optionList(options, selected = '', placeholder = 'Consulte disponibilidade') {
     if (!Array.isArray(options) || !options.length) return `<option value="">${escapeHTML(placeholder)}</option>`;
@@ -249,7 +251,7 @@
       ? `<span>Opções: ${escapeHTML(product.orderOptions.finishes.map(finish => finish.label).join(', '))}</span>`
       : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span>`;
     return `<article class="product-card">
-      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à lista">+</button></div>
+      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
       <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p>${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
@@ -270,7 +272,9 @@
     currentCategory = null;
     document.title = 'Catálogo de produtos em impressão 3D | Cubic Maker';
     document.body.classList.add('catalog-mode');
+    document.body.classList.remove('catalog-products-view');
     $('#catalogLanding').hidden = false;
+    if ($('#allProductsView')) $('#allProductsView').hidden = true;
     $('#categoryProductsView').hidden = true;
     $('#catalogQuickSearchInput').value = '';
     $('#searchInput').value = '';
@@ -284,7 +288,9 @@
     currentCategory = null;
     document.title = `Busca por ${term} — Catálogo | Cubic Maker`;
     document.body.classList.add('catalog-mode');
+    document.body.classList.add('catalog-products-view');
     $('#catalogLanding').hidden = true;
+    if ($('#allProductsView')) $('#allProductsView').hidden = true;
     $('#categoryProductsView').hidden = false;
     $('#breadcrumbCategory').textContent = 'Busca';
     $('#categoryGroupName').textContent = 'BUSCA / TODOS OS PRODUTOS';
@@ -309,7 +315,9 @@
     document.title = `${category.name} — Catálogo | Cubic Maker`;
     currentCategory = slug;
     document.body.classList.add('catalog-mode');
+    document.body.classList.add('catalog-products-view');
     $('#catalogLanding').hidden = true;
+    if ($('#allProductsView')) $('#allProductsView').hidden = true;
     $('#categoryProductsView').hidden = false;
     $('#breadcrumbCategory').textContent = category.name;
     $('#categoryGroupName').textContent = `CATÁLOGO / ${category.groupTitle.toLocaleUpperCase('pt-BR')}`;
@@ -328,10 +336,28 @@
     if (location.hash !== '#catalogo') history.pushState(null,'','#catalogo');
     renderCatalogLanding();
   }
+  function showAllProducts() {
+    if (!isCatalogPage || !$('#allProductsView')) return;
+    currentCategory = null;
+    document.title = 'Nossos Produtos | Cubic Maker';
+    document.body.classList.add('catalog-mode');
+    document.body.classList.remove('catalog-products-view');
+    $('#catalogLanding').hidden = true;
+    $('#categoryProductsView').hidden = true;
+    $('#allProductsView').hidden = false;
+    const select = $('#allProductsCategory');
+    if (select.options.length === 1) {
+      const categories = [...new Set(products.flatMap(product => product.categories || [product.category]).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
+      select.insertAdjacentHTML('beforeend', categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`).join(''));
+    }
+    renderAllProducts();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
   function routeFromHash() {
     if (!isCatalogPage) return;
     const hash = location.hash.slice(1);
     if (hash === 'catalogo' || !hash) { renderCatalogLanding(); return; }
+    if (hash === 'produtos') { showAllProducts(); return; }
     if (hash.startsWith('catalogo/')) { showCategory(hash.slice('catalogo/'.length)); return; }
     if (hash.startsWith('buscar/')) {
       let query = '';
@@ -366,7 +392,24 @@
       $('#emptyCategoryRequest').hidden = false;
     }
   }
+  function renderAllProducts() {
+    const grid = $('#allProductsGrid');
+    if (!grid) return;
+    const query = $('#allProductsSearch').value.trim();
+    const category = $('#allProductsCategory').value;
+    const visible = products.filter(product => (!category || (product.categories || [product.category]).includes(category)) && matchesSearch(product,query))
+      .sort((a,b) => (a.featured || 999) - (b.featured || 999));
+    grid.innerHTML = visible.map(product => {
+      const image = productImages(product)[0];
+      return `<article class="all-products-card"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
+    }).join('');
+    const count = $('#allProductsCount');
+    count.textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
+    $('#allProductsEmpty').hidden = visible.length !== 0;
+    grid.hidden = visible.length === 0;
+  }
   function addProduct(product, opts = {}) {
+    const previousCart = cart.map(item => ({ ...item }));
     const color = opts.color || '';
     const size = opts.size || product.orderOptions?.fixedSize || '';
     const version = opts.version === 'reforcada' ? 'reforcada' : 'economica';
@@ -377,7 +420,14 @@
       existing.quantity = Math.min(99, existing.quantity + (Number(opts.quantity) || 1));
       if (opts.note) existing.note = opts.note.slice(0,500);
     } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, finish, note:(opts.note || '').slice(0,500) });
-    saveCart(); renderCart(); showToast(`${product.name} adicionado à sua lista.`);
+    if (!saveCart()) {
+      cart = previousCart;
+      renderCart();
+      return false;
+    }
+    renderCart();
+    showToast('Produto adicionado à cotação.');
+    return true;
   }
   function renderCart() {
     const totalItems = cart.reduce((sum,item) => sum + item.quantity, 0) + (customRequest ? 1 : 0);
@@ -412,7 +462,9 @@
     const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
     const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
-    $('#cartTotal').innerHTML = `<span>${known ? 'Total estimado dos produtos' : 'Total parcial dos produtos'}</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong>${known ? `<small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>` : '<small>Há itens sem preço cadastrado; consulte o orçamento.</small>'}`;
+    $('#cartTotal').innerHTML = known
+      ? `<span>Total estimado dos produtos</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong><small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>`
+      : '<span>Valores a confirmar pelo WhatsApp</span><small>Há itens sem preço cadastrado; solicite o orçamento.</small>';
     $('#requestQuote').disabled = false;
   }
   function showToast(message) {
@@ -478,9 +530,8 @@
   function galleryMarkup(product) {
     const images = productImages(product);
     if (!images.length) return '<div class="dialog-image"><div class="product-image-placeholder">Imagem não cadastrada</div></div>';
-    const thumbs = images.length > 1 ? `<div class="product-gallery-thumbs" aria-label="Outras imagens do produto">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div>` : '';
-    const arrows = images.length > 1 ? `<button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button>` : '';
-    return `<div class="product-gallery"><div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}${arrows}</div>${thumbs}</div>`;
+    const controls = images.length > 1 ? `<div class="product-gallery-controls"><div class="product-gallery-thumbs" aria-label="Miniaturas de ${escapeHTML(product.name)}">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-controls="dialogMainImage" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div><div class="gallery-navigation"><span data-gallery-position aria-live="polite">1/${images.length}</span><button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button></div></div>` : '';
+    return `<div class="product-gallery"><div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</div>${controls}</div>`;
   }
   function openDetails(id, selectedVersion = 'economica') {
     const product = getProduct(id); if (!product) return;
@@ -493,12 +544,29 @@
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
     const orderFields = product.orderOptions
-      ? `<p class="detail-version-description detail-order-observation">Tamanhos disponíveis: 3 cm, 7,5 cm e 10 cm.<br><br>Para mais quantidades, consulte pelo WhatsApp.</p><div class="dialog-fields"><label><span class="sr-only">Acabamento</span><select name="finish" aria-label="Acabamento" required><option value="" selected hidden>Acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select></label><label data-sash-field hidden><span class="sr-only">Cor do manto</span><select name="color" aria-label="Cor do manto"><option value="" selected hidden>Cor do manto</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
+      ? `<p class="detail-version-description detail-order-observation">Tamanhos disponíveis: 3 cm, 7,5 cm e 10 cm.<br><br>Para mais quantidades, consulte pelo WhatsApp.</p><div class="dialog-fields"><label class="detail-option-field"><span class="sr-only">Acabamento</span><select id="detailFinish" name="finish" aria-label="Acabamento" aria-describedby="finishError" required><option value="" selected hidden>Acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select><span class="field-error" id="finishError" hidden>Selecione um acabamento para continuar.</span></label><label class="detail-option-field" data-sash-field hidden><span class="sr-only">Cor do manto</span><select id="detailColor" name="color" aria-label="Cor do manto" aria-describedby="colorError"><option value="" selected hidden>Cor do manto</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select><span class="field-error" id="colorError" hidden>Selecione uma cor do manto para continuar.</span></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
       : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
     const initialSubtotal = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`;
     const noteLabel = product.orderOptions ? 'Observações para cotação' : 'Observações ou personalização';
     const notePlaceholder = product.orderOptions ? 'Informe outro tamanho ou quantidade para consultar pelo WhatsApp.' : 'Opcional';
-    $('#dialogContent').innerHTML = `<div class="dialog-layout">${galleryMarkup(product)}<div class="dialog-info"><p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2><div class="dialog-price">${priceDetails}</div>${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}<form id="detailForm" data-product="${escapeHTML(product.id)}">${orderFields}<label class="dialog-note">${noteLabel}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label><div class="dialog-add-row"><label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">▲</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">▼</button></span></span></label><output class="detail-quantity-price${product.orderOptions ? ' detail-price-highlight' : ''}" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output><button class="button button-dark" type="submit" aria-label="Adicionar ${escapeHTML(product.name)} à sacola">Adicionar</button></div></form></div></div>`;
+    $('#dialogContent').innerHTML = `<div class="dialog-layout">
+      ${galleryMarkup(product)}
+      <div class="dialog-info">
+        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2>
+        <div class="dialog-price">${priceDetails}</div>
+        ${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
+        <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
+          ${orderFields}
+          <label class="dialog-note">${noteLabel}<span class="dialog-help">${product.orderOptions ? 'Use este campo para informar tamanhos ou quantidades especiais.' : 'Opcional: informe personalizações ou detalhes do pedido.'}</span><textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>
+          <div class="dialog-add-row">
+            <label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>
+            <output class="detail-quantity-price${product.orderOptions ? ' detail-price-highlight' : ''}" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
+            <button class="button button-dark" type="submit" data-add-to-quote aria-label="Adicionar ${escapeHTML(product.name)} à cotação">Adicionar à cotação</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    $('#dialogContent').scrollTop = 0;
     if (!dialog.open) dialog.showModal();
     $('#closeDialog').focus();
   }
@@ -509,10 +577,12 @@
       const product = getProduct(item.productId); if (!product) return;
       itemNumber += 1;
       const subtotal = cartSubtotal(product,item);
-      lines.push(`${itemNumber}. ${product.whatsappName || product.name}`, `   Quantidade: ${item.quantity}`);
+      lines.push(`${itemNumber}. ${product.name}`, `   Quantidade: ${item.quantity}`);
+      const productLink = product.url || product.productUrl;
+      if (productLink) lines.push(`   Link: ${productLink}`);
       if (product.orderOptions) {
         const finish = product.orderOptions.finishes.find(entry => entry.value === item.finish);
-        lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Cor do manto / acabamento: ${finish?.label || 'a definir'}`);
+        lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Acabamento: ${finish?.label || 'a definir'}`);
         if (finish?.value === 'colorido') lines.push(`   Cor do manto: ${item.color || 'a definir'}`, '   A cor escolhida altera somente a faixa do manto; as demais partes permanecem conforme o modelo original.');
         if (finish?.value === 'sem-cor') lines.push('   O boneco inteiro será branco, sem pintura.');
         if (item.note.trim()) lines.push(`   Observações para cotação: ${item.note.trim()}`);
@@ -531,7 +601,7 @@
     const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
     const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
     const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
-    if (cart.length) lines.push(`Total estimado dos produtos: ${known ? `${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}` : `parcial ${money(total)} (há itens a consultar)`}`, '');
+    if (cart.length && known) lines.push(`Total estimado dos produtos: ${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}`, '');
     if (customRequest) {
       lines.push(`${itemNumber ? `${itemNumber + 1}. ` : ''}Projeto personalizado`, '   Solicitação de avaliação');
       if (customRequest.idea) lines.push(`   Ideia: ${customRequest.idea}`);
@@ -566,7 +636,7 @@
   if ($('#backToCategories')) $('#backToCategories').addEventListener('click', openCatalog);
   if ($('#emptyCategoryRequest')) $('#emptyCategoryRequest').addEventListener('click', () => { const category = categoryBySlug.get(currentCategory); sendCategoryWhatsApp(category?.name || 'Outras ideias'); });
   window.addEventListener('hashchange', routeFromHash);
-  [productGrid,trendingTrack].filter(Boolean).forEach(grid => {
+  [productGrid,trendingTrack,$('#allProductsGrid')].filter(Boolean).forEach(grid => {
     grid.addEventListener('click', event => {
       const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]');
       if (add) { const product=getProduct(add.dataset.add); if (product?.orderOptions) openDetails(product.id); else if (product) addProduct(product); }
@@ -575,6 +645,8 @@
   });
   if ($('#searchInput')) $('#searchInput').addEventListener('input', renderProducts);
   if ($('#sortSelect')) $('#sortSelect').addEventListener('change', renderProducts);
+  if ($('#allProductsSearch')) $('#allProductsSearch').addEventListener('input', renderAllProducts);
+  if ($('#allProductsCategory')) $('#allProductsCategory').addEventListener('change', renderAllProducts);
   $('#openCart').addEventListener('click', openCart); $('#closeCart').addEventListener('click', closeCart); overlay.addEventListener('click', closeCart);
   $('#cartContent').addEventListener('click', event => { if (event.target.closest('[data-close-cart]')) { closeCart(); if (isCatalogPage) openCatalog(); return; } const step=event.target.closest('[data-quantity-step]'); if (step) { const item=cart.find(entry=>entry.key===step.dataset.key); if (!item) return; item.quantity=Math.min(99,Math.max(1,item.quantity + Number(step.dataset.quantityStep))); saveCart(); renderCart(); return; } const remove=event.target.closest('[data-remove]'); if (remove) { cart=cart.filter(item=>item.key !== remove.dataset.remove); saveCart(); renderCart(); showToast('Produto removido da lista.'); } if (event.target.closest('[data-remove-custom]')) { customRequest=null; saveCart(); renderCart(); showToast('Solicitação personalizada removida.'); } });
   $('#cartContent').addEventListener('change', event => {
@@ -612,10 +684,26 @@
     main.src = image;
     main.alt = product?.imageAlts?.[index] || product?.imageAlt || product?.name || '';
     $$('#dialogContent [data-gallery-image]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.galleryImage) === index)));
+    const position = $('[data-gallery-position]');
+    if (position) position.textContent = `${index + 1}/${images.length}`;
+  });
+  $('#dialogContent').addEventListener('keydown', event => {
+    if (!dialog.open || !['ArrowLeft','ArrowRight'].includes(event.key) || !productImages(getProduct($('#detailForm')?.dataset.product)).length) return;
+    const product = getProduct($('#detailForm')?.dataset.product);
+    const images = productImages(product);
+    if (images.length < 2 || event.target.matches('input,select,textarea') || (event.target.closest('button') && !event.target.closest('[data-gallery-image],[data-gallery-step]'))) return;
+    event.preventDefault();
+    const main = $('#dialogMainImage');
+    const current = images.findIndex(src => new URL(src, document.baseURI).href === main?.src);
+    const index = ((current < 0 ? 0 : current) + (event.key === 'ArrowRight' ? 1 : -1) + images.length) % images.length;
+    $('#dialogContent').querySelector(`[data-gallery-image="${index}"]`)?.click();
   });
   $('#dialogContent').addEventListener('input', event => {
     const quantity = event.target.closest('#detailForm [name="quantity"]');
     if (!quantity) return;
+    const quantityError = $('#quantityError');
+    if (quantityError) quantityError.hidden = true;
+    quantity.removeAttribute('aria-invalid');
     const product = getProduct($('#detailForm')?.dataset.product);
     const value = Number.parseInt(quantity.value, 10);
     const output = $('#detailQuantityPrice');
@@ -652,6 +740,14 @@
       if (colorSelect) {
         colorSelect.required = showColor;
         if (!showColor) colorSelect.value = '';
+      }
+      const changedError = event.target.name === 'finish' ? $('#finishError') : $('#colorError');
+      if (changedError) changedError.hidden = true;
+      event.target.removeAttribute('aria-invalid');
+      if (!showColor) {
+        const colorError = $('#colorError');
+        if (colorError) colorError.hidden = true;
+        colorSelect?.removeAttribute('aria-invalid');
       }
       const output = $('#detailQuantityPrice');
       const ready = finishValue === 'sem-cor' || (finishValue === 'colorido' && colorSelect?.value);
@@ -698,7 +794,59 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
-  dialog.addEventListener('submit', event => { if (event.target.id !== 'detailForm') return; event.preventDefault(); const form=event.target; const product=getProduct(form.dataset.product); if (!product) return; const data=new FormData(form); const quantity=Number.parseInt(data.get('quantity'),10); if (!Number.isFinite(quantity)||quantity<1||quantity>99) { showToast('Informe uma quantidade entre 1 e 99.'); return; } if (product.orderOptions && (!data.get('finish') || (data.get('finish') === 'colorido' && !data.get('color')))) { showToast('Selecione o acabamento e a cor do manto para a opção colorida.'); return; } addProduct(product,{version:data.get('version'),finish:data.get('finish'),color:data.get('color'),size:product.orderOptions?.fixedSize || data.get('size'),quantity,note:data.get('note')}); });
+  $('#dialogContent').addEventListener('submit', async event => {
+    const form = event.target;
+    if (form.id !== 'detailForm') return;
+    event.preventDefault();
+    if (quoteSubmitPending) return;
+    const product = getProduct(form.dataset.product);
+    if (!product) { showToast('Não foi possível identificar este produto. Feche os detalhes e tente novamente.'); return; }
+    const data = new FormData(form);
+    const finish = String(data.get('finish') || '');
+    const color = String(data.get('color') || '');
+    const quantityText = String(data.get('quantity') || '');
+    const quantity = Number(quantityText);
+    const finishSelect = form.querySelector('[name="finish"]');
+    const colorSelect = form.querySelector('[name="color"]');
+    const quantityInput = form.querySelector('[name="quantity"]');
+    const setError = (input, errorId, message) => {
+      const error = $(`#${errorId}`);
+      if (error) { error.textContent = message; error.hidden = false; }
+      input?.setAttribute('aria-invalid','true');
+      input?.focus();
+      showToast(message);
+    };
+    if (product.orderOptions && !product.orderOptions.finishes.some(option => option.value === finish)) {
+      setError(finishSelect,'finishError','Selecione um acabamento para continuar.');
+      return;
+    }
+    if (product.orderOptions && finish === 'colorido' && !product.orderOptions.colors.includes(color)) {
+      setError(colorSelect,'colorError','Selecione uma cor do manto para continuar.');
+      return;
+    }
+    if (!/^\d+$/.test(quantityText) || !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+      setError(quantityInput,'quantityError','Informe uma quantidade entre 1 e 99.');
+      return;
+    }
+    const submitButton = form.querySelector('[data-add-to-quote]');
+    const originalLabel = submitButton?.textContent || 'Adicionar à cotação';
+    quoteSubmitPending = true;
+    if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Adicionando...'; }
+    try {
+      await new Promise(resolve => window.requestAnimationFrame(resolve));
+      addProduct(product,{
+        version:data.get('version'), finish, color,
+        size:product.orderOptions?.fixedSize || data.get('size'),
+        quantity, note:String(data.get('note') || '')
+      });
+    } catch (error) {
+      console.error('Falha ao adicionar produto à cotação:', error);
+      showToast('Não foi possível adicionar o produto. Tente novamente.');
+    } finally {
+      quoteSubmitPending = false;
+      if (submitButton?.isConnected) { submitButton.disabled = false; submitButton.textContent = originalLabel; }
+    }
+  });
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));

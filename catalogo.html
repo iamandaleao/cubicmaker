@@ -38,17 +38,16 @@
         <span class="brand-name">cubic<span>maker</span></span>
       </a>
       <nav class="main-nav" aria-label="Navegação principal">
-        <a href="catalogo.html">Catálogo</a><a href="materiais-e-versoes.html">Materiais e Versões</a><a href="indicacoes.html">Indicações</a><a href="index.html#sobre">Sobre</a><a href="index.html#personalizados">Personalizados</a>
+        <a href="catalogo.html">Catálogo</a><a href="catalogo.html#produtos">Produtos</a><a href="materiais-e-versoes.html">Materiais e Versões</a><a href="indicacoes.html">Indicações</a><a href="index.html#sobre">Sobre</a><a href="index.html#personalizados">Personalizados</a>
       </nav>
       <div class="header-actions">
-        <a class="button button-outline contact-link" href="index.html#contato">Fale com a gente <span aria-hidden="true">↗</span></a>
         <button class="bag-button" id="openCart" type="button" aria-label="Abrir lista de interesse, 0 itens" aria-controls="cartPanel">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg><span class="bag-count" id="bagCount">0</span>
         </button>
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false" type="button"><span></span><span></span></button>
       </div>
     </div>
-    <div class="mobile-nav" id="mobileNav"><a href="catalogo.html">Catálogo</a><a href="materiais-e-versoes.html">Materiais e Versões</a><a href="indicacoes.html">Indicações</a><a href="index.html#sobre">Sobre</a><a href="index.html#personalizados">Personalizados</a><a href="index.html#contato">Fale com a gente</a></div>
+    <div class="mobile-nav" id="mobileNav"><a href="catalogo.html">Catálogo</a><a href="catalogo.html#produtos">Produtos</a><a href="materiais-e-versoes.html">Materiais e Versões</a><a href="indicacoes.html">Indicações</a><a href="index.html#sobre">Sobre</a><a href="index.html#personalizados">Personalizados</a></div>
   </header>
 
   <main>
@@ -65,6 +64,16 @@
             </form>
           </div>
           <div id="categoryGroups" class="category-groups"></div>
+        </div>
+        <div id="allProductsView" class="all-products-view" hidden>
+          <div class="all-products-heading"><h1 id="allProductsTitle">Nossos Produtos</h1><p>Conheça nossas peças impressas em 3D. Encontre opções para decorar, organizar e presentear.</p></div>
+          <div class="all-products-toolbar">
+            <label class="search-field all-products-search" for="allProductsSearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="allProductsSearch" type="search" placeholder="Buscar produto..." autocomplete="off" aria-label="Buscar produtos"></label>
+            <label class="all-products-category" for="allProductsCategory"><span>Categoria</span><select id="allProductsCategory" aria-label="Filtrar produtos por categoria"><option value="">Todas as categorias</option></select></label>
+            <span class="all-products-count" id="allProductsCount" aria-live="polite"></span>
+          </div>
+          <div class="all-products-grid" id="allProductsGrid"></div>
+          <div class="all-products-empty" id="allProductsEmpty" hidden>Nenhum produto encontrado. Tente outro termo ou categoria.</div>
         </div>
         <div id="categoryProductsView" class="category-products-view" hidden>
           <nav class="breadcrumbs" aria-label="Trilha de navegação"><a href="index.html#inicio">Início</a><span aria-hidden="true">›</span><a href="catalogo.html#catalogo">Catálogo</a><span aria-hidden="true">›</span><span id="breadcrumbCategory" aria-current="page"></span></nav>
