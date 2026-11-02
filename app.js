@@ -20,7 +20,6 @@
   const overlay = $('#overlay');
   const dialog = $('#productDialog');
   const infoDialog = $('#infoDialog');
-  const materialsImageDialog = $('#materialsImageDialog');
   let cart = loadCart();
   let customRequest = loadCustomRequest();
   let currentCategory = null;
@@ -253,7 +252,7 @@
       : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span>`;
     return `<article class="product-card">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p>${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
@@ -797,100 +796,6 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
-  if (materialsImageDialog) {
-    const expandedImage=$('#materialsImageExpanded');
-    $('#closeMaterialsImage').addEventListener('click',() => materialsImageDialog.close());
-    materialsImageDialog.addEventListener('click',event => { if (event.target===materialsImageDialog) materialsImageDialog.close(); });
-    materialsImageDialog.addEventListener('close',() => expandedImage.removeAttribute('src'));
-  }
-  $$('[data-material-zoom-area]').forEach(area => {
-    const image = $('img',area);
-    const lens = $('.material-zoom-lens',area);
-    const toggle = $('[data-material-zoom-toggle]',area);
-    const labelDefault = toggle.getAttribute('aria-label');
-    const zoom = 2.6;
-    let hoverActive=false;
-    let touchActive=false;
-    const syncZoomState=() => {
-      const active=hoverActive||touchActive;
-      area.classList.toggle('is-zooming',active);
-      lens.hidden=!active;
-      toggle.setAttribute('aria-pressed',String(touchActive));
-      toggle.setAttribute('aria-label',touchActive?`Desativar lupa · ${labelDefault.replace('Ativar lupa na ','')}`:labelDefault);
-    };
-    const moveLens = (clientX,clientY) => {
-      const rect=area.getBoundingClientRect();
-      const lensSize=lens.offsetWidth;
-      if (!image.naturalWidth || !rect.width || !rect.height || !lensSize) return;
-      const pointerX=Math.max(0,Math.min(rect.width,clientX-rect.left));
-      const pointerY=Math.max(0,Math.min(rect.height,clientY-rect.top));
-      const left=Math.max(0,Math.min(rect.width-lensSize,pointerX-lensSize/2));
-      const top=Math.max(0,Math.min(rect.height-lensSize,pointerY-lensSize/2));
-      const centerX=left+lensSize/2;
-      const centerY=top+lensSize/2;
-      const imageScale=Math.max(rect.width/image.naturalWidth,rect.height/image.naturalHeight);
-      const imageWidth=image.naturalWidth*imageScale;
-      const imageHeight=image.naturalHeight*imageScale;
-      const objectPosition=getComputedStyle(image).objectPosition.split(/\s+/);
-      const positionX=(parseFloat(objectPosition[0])||50)/100;
-      const positionY=(parseFloat(objectPosition[1]||objectPosition[0])||50)/100;
-      const cropX=(imageWidth-rect.width)*positionX;
-      const cropY=(imageHeight-rect.height)*positionY;
-      lens.style.left=`${left}px`;
-      lens.style.top=`${top}px`;
-      lens.style.backgroundImage=`url("${image.dataset.zoomSrc || image.currentSrc || image.src}")`;
-      lens.style.backgroundSize=`${imageWidth*zoom}px ${imageHeight*zoom}px`;
-      lens.style.backgroundPosition=`${lensSize/2-(centerX+cropX)*zoom}px ${lensSize/2-(centerY+cropY)*zoom}px`;
-    };
-    toggle.addEventListener('click',() => {
-      touchActive=!touchActive;
-      syncZoomState();
-      if (touchActive) moveLens(area.getBoundingClientRect().left+area.clientWidth/2,area.getBoundingClientRect().top+area.clientHeight/2);
-    });
-    area.addEventListener('pointerenter',event => {
-      if (!['mouse','pen'].includes(event.pointerType)) return;
-      hoverActive=true;
-      syncZoomState();
-      moveLens(event.clientX,event.clientY);
-    });
-    area.addEventListener('pointermove',event => {
-      if (hoverActive||touchActive) moveLens(event.clientX,event.clientY);
-    });
-    area.addEventListener('pointerleave',event => {
-      if (!['mouse','pen'].includes(event.pointerType)) return;
-      hoverActive=false;
-      touchActive=false;
-      syncZoomState();
-    });
-    area.addEventListener('click',event => {
-      if (event.target.closest('[data-material-zoom-toggle]')) return;
-      if (matchMedia('(hover: none), (pointer: coarse)').matches && event.target.closest('img') && !touchActive) {
-        if (!materialsImageDialog) return;
-        const expandedImage=$('#materialsImageExpanded');
-        expandedImage.src=image.dataset.zoomSrc || image.currentSrc || image.src;
-        expandedImage.alt=image.alt;
-        materialsImageDialog.showModal();
-        $('#closeMaterialsImage').focus();
-        return;
-      }
-      if (hoverActive||touchActive) moveLens(event.clientX,event.clientY);
-    });
-    toggle.addEventListener('keydown',event => {
-      if (!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)) return;
-      event.preventDefault();
-      touchActive=true;
-      syncZoomState();
-      const leftValue=parseFloat(lens.style.left);
-      const topValue=parseFloat(lens.style.top);
-      const currentLeft=Number.isFinite(leftValue)?leftValue:area.clientWidth/2-lens.offsetWidth/2;
-      const currentTop=Number.isFinite(topValue)?topValue:area.clientHeight/2-lens.offsetHeight/2;
-      const step=30;
-      const x=currentLeft+lens.offsetWidth/2+(event.key==='ArrowRight'?step:event.key==='ArrowLeft'?-step:0);
-      const y=currentTop+lens.offsetHeight/2+(event.key==='ArrowDown'?step:event.key==='ArrowUp'?-step:0);
-      const rect=area.getBoundingClientRect();
-      moveLens(rect.left+x,rect.top+y);
-    });
-  });
   $('#dialogContent').addEventListener('submit', async event => {
     const form = event.target;
     if (form.id !== 'detailForm') return;
