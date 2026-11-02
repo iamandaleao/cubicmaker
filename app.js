@@ -20,6 +20,7 @@
   const overlay = $('#overlay');
   const dialog = $('#productDialog');
   const infoDialog = $('#infoDialog');
+  const materialsImageDialog = $('#materialsImageDialog');
   let cart = loadCart();
   let customRequest = loadCustomRequest();
   let currentCategory = null;
@@ -530,8 +531,10 @@
   function galleryMarkup(product) {
     const images = productImages(product);
     if (!images.length) return '<div class="dialog-image"><div class="product-image-placeholder">Imagem não cadastrada</div></div>';
-    const controls = images.length > 1 ? `<div class="product-gallery-controls"><div class="product-gallery-thumbs" aria-label="Miniaturas de ${escapeHTML(product.name)}">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-controls="dialogMainImage" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div><div class="gallery-navigation"><span data-gallery-position aria-live="polite">1/${images.length}</span><button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button></div></div>` : '';
-    return `<div class="product-gallery"><div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</div>${controls}</div>`;
+    const hasGallery = images.length > 1;
+    const thumbnails = hasGallery ? `<div class="product-gallery-thumbs" aria-label="Miniaturas de ${escapeHTML(product.name)}">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-controls="dialogMainImage" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div>` : '';
+    const navigation = hasGallery ? `<div class="gallery-navigation"><span data-gallery-position aria-live="polite">1/${images.length}</span><button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button></div>` : '';
+    return `<div class="product-gallery${hasGallery ? ' has-thumbnails' : ''}">${thumbnails}<div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</div>${navigation}</div>`;
   }
   function openDetails(id, selectedVersion = 'economica') {
     const product = getProduct(id); if (!product) return;
@@ -794,6 +797,100 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
+  if (materialsImageDialog) {
+    const expandedImage=$('#materialsImageExpanded');
+    $('#closeMaterialsImage').addEventListener('click',() => materialsImageDialog.close());
+    materialsImageDialog.addEventListener('click',event => { if (event.target===materialsImageDialog) materialsImageDialog.close(); });
+    materialsImageDialog.addEventListener('close',() => expandedImage.removeAttribute('src'));
+  }
+  $$('[data-material-zoom-area]').forEach(area => {
+    const image = $('img',area);
+    const lens = $('.material-zoom-lens',area);
+    const toggle = $('[data-material-zoom-toggle]',area);
+    const labelDefault = toggle.getAttribute('aria-label');
+    const zoom = 2.6;
+    let hoverActive=false;
+    let touchActive=false;
+    const syncZoomState=() => {
+      const active=hoverActive||touchActive;
+      area.classList.toggle('is-zooming',active);
+      lens.hidden=!active;
+      toggle.setAttribute('aria-pressed',String(touchActive));
+      toggle.setAttribute('aria-label',touchActive?`Desativar lupa · ${labelDefault.replace('Ativar lupa na ','')}`:labelDefault);
+    };
+    const moveLens = (clientX,clientY) => {
+      const rect=area.getBoundingClientRect();
+      const lensSize=lens.offsetWidth;
+      if (!image.naturalWidth || !rect.width || !rect.height || !lensSize) return;
+      const pointerX=Math.max(0,Math.min(rect.width,clientX-rect.left));
+      const pointerY=Math.max(0,Math.min(rect.height,clientY-rect.top));
+      const left=Math.max(0,Math.min(rect.width-lensSize,pointerX-lensSize/2));
+      const top=Math.max(0,Math.min(rect.height-lensSize,pointerY-lensSize/2));
+      const centerX=left+lensSize/2;
+      const centerY=top+lensSize/2;
+      const imageScale=Math.max(rect.width/image.naturalWidth,rect.height/image.naturalHeight);
+      const imageWidth=image.naturalWidth*imageScale;
+      const imageHeight=image.naturalHeight*imageScale;
+      const objectPosition=getComputedStyle(image).objectPosition.split(/\s+/);
+      const positionX=(parseFloat(objectPosition[0])||50)/100;
+      const positionY=(parseFloat(objectPosition[1]||objectPosition[0])||50)/100;
+      const cropX=(imageWidth-rect.width)*positionX;
+      const cropY=(imageHeight-rect.height)*positionY;
+      lens.style.left=`${left}px`;
+      lens.style.top=`${top}px`;
+      lens.style.backgroundImage=`url("${image.dataset.zoomSrc || image.currentSrc || image.src}")`;
+      lens.style.backgroundSize=`${imageWidth*zoom}px ${imageHeight*zoom}px`;
+      lens.style.backgroundPosition=`${lensSize/2-(centerX+cropX)*zoom}px ${lensSize/2-(centerY+cropY)*zoom}px`;
+    };
+    toggle.addEventListener('click',() => {
+      touchActive=!touchActive;
+      syncZoomState();
+      if (touchActive) moveLens(area.getBoundingClientRect().left+area.clientWidth/2,area.getBoundingClientRect().top+area.clientHeight/2);
+    });
+    area.addEventListener('pointerenter',event => {
+      if (!['mouse','pen'].includes(event.pointerType)) return;
+      hoverActive=true;
+      syncZoomState();
+      moveLens(event.clientX,event.clientY);
+    });
+    area.addEventListener('pointermove',event => {
+      if (hoverActive||touchActive) moveLens(event.clientX,event.clientY);
+    });
+    area.addEventListener('pointerleave',event => {
+      if (!['mouse','pen'].includes(event.pointerType)) return;
+      hoverActive=false;
+      touchActive=false;
+      syncZoomState();
+    });
+    area.addEventListener('click',event => {
+      if (event.target.closest('[data-material-zoom-toggle]')) return;
+      if (matchMedia('(hover: none), (pointer: coarse)').matches && event.target.closest('img') && !touchActive) {
+        if (!materialsImageDialog) return;
+        const expandedImage=$('#materialsImageExpanded');
+        expandedImage.src=image.dataset.zoomSrc || image.currentSrc || image.src;
+        expandedImage.alt=image.alt;
+        materialsImageDialog.showModal();
+        $('#closeMaterialsImage').focus();
+        return;
+      }
+      if (hoverActive||touchActive) moveLens(event.clientX,event.clientY);
+    });
+    toggle.addEventListener('keydown',event => {
+      if (!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key)) return;
+      event.preventDefault();
+      touchActive=true;
+      syncZoomState();
+      const leftValue=parseFloat(lens.style.left);
+      const topValue=parseFloat(lens.style.top);
+      const currentLeft=Number.isFinite(leftValue)?leftValue:area.clientWidth/2-lens.offsetWidth/2;
+      const currentTop=Number.isFinite(topValue)?topValue:area.clientHeight/2-lens.offsetHeight/2;
+      const step=30;
+      const x=currentLeft+lens.offsetWidth/2+(event.key==='ArrowRight'?step:event.key==='ArrowLeft'?-step:0);
+      const y=currentTop+lens.offsetHeight/2+(event.key==='ArrowDown'?step:event.key==='ArrowUp'?-step:0);
+      const rect=area.getBoundingClientRect();
+      moveLens(rect.left+x,rect.top+y);
+    });
+  });
   $('#dialogContent').addEventListener('submit', async event => {
     const form = event.target;
     if (form.id !== 'detailForm') return;
