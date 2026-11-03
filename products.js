@@ -215,7 +215,7 @@ window.CUBIC_PRODUCTS = [
       sections:[{title:'Tamanhos e valores',items:['16 cm: R$ 35,00.','22 cm: R$ 40,00.']}],
       note:'Também podemos produzir em outros tamanhos, como 11 cm, 14 cm e 17 cm. Caso deseje alguma dessas medidas ou um kit com mais de uma peça, informe sua preferência no campo de observações para consultar disponibilidade e valores.'
     },
-    image:'assets/photos/products/decoracao-quebra-nozes/1.webp',
+    image:'assets/photos/products/decoracao-quebra-nozes/soldadinho-quebra-nozes-natalino-impressao-3d-vista-principal.webp',
     imageAlt:'Soldadinho Quebra-Nozes natalino produzido em impressão 3D',
     imageAlts:[
       'Soldadinho Quebra-Nozes natalino em impressão 3D, vista principal',
@@ -224,10 +224,10 @@ window.CUBIC_PRODUCTS = [
       'Soldadinho Quebra-Nozes natalino em impressão 3D, quarta vista'
     ],
     images:[
-      'assets/photos/products/decoracao-quebra-nozes/1.webp',
-      'assets/photos/products/decoracao-quebra-nozes/2.webp',
-      'assets/photos/products/decoracao-quebra-nozes/3.webp',
-      'assets/photos/products/decoracao-quebra-nozes/4.webp'
+      'assets/photos/products/decoracao-quebra-nozes/soldadinho-quebra-nozes-natalino-impressao-3d-vista-principal.webp',
+      'assets/photos/products/decoracao-quebra-nozes/soldadinho-quebra-nozes-natalino-impressao-3d-segunda-vista.webp',
+      'assets/photos/products/decoracao-quebra-nozes/soldadinho-quebra-nozes-natalino-impressao-3d-terceira-vista.webp',
+      'assets/photos/products/decoracao-quebra-nozes/soldadinho-quebra-nozes-natalino-impressao-3d-quarta-vista.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     orderOptions:{
@@ -242,6 +242,94 @@ window.CUBIC_PRODUCTS = [
       alwaysShowColor:true
     },
     featured:17
+  },
+  {
+    id:'bandeja-decorativa-ore-e-confie-22-cm',
+    name:'Bandeja Decorativa Ore e Confie – 22 cm',
+    cardTitleSingleLine:true,
+    category:'Bandejas', categories:['Bandejas'],
+    price:40.00, cardPrice:40.00,
+    description:'Bandeja decorativa canelada em impressão 3D, com 22 cm e cores personalizáveis. R$ 40,00.',
+    fullDescription:'Leve delicadeza e significado para sua decoração com a Bandeja Decorativa Ore e Confie. Com design moderno e acabamento canelado, é uma peça versátil que combina decoração e funcionalidade. Ideal para organizar pequenos objetos e compor mesas, aparadores, estantes e cantinhos especiais da casa.',
+    detailContent:{
+      paragraphs:[
+        'Leve delicadeza e significado para sua decoração com a Bandeja Decorativa Ore e Confie. Com design moderno e acabamento canelado, é uma peça versátil que combina decoração e funcionalidade.',
+        'Ideal para organizar pequenos objetos e compor mesas, aparadores, estantes e cantinhos especiais da casa.'
+      ],
+      features:[
+        'Produzida em impressão 3D.',
+        'Design com acabamento canelado.',
+        'Personalização de cores.',
+        'Ideal para decoração e organização de pequenos objetos.'
+      ],
+      sections:[{title:'Dimensões aproximadas',items:['Comprimento: 22 cm.','Largura: 22,11 cm.','Altura: 2 cm.']}],
+      note:'Não encontrou a cor desejada? Informe no campo de observações qual cor gostaria de encomendar. Vamos consultar a disponibilidade.'
+    },
+    image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',
+    imageAlt:'Bandeja decorativa Ore e Confie canelada com pezinhos',
+    imageAlts:[
+      'Bandeja decorativa Ore e Confie canelada com pezinhos em ambiente de casa',
+      'Bandeja Ore e Confie branca vista de cima',
+      'Bandeja Ore e Confie canelada vista de lado'
+    ],
+    images:[
+      'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',
+      'assets/photos/products/bandeja-ore-e-confie/2.webp',
+      'assets/photos/products/bandeja-ore-e-confie/3.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    colorChoices:[
+      {key:'trayColor',label:'Cor da bandeja',partLabel:'bandeja',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'letterColor',label:'Cor da letra',partLabel:'letra',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'feetColor',label:'Cor dos pezinhos',partLabel:'pezinhos',options:['Preto','Branco','Areia','Verde oliva','Vermelho']}
+    ],
+    hidePrintFinishNote:true,
+    featured:18
+  },
+  {
+    id:'tigela-arvore-de-natal-decorativa-3d-17-cm',
+    name:'Tigela Árvore de Natal Decorativa 3D – 17 cm',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:20.00, cardPrice:20.00,
+    description:'Tigela empilhável em formato de árvore de Natal, vendida por unidade. R$ 20,00 cada.',
+    fullDescription:'Deixe sua decoração natalina ainda mais especial com esta tigela em formato de árvore de Natal. Produzida em impressão 3D, possui design criativo e empilhável, sendo ideal para decorar mesas, organizar pequenas lembrancinhas e apresentar doces embalados.',
+    detailContent:{
+      paragraphs:[
+        'Deixe sua decoração natalina ainda mais especial com esta tigela em formato de árvore de Natal. Produzida em impressão 3D, possui design criativo e empilhável, sendo ideal para decorar mesas, organizar pequenas lembrancinhas e apresentar doces embalados.'
+      ],
+      features:[
+        'Produzida em impressão 3D.',
+        'Formato de árvore de Natal.',
+        'Design empilhável.',
+        'Venda por unidade.',
+        'Cor personalizável.'
+      ],
+      sections:[{title:'Dimensões aproximadas',items:['Comprimento: 17 cm.','Largura: 17,56 cm.','Altura: 2,88 cm.']}],
+      note:'Não indicado para contato direto com alimentos sem embalagem. Por ser produzido em impressão 3D, pode apresentar pequenas marcas naturais do processo de fabricação. Evite exposição a temperaturas elevadas. Não encontrou a cor desejada? Informe no campo de observações para consultar a disponibilidade.'
+    },
+    image:'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-ilustrativos.webp',
+    imageAlt:'Tigela individual em formato de árvore de Natal com doces embalados ilustrativos',
+    imageAlts:[
+      'Tigela individual em formato de árvore de Natal com doces embalados ilustrativos',
+      'Tigelas natalinas em formato de árvore com doces ilustrativos',
+      'Tigelas de árvore de Natal com lembrancinhas embaladas em uma composição festiva',
+      'Tigelas em formato de árvore de Natal em composição de mesa',
+      'Tigelas natalinas empilhadas com detalhes do acabamento de impressão 3D'
+    ],
+    images:[
+      'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-ilustrativos.webp',
+      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-sortidas-doces-ilustrativos.webp',
+      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-empilhaveis-decoracao.webp',
+      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-lembrancinhas.webp',
+      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-empilhadas-detalhes-impressao-3d.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, colorFieldLabel:'Cor',
+    colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    hidePrintFinishNote:true,
+    featured:19
   }
 ];
 
@@ -315,15 +403,7 @@ window.CUBIC_CATEGORY_GROUPS = [
   //    {name:'Formaturas',slug:'formaturas',image:'assets/photos/categories/formaturas.webp',alt:'Foto ilustrativa de capelo de formatura',icon:'🎓'}
   //  ]},
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
-  //    {name:'Decoração',slug:'decoracao',image:'assets/photos/categories/decoracao.webp',alt:'Foto ilustrativa de objeto geométrico decorativo',icon:'🪴',hidden:true},
-  //    {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/categories/vasos-decorativos.webp',alt:'Foto ilustrativa de vaso decorativo impresso em 3D',icon:'🏺'},
-  //    {name:'Iluminárias',slug:'iluminarias',image:'assets/photos/categories/iluminarias.webp',alt:'Ilustração demonstrativa de luminária decorativa com luz quente',icon:'✳'},
-  //    {name:'Mesa posta',slug:'mesa-posta',image:'assets/photos/categories/mesa-posta.webp',alt:'Foto ilustrativa de mesa posta com porta-guardanapos',icon:'🍽️'},
-  //    {name:'Organização da casa',slug:'organizacao-da-casa',image:'assets/photos/categories/organizacao-da-casa.webp',alt:'Foto ilustrativa de caixas organizadoras',icon:'🗃️'},
-  //    {name:'Cozinha',slug:'cozinha',image:'assets/photos/categories/cozinha.webp',alt:'Foto ilustrativa de utensílios de cozinha',icon:'🍴'},
-  //    {name:'Banheiro',slug:'banheiro',image:'assets/photos/categories/banheiro.webp',alt:'Foto ilustrativa de organizador para banheiro',icon:'🧼'},
-  //    {name:'Escritório',slug:'escritorio',image:'assets/photos/categories/escritorio.webp',alt:'Foto ilustrativa de organizador de mesa de escritório',icon:'🖇️'},
-  //    {name:'Suportes e acessórios',slug:'suportes-e-acessorios',image:'assets/photos/categories/suportes-e-acessorios.webp',alt:'Foto ilustrativa de suporte para celular e acessórios',icon:'📱'},
+    {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
