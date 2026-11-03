@@ -271,6 +271,7 @@
 .product-info h3{height:1.25em;min-height:1.25em;line-height:1.25;overflow:hidden}
 .product-title-link{display:block;height:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .product-info>p{display:-webkit-box;height:3.3em;min-height:3.3em;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.65}
+.product-info>.product-card-note{display:none}
 .product-variations{height:2.9em;min-height:2.9em;overflow:hidden}
 .product-variations>span{min-height:1.45em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .product-title-link{display:block;width:100%;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
