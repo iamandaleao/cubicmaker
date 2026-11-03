@@ -134,6 +134,64 @@ window.CUBIC_PRODUCTS = [
     hidePrintFinishNote:true,
     colors:['Branco','Verde-oliva','Bege','Areia'],
     featured:14
+  },
+  {
+    id:'centro-mesa-chapeu-papai-noel-16cm',
+    name:'Centro de Mesa Chapéu de Papai Noel – 16 cm',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:80.00,
+    description:'Centro de mesa natalino em formato de chapéu de Papai Noel, com espaço interno para pequenos objetos e lembrancinhas.',
+    fullDescription:'Deixe sua decoração natalina ainda mais especial com este centro de mesa em formato de chapéu de Papai Noel. Produzido em impressão 3D, combina as cores tradicionais vermelho e branco com um design criativo e delicado. Além de decorar, possui espaço interno que pode ser utilizado para guardar pequenos objetos e lembrancinhas.',
+    detailContent:{
+      paragraphs:['Deixe sua decoração natalina ainda mais especial com este centro de mesa em formato de chapéu de Papai Noel. Produzido em impressão 3D, combina as cores tradicionais vermelho e branco com um design criativo e delicado.','Além de decorar, possui espaço interno que pode ser utilizado para guardar pequenos objetos e lembrancinhas.'],
+      features:['Produzido em PLA por impressão 3D.','Cores vermelho e branco.','Altura aproximada de 16 cm.','Possui espaço interno para pequenos objetos.','Acompanha 1 unidade.'],
+      note:'Importante: Produto fabricado por impressão 3D, podendo apresentar pequenas marcas naturais do processo. Não é indicado para contato direto com alimentos. Evite exposição ao sol intenso e a temperaturas elevadas.'
+    },
+    image:'assets/photos/products/Chapéu de Natal Tigela & Decoração/br-11134207-820m3-muu1cpgb60oy16@resize_w450_nl.webp',
+    imageAlt:'Centro de mesa em formato de chapéu de Papai Noel vermelho e branco com espaço interno',
+    images:['assets/photos/products/Chapéu de Natal Tigela & Decoração/br-11134207-820m3-muu1cpgb60oy16@resize_w450_nl.webp'],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    colors:['Vermelho','Branco'],
+    featured:15
+  },
+  {
+    id:'kit-presepio-sagrada-familia-arvore-bandeja',
+    name:'Kit Presépio Sagrada Família, Árvore de Natal e Bandeja Decorativa',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:33.00,
+    description:'Peças natalinas minimalistas em impressão 3D, disponíveis avulsas ou em kit completo, a partir de R$ 33,00.',
+    fullDescription:'Encante sua decoração natalina com este conjunto de peças decorativas com design minimalista e moderno. Ideal para mesas, aparadores, estantes, altares e cantinhos de oração, trazendo delicadeza e significado ao ambiente. O conjunto é composto por escultura da Sagrada Família de 10 cm, pinheiro decorativo de 13 cm e bandeja decorativa de 20 cm. Produzidas em impressão 3D, as peças possuem visual delicado e versátil, combinando com diferentes estilos de decoração. Também são uma ótima opção de presente religioso.',
+    detailContent:{
+      paragraphs:['Encante sua decoração natalina com este conjunto de peças decorativas com design minimalista e moderno. Ideal para mesas, aparadores, estantes, altares e cantinhos de oração, trazendo delicadeza e significado ao ambiente.','Produzidas em impressão 3D, as peças possuem visual delicado e versátil, combinando com diferentes estilos de decoração. Também são uma ótima opção de presente religioso.'],
+      features:['Produzido em impressão 3D com PLA.'],
+      sections:[
+        {title:'Peças do conjunto',items:['Escultura da Sagrada Família: 10 cm.','Pinheiro decorativo: 13 cm.','Bandeja decorativa: 20 cm.']}
+      ]
+    },
+    image:'assets/photos/products/sagrada-familia/1-kit-presepio-sagrada-familia-arvore-natal-bandeja-decorativa.webp',
+    imageAlt:'Kit decorativo de Natal com Sagrada Família, pinheiro e bandeja',
+    imageAlts:[
+      'Kit completo com escultura da Sagrada Família, pinheiro e bandeja decorativa',
+      'Escultura da Sagrada Família, pinheiro verde e bandeja em impressão 3D',
+      'Conjunto natalino com pinheiro, bandeja e Sagrada Família em cenário decorativo'
+    ],
+    images:[
+      'assets/photos/products/sagrada-familia/1-kit-presepio-sagrada-familia-arvore-natal-bandeja-decorativa.webp',
+      'assets/photos/products/sagrada-familia/2-escultura-sagrada-familia-pinheiro-bandeja-impressao-3d.webp',
+      'assets/photos/products/sagrada-familia/3-kit-sagrada-familia-arvore-bandeja-natal-impressao-3d.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    variantLabel:'Escolha sua opção', hideVariantColorSelector:true, variantPriceInline:true,
+    variantOptions:[
+      {value:'pinheiro',label:'Pinheiro',price:38.00},
+      {value:'bandeja',label:'Bandeja',price:38.00},
+      {value:'escultura-sagrada-familia',label:'Escultura Sagrada Família',price:33.00},
+      {value:'kit-completo',label:'Kit completo',price:80.00}
+    ],
+    featured:16
   }
 ];
 
