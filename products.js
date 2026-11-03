@@ -192,6 +192,56 @@ window.CUBIC_PRODUCTS = [
       {value:'kit-completo',label:'Kit completo',price:80.00}
     ],
     featured:16
+  },
+  {
+    id:'soldadinho-quebra-nozes-natalino-3d-20-cm',
+    name:'Soldadinho Quebra-Nozes Natalino 3D – 20 cm',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:35.00, cardPrice:35.00,
+    description:'Soldadinho Quebra-Nozes em impressão 3D, com opções de tamanho, acabamento e cor. A partir de R$ 35,00.',
+    fullDescription:'Deixe sua decoração de Natal mais charmosa com este soldadinho Quebra-Nozes de design clássico e delicado. Produzido em impressão 3D, é ideal para decorar aparadores, mesas, estantes e outros ambientes natalinos. Disponível em diferentes cores, tamanhos e acabamentos, permitindo personalizar a peça conforme sua preferência.',
+    detailContent:{
+      paragraphs:[
+        'Deixe sua decoração de Natal mais charmosa com este soldadinho Quebra-Nozes de design clássico e delicado. Produzido em impressão 3D, é ideal para decorar aparadores, mesas, estantes e outros ambientes natalinos.',
+        'Disponível em diferentes cores, tamanhos e acabamentos, permitindo personalizar a peça conforme sua preferência.'
+      ],
+      features:[
+        'Produzido em PLA por impressão 3D.',
+        'Disponível nos acabamentos canelado e texturizado.',
+        'Opções de cores personalizáveis.',
+        'Ideal para decoração natalina e para presentear.'
+      ],
+      sections:[{title:'Tamanhos e valores',items:['16 cm: R$ 35,00.','22 cm: R$ 40,00.']}],
+      note:'Também podemos produzir em outros tamanhos, como 11 cm, 14 cm e 17 cm. Caso deseje alguma dessas medidas ou um kit com mais de uma peça, informe sua preferência no campo de observações para consultar disponibilidade e valores.'
+    },
+    image:'assets/photos/products/decoracao-quebra-nozes/1.webp',
+    imageAlt:'Soldadinho Quebra-Nozes natalino produzido em impressão 3D',
+    imageAlts:[
+      'Soldadinho Quebra-Nozes natalino em impressão 3D, vista principal',
+      'Soldadinho Quebra-Nozes natalino em impressão 3D, segunda vista',
+      'Soldadinho Quebra-Nozes natalino em impressão 3D, terceira vista',
+      'Soldadinho Quebra-Nozes natalino em impressão 3D, quarta vista'
+    ],
+    images:[
+      'assets/photos/products/decoracao-quebra-nozes/1.webp',
+      'assets/photos/products/decoracao-quebra-nozes/2.webp',
+      'assets/photos/products/decoracao-quebra-nozes/3.webp',
+      'assets/photos/products/decoracao-quebra-nozes/4.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    orderOptions:{
+      sizeOptions:['16 cm','22 cm'],
+      sizePrices:{'16 cm':35.00,'22 cm':40.00},
+      finishes:[
+        {value:'canelado',label:'Canelado'},
+        {value:'texturizado',label:'Texturizado'}
+      ],
+      colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+      colorFieldLabel:'Cor',
+      alwaysShowColor:true
+    },
+    featured:17
   }
 ];
 

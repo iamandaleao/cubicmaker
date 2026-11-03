@@ -88,8 +88,8 @@
     if (!options) return versionPrice(product, item?.version);
     if (options.sizeOptions && !options.sizeOptions.includes(item?.size)) return null;
     const finish=options.finishes.find(entry => entry.value === item?.finish);
-    if (!finish || (finish.value === 'colorido' && !options.colors.includes(item?.color))) return null;
-    return finish.price ?? null;
+    if (!finish || ((finish.value === 'colorido' || options.alwaysShowColor) && !options.colors.includes(item?.color))) return null;
+    return options.sizePrices?.[item?.size] ?? finish.price ?? null;
   }
   function configuredSubtotal(product, item) {
     const unitPrice = configuredUnitPrice(product,item);
@@ -256,7 +256,7 @@
           if (finish === 'branco' || finish === 'sem-cor') finish='sem-pintura';
           if (finish === 'pintado') finish='colorido';
           if (finish === 'sem-pintura') color='';
-          if (finish === 'colorido' && !product.orderOptions.colors.includes(color)) color='';
+          if ((finish === 'colorido' || product.orderOptions.alwaysShowColor) && !product.orderOptions.colors.includes(color)) color='';
         }
         const normalizedItem={ productId:item.productId, version, quantity:Math.max(1,Math.min(99,Number.parseInt(item.quantity,10)||1)), color, colorSelections, size, variant, finish, note:String(item.note || '').slice(0,500) };
         const key=product.colorChoices ? colorChoicesKey(product,normalizedItem) : product.orderOptions ? `${item.productId}::${version}::${size}::${color}::${finish}` : product.variantOptions ? `${item.productId}::variant::${variant}::${color}` : `${item.productId}::${version}::${color}`;
@@ -504,7 +504,7 @@
         : product.colorChoices
         ? `<div class="cart-options">${product.colorChoices.map(choice => `<label>${escapeHTML(choice.label)}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.colorSelections?.[choice.key])}"></span><select data-choice-key="${escapeHTML(choice.key)}" data-key="${escapeHTML(item.key)}" required>${optionList(choice.options,item.colorSelections?.[choice.key],'Selecione uma cor')}</select></span></label>`).join('')}</div>`
         : orderOptions
-        ? `<div class="cart-options"><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.sizeOptions || [],item.size,'Selecione um tamanho')}</select></label><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}" required><option value="" ${item.finish ? '' : 'selected'}>Selecione um acabamento</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' ? `<label>Cor do manto<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
+        ? `<div class="cart-options"><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.sizeOptions || [],item.size,'Selecione um tamanho')}</select></label><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}" required><option value="" ${item.finish ? '' : 'selected'}>Selecione um acabamento</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' || orderOptions.alwaysShowColor ? `<label>${escapeHTML(orderOptions.colorFieldLabel || (item.finish === 'colorido' ? 'Cor do manto' : 'Cor'))}<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
         : product.variantOptions
         ? product.hideVariantColorSelector
           ? `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}" required><option value="" ${item.variant ? '' : 'selected'}>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label></div>`
@@ -611,7 +611,7 @@
     const orderFields = product.hideOrderSelectors
       ? ''
       : product.orderOptions
-      ? `<div class="dialog-fields"><label class="detail-option-field">Tamanho<select id="detailSize" name="size" aria-label="Tamanho do Mini Jesus" aria-describedby="sizeError" required><option value="" selected hidden>Selecione um tamanho</option>${product.orderOptions.sizeOptions.map(size => `<option value="${escapeHTML(size)}">${escapeHTML(size)}</option>`).join('')}</select><span class="field-error" id="sizeError" hidden>Selecione um tamanho para continuar.</span></label><label class="detail-option-field">Acabamento<select id="detailFinish" name="finish" aria-label="Acabamento" aria-describedby="finishError" required><option value="" selected hidden>Selecione um acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)} — ${money(finish.price)}</option>`).join('')}</select><span class="field-error" id="finishError" hidden>Selecione um acabamento para continuar.</span></label><label class="detail-option-field" data-sash-field hidden>Cor do manto<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select id="detailColor" name="color" aria-label="Cor do manto" aria-describedby="colorError"><option value="" selected hidden>Selecione uma cor</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor do manto para continuar.</span></label></div>`
+      ? `<div class="dialog-fields"><label class="detail-option-field">Tamanho<select id="detailSize" name="size" aria-label="Tamanho do produto" aria-describedby="sizeError" required><option value="" selected hidden>Selecione um tamanho</option>${product.orderOptions.sizeOptions.map(size => `<option value="${escapeHTML(size)}">${escapeHTML(size)}</option>`).join('')}</select><span class="field-error" id="sizeError" hidden>Selecione um tamanho para continuar.</span></label><label class="detail-option-field">Acabamento<select id="detailFinish" name="finish" aria-label="Acabamento" aria-describedby="finishError" required><option value="" selected hidden>Selecione um acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select><span class="field-error" id="finishError" hidden>Selecione um acabamento para continuar.</span></label><label class="detail-option-field" data-sash-field ${product.orderOptions.alwaysShowColor ? '' : 'hidden'}>${escapeHTML(product.orderOptions.colorFieldLabel || 'Cor')}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select id="detailColor" name="color" aria-label="${escapeHTML(product.orderOptions.colorFieldLabel || 'Cor')}" aria-describedby="colorError" ${product.orderOptions.alwaysShowColor ? 'required' : ''}><option value="" selected hidden>Selecione uma cor</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor para continuar.</span></label></div>`
       : product.colorChoices
       ? `<div class="dialog-fields">${product.colorChoices.map(choice => `<label class="detail-option-field">${escapeHTML(choice.label)}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="${escapeHTML(choice.key)}" aria-label="${escapeHTML(choice.label)} do ${escapeHTML(product.name)}" aria-describedby="${escapeHTML(choice.key)}Error" required>${optionList(choice.options,'','Selecione uma cor')}</select></span><span class="field-error" id="${escapeHTML(choice.key)}Error" hidden>Selecione ${escapeHTML(choice.label.toLocaleLowerCase('pt-BR'))}.</span></label>`).join('')}</div>`
       : product.variantOptions
@@ -672,7 +672,8 @@
       if (product.orderOptions) {
         const finish = product.orderOptions.finishes.find(entry => entry.value === item.finish);
         lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Acabamento: ${finish?.label || 'a definir'}`);
-        if (finish?.value === 'colorido') lines.push(`   Cor do manto: ${item.color || 'a definir'}`, '   A cor escolhida altera somente o manto; as demais partes permanecem conforme o modelo original.');
+        if (finish?.value === 'colorido' || product.orderOptions.alwaysShowColor) lines.push(`   ${product.orderOptions.colorFieldLabel || (finish?.value === 'colorido' ? 'Cor do manto' : 'Cor')}: ${item.color || 'a definir'}`);
+        if (finish?.value === 'colorido') lines.push('   A cor escolhida altera somente o manto; as demais partes permanecem conforme o modelo original.');
         if (finish?.value === 'sem-pintura') lines.push('   Produto sem pintura.');
         if (item.note.trim()) lines.push(`   Observações para cotação: ${item.note.trim()}`);
         const unitPrice = cartUnitPrice(product,item);
@@ -718,7 +719,7 @@
     const incomplete = cart.some(item => {
       const product = getProduct(item.productId);
       return product?.colorChoices && !colorChoicesComplete(product,item)
-        || product?.orderOptions && (!product.orderOptions.sizeOptions?.includes(item.size) || !item.finish || (item.finish === 'colorido' && !product.orderOptions.colors.includes(item.color)))
+        || product?.orderOptions && (!product.orderOptions.sizeOptions?.includes(item.size) || !item.finish || ((item.finish === 'colorido' || product.orderOptions.alwaysShowColor) && !product.orderOptions.colors.includes(item.color)))
         || product?.variantOptions && (!product.variantOptions.some(option => option.value === item.variant) || !product.hideVariantColorSelector && !productColors(product).includes(item.color))
         || product?.hideVersionSelector && !product?.hideOrderSelectors && !productColors(product).includes(item.color);
     });
@@ -760,7 +761,7 @@
       item.colorSelections[input.dataset.choiceKey]=input.value;
     } else if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1));
     else item[input.dataset.field]=input.value;
-    if (itemProduct?.orderOptions && input.dataset.field === 'finish' && item.finish !== 'colorido') item.color='';
+    if (itemProduct?.orderOptions && input.dataset.field === 'finish' && item.finish !== 'colorido' && !itemProduct.orderOptions.alwaysShowColor) item.color='';
     item.key=itemProduct?.colorChoices ? colorChoicesKey(itemProduct,item) : itemProduct?.orderOptions ? `${item.productId}::${item.version || 'economica'}::${item.size || ''}::${item.color}::${item.finish || ''}` : itemProduct?.variantOptions ? `${item.productId}::variant::${item.variant || ''}::${item.color}` : `${item.productId}::${item.version || 'economica'}::${item.color}`;
     const duplicate=cart.find(entry=>entry!==item&&entry.key===item.key);
     if (duplicate) { duplicate.quantity=Math.min(99,duplicate.quantity+item.quantity); if (item.note) duplicate.note=item.note; cart=cart.filter(entry=>entry!==item); }
@@ -819,7 +820,8 @@
     if (!quantity) return;
     if (product.orderOptions) {
       const finish = $('#detailForm [name="finish"]')?.value;
-      const unitPrice = product.orderOptions.finishes.find(entry => entry.value === finish)?.price ?? null;
+      const size = $('#detailForm [name="size"]')?.value;
+      const unitPrice = product.orderOptions.sizePrices?.[size] ?? product.orderOptions.finishes.find(entry => entry.value === finish)?.price ?? null;
       output.textContent = !Number.isFinite(value) || value < 1 || value > 99 ? 'Informe de 1 a 99 unidades' : unitPrice == null ? '' : `${value > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * value)}`;
       return;
     }
@@ -862,7 +864,7 @@
       const finish = product.orderOptions.finishes.find(entry => entry.value === finishValue);
       const sashField = $('[data-sash-field]');
       const colorSelect = $('#detailForm [name="color"]');
-      const showColor = finishValue === 'colorido';
+      const showColor = finishValue === 'colorido' || product.orderOptions.alwaysShowColor;
       if (sashField) sashField.hidden = !showColor;
       if (colorSelect) {
         colorSelect.required = showColor;
@@ -881,7 +883,8 @@
         if (swatch) swatch.style.setProperty('--swatch-color',PRODUCT_COLOR_SWATCHES[event.target.value] || '#e7e9e3');
       }
       const output = $('#detailQuantityPrice');
-      const unitPrice = finish?.price ?? null;
+      const size = $('#detailForm [name="size"]')?.value;
+      const unitPrice = product.orderOptions.sizePrices?.[size] ?? finish?.price ?? null;
       const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
       if (output) {
         output.textContent = unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
@@ -969,8 +972,8 @@
       setError(finishSelect,'finishError','Selecione um acabamento para continuar.');
       return;
     }
-    if (product.orderOptions && finish === 'colorido' && !product.orderOptions.colors.includes(color)) {
-      setError(colorSelect,'colorError','Selecione uma cor do manto para continuar.');
+    if (product.orderOptions && (finish === 'colorido' || product.orderOptions.alwaysShowColor) && !product.orderOptions.colors.includes(color)) {
+      setError(colorSelect,'colorError',`Selecione ${product.orderOptions.colorFieldLabel ? 'uma cor' : 'uma cor do manto'} para continuar.`);
       return;
     }
     if (product.hideVersionSelector && !product.hideOrderSelectors && !productColors(product).includes(color)) {
