@@ -297,14 +297,12 @@
   function productCard(product) {
     const image = productImages(product)[0];
     const demonstrative = product.demonstrative !== false;
-    const variations = product.colorChoices
-      ? `<span>${escapeHTML(product.colorChoiceSummary || 'Escolha as cores da peça')}</span>`
-      : product.orderOptions
+    const variations = product.orderOptions
       ? `<span>Opções: ${escapeHTML(product.orderOptions.finishes.map(finish => finish.label).join(', '))}</span>`
-      : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span>`;
-    return `<article class="product-card">
+      : '';
+    return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link${product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
@@ -453,7 +451,7 @@
       .sort((a,b) => (a.featured || 999) - (b.featured || 999));
     grid.innerHTML = visible.map(product => {
       const image = productImages(product)[0];
-      return `<article class="all-products-card"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name${product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
+      return `<article class="all-products-card${product.id === 'presepio-natal-sagrada-familia' ? ' all-products-card-presepio' : ''}"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
     }).join('');
     const count = $('#allProductsCount');
     count.textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;

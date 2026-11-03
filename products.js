@@ -37,7 +37,7 @@ window.CUBIC_PRODUCTS = [
   {
     id:'mini-jesus-no-trono',
     name:'Mini Jesus no Trono – Decoração Religiosa 3D',
-    category:'Presentes criativos', categories:['Religião','Presentes criativos'],
+    category:'Religião', categories:['Religião'],
     price:35.00, cardPrice:35.00,
     description:'Mini Jesus colorido com trono incluído, uma peça delicada para decorar cantinhos de oração e outros ambientes.',
     fullDescription:'Uma miniatura delicada e cheia de significado, ideal para decorar cantinhos de oração, aparadores, estantes e escritórios. O Mini Jesus possui detalhes coloridos, com túnica branca, faixa vermelha e um trono que acompanha a peça.',
@@ -65,7 +65,7 @@ window.CUBIC_PRODUCTS = [
       'assets/photos/products/mini-jesus-cadeira-reta/4-mini-jesus-no-trono-dimensoes-altura-largura.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false, hidePrintFinishNote:true,
-    colorChoiceSummary:'Cores da cadeira e do manto selecionadas separadamente.',
+    cardTitleSingleLine:true,
     colorChoices:[
       {key:'chairColor',label:'Cor da cadeira',partLabel:'altera somente o trono',options:['Marrom','Bege','Preto','Branco']},
       {key:'mantleColor',label:'Cor do manto',partLabel:'altera somente o manto do Mini Jesus',options:['Vermelho','Verde-oliva','Preto','Marrom','Areia']}
@@ -98,6 +98,42 @@ window.CUBIC_PRODUCTS = [
     colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],
     demonstrative:false,
     featured:13
+  },
+  {
+    id:'presepio-natal-sagrada-familia',
+    name:'Presépio de Natal Decorativo – Sagrada Família 15 cm',
+    category:'Natal', categories:['Natal'],
+    price:42.00,
+    cardTitleSingleLine:true,
+    description:'Presépio natalino em impressão 3D com acabamento texturizado e representação da Sagrada Família, Reis Magos e animais.',
+    fullDescription:'Celebre o verdadeiro significado do Natal com este presépio decorativo produzido em impressão 3D. Com acabamento texturizado e design delicado, representa o nascimento de Jesus com a Sagrada Família, os Reis Magos, animais e uma estrutura em arco com estrela no topo. Ideal para decorar mesas, aparadores, estantes e outros ambientes, trazendo um toque de fé e tradição à decoração natalina.',
+    detailContent:{
+      paragraphs:['Celebre o verdadeiro significado do Natal com este presépio decorativo produzido em impressão 3D.','Com acabamento texturizado e design delicado, representa o nascimento de Jesus com a Sagrada Família, os Reis Magos, animais e uma estrutura em arco com estrela no topo.','Ideal para decorar mesas, aparadores, estantes e outros ambientes, trazendo um toque de fé e tradição à decoração natalina.'],
+      features:['Produzido em impressão 3D com PLA.','Design detalhado com acabamento texturizado.','Peça decorativa com representação do nascimento de Jesus.','Dimensões aproximadas do tamanho pequeno: 17 cm de largura e 15 cm de altura.'],
+      sections:[{title:'Tamanhos disponíveis',items:['Pequeno: 15 cm.','Grande: 20 cm.']}],
+      note:'Importante: Por ser produzido em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação. Evite exposição a altas temperaturas.'
+    },
+    image:'assets/photos/products/presepio-de-natal/branco.webp',
+    imageAlt:'Presépio de Natal decorativo branco com Sagrada Família, Reis Magos e animais',
+    imageAlts:[
+      'Presépio de Natal branco com a Sagrada Família, Reis Magos e animais',
+      'Presépio de Natal verde-oliva com acabamento texturizado',
+      'Presépio de Natal bege com estrela no topo do arco'
+    ],
+    images:[
+      'assets/photos/products/presepio-de-natal/branco.webp',
+      'assets/photos/products/presepio-de-natal/verde-oliva.webp',
+      'assets/photos/products/presepio-de-natal/bege.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    variantLabel:'Tamanho', variantOptions:[
+      {value:'pequeno',label:'Pequeno',price:42.00},
+      {value:'grande',label:'Grande',price:80.00}
+    ],
+    colorOptions:['Branco','Verde-oliva','Bege','Areia'],
+    hidePrintFinishNote:true,
+    colors:['Branco','Verde-oliva','Bege','Areia'],
+    featured:14
   }
 ];
 
@@ -182,12 +218,12 @@ window.CUBIC_CATEGORY_GROUPS = [
   //    {name:'Suportes e acessórios',slug:'suportes-e-acessorios',image:'assets/photos/categories/suportes-e-acessorios.webp',alt:'Foto ilustrativa de suporte para celular e acessórios',icon:'📱'},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'}
   ]},
-  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
-    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
+  //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
+  //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
   //    {name:'Geek e games',slug:'geek-e-games',image:'assets/photos/categories/geek-e-games.webp',alt:'Foto ilustrativa de controle para videogame',icon:'🎮'},
   //    {name:'Pets',slug:'pets',image:'assets/photos/categories/pets.webp',alt:'Foto ilustrativa de pata e acessórios para pets',icon:'🐾'},
   //    {name:'Personalizados',slug:'personalizados',image:'assets/photos/categories/personalizados.webp',alt:'Foto ilustrativa de peça personalizada em impressão 3D',icon:'✨'}
-  ]},
+  //  ]},
   //  { title:'Empresas e profissionais', intro:'Possibilidades de suportes, organizadores, expositores, brindes e peças personalizadas, sempre sujeitas à avaliação de viabilidade técnica.', categories:[
   //    {name:'Tecnologia e informática',slug:'tecnologia-e-informatica',image:'assets/photos/categories/tecnologia-e-informatica.webp',alt:'Foto ilustrativa de suportes para celulares e controles',icon:'📱'},
   //    {name:'Farmácias',slug:'farmacias',image:'assets/photos/categories/farmacias.webp',alt:'Foto ilustrativa de organizadores para balcão de farmácia',icon:'💊'},

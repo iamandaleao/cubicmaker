@@ -572,3 +572,7 @@ body.catalog-mode.catalog-products-view .catalog-section{min-height:0;padding:28
   .affiliate-product-description{font-size:11px!important}
   .affiliate-product-disclosure{font-size:10px}
 }
+.product-card-presepio .product-image-wrap img{transform:scale(1.15)}
+.product-card-presepio:hover .product-image-wrap img{transform:scale(1.18)}
+.all-products-card-presepio .all-products-image img{transform:scale(1.15)}
+.all-products-card-presepio .all-products-image:hover img{transform:scale(1.18)}
