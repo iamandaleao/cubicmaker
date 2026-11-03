@@ -1,9 +1,9 @@
 (() => {
   'use strict';
   const CONFIG = { WHATSAPP_NUMBER: '5547991611628', CONTACT_EMAIL: 'admcubicmaker@gmail.com', TRENDING_ENDPOINT: '' }; // Endpoint opcional: GET retorna {items:[{id,clicks}]} e POST recebe {productId,event}.
+  const PRINT_FINISH_NOTE = 'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.';
   const PRODUCT_COLORS = ['Preto','Branco','Areia','Verde oliva','Vermelho'];
-  const PRODUCT_COLOR_SWATCHES = { 'Preto':'#272927','Branco':'#ffffff','Areia':'#cbb99a','Verde oliva':'#78825b','Vermelho':'#bd493e' };
-  const PRODUCT_SIZES = ['P (8 cm)','M (12 cm)','G (16 cm)'];
+  const PRODUCT_COLOR_SWATCHES = { 'Preto':'#272927','Branco':'#ffffff','Areia':'#cbb99a','Verde oliva':'#78825b','Verde-oliva':'#78825b','Vermelho':'#bd493e','Marrom':'#7b5138','Dourado':'#c5a157' };
   const products = Array.isArray(window.CUBIC_PRODUCTS) ? window.CUBIC_PRODUCTS : [];
   const categoryGroups = Array.isArray(window.CUBIC_CATEGORY_GROUPS) ? window.CUBIC_CATEGORY_GROUPS : [];
   const categoryEntries = categoryGroups.flatMap(group => group.categories.map(category => ({ ...category, groupTitle:group.title, groupIntro:group.intro })));
@@ -63,10 +63,10 @@
     return Number(value).toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
   }
   function versionName(version) { return version === 'reforcada' ? 'Reforçada' : 'Econômica'; }
-  function versionDescription(version) { return version === 'reforcada' ? 'Mais material, paredes espessas e maior tempo de produção.' : 'Menor consumo de material, paredes mais finas e preço mais acessível.'; }
+  function versionDescription(version) { return version === 'reforcada' ? 'Mais material, paredes espessas e maior tempo de produção.' : ''; }
   function versionPrice(product, version = 'economica') {
     if (product?.price == null) return null;
-    return Number(product.price) * (version === 'reforcada' ? 2 : 1);
+    return Number(product.price) * (version === 'reforcada' && !product.hideVersionSelector ? 2 : 1);
   }
   function productSubtotal(product, quantity = 1, version = 'economica') {
     if (product?.price == null) return null;
@@ -77,17 +77,23 @@
       : versionPrice(product, version) * count;
   }
   function configuredUnitPrice(product, item) {
+    if (product?.variantOptions) {
+      if (!productColors(product).includes(item?.color)) return null;
+      return product.variantOptions.find(option => option.value === item?.variant)?.price ?? null;
+    }
     const options = product?.orderOptions;
     if (!options) return versionPrice(product, item?.version);
-    if ((item?.size || options.fixedSize) !== options.pricedSize) return null;
-    return options.finishes.find(finish => finish.value === item?.finish)?.price ?? null;
+    if (options.sizeOptions && !options.sizeOptions.includes(item?.size)) return null;
+    const finish=options.finishes.find(entry => entry.value === item?.finish);
+    if (!finish || (finish.value === 'colorido' && !options.colors.includes(item?.color))) return null;
+    return finish.price ?? null;
   }
   function configuredSubtotal(product, item) {
     const unitPrice = configuredUnitPrice(product,item);
     return unitPrice == null ? null : unitPrice * Math.min(99,Math.max(1,Number.parseInt(item?.quantity,10)||1));
   }
-  function cartUnitPrice(product,item) { return product?.orderOptions ? configuredUnitPrice(product,item) : versionPrice(product,item?.version); }
-  function cartSubtotal(product,item) { return product?.orderOptions ? configuredSubtotal(product,item) : productSubtotal(product,item?.quantity,item?.version); }
+  function cartUnitPrice(product,item) { return product?.orderOptions || product?.variantOptions ? configuredUnitPrice(product,item) : versionPrice(product,item?.version); }
+  function cartSubtotal(product,item) { return product?.orderOptions || product?.variantOptions ? configuredSubtotal(product,item) : productSubtotal(product,item?.quantity,item?.version); }
   function productImages(product) {
     const images = Array.isArray(product?.images) ? product.images.filter(Boolean) : [];
     return images.length ? images : (product?.image ? [product.image] : []);
@@ -97,14 +103,29 @@
   }
   function productDescriptionMarkup(product) {
     const content = product?.detailContent;
-    if (!content) return `<p class="dialog-description">${escapeHTML(product.fullDescription || product.description || '')}</p>`;
-    return `<div class="dialog-description dialog-description-structured">${(content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('')}${content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}</div>`;
+    const visibleContent = content
+      ? [...(content.paragraphs || []), ...(content.features || []), ...(content.sections || []).flatMap(section => section.items || []), content.note || '', content.suggestion || ''].join(' ')
+      : product.fullDescription || product.description || '';
+    const printFinishNote = visibleContent.includes(PRINT_FINISH_NOTE) ? '' : `<p class="description-suggestion">${escapeHTML(PRINT_FINISH_NOTE)}</p>`;
+    if (!content) return `<div class="dialog-description"><p>${escapeHTML(visibleContent)}</p>${printFinishNote}</div>`;
+    return `<div class="dialog-description dialog-description-structured">${(content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('')}${content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : ''}${(content.sections || []).map(section => `<section class="description-feature-block"><h3>${escapeHTML(section.title || '')}</h3><ul>${(section.items || []).map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>`).join('')}${content.note ? `<p class="description-suggestion">${escapeHTML(content.note)}</p>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}${printFinishNote}</div>`;
   }
   function colorSwatchStyle(color = '') {
     return `--swatch-color:${PRODUCT_COLOR_SWATCHES[color] || '#e7e9e3'}`;
   }
+  function updateVariantProductPrice(product, quantity = 1) {
+    const form=$('#detailForm');
+    const selected=product.variantOptions.find(option => option.value === form?.querySelector('[name="variant"]')?.value);
+    const color=form?.elements.color?.value || '';
+    const unitPrice=selected && productColors(product).includes(color) ? Number(selected.price) : null;
+    const output=$('#detailQuantityPrice');
+    if (!output) return;
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) output.textContent='Informe de 1 a 99 unidades';
+    else output.textContent=unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
+  }
   function productPriceMarkup(product, version = 'economica') {
     if (product.orderOptions) {
+      if (Number.isFinite(Number(product.cardPrice))) return money(product.cardPrice);
       const prices = product.orderOptions.finishes.map(finish => Number(finish.price)).filter(Number.isFinite);
       if (!prices.length) return '';
       const min = Math.min(...prices);
@@ -206,22 +227,37 @@
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       const saved = Array.isArray(stored) ? stored : stored?.items;
       if (!Array.isArray(saved)) return [];
-      return saved.filter(item => item && getProduct(item.productId)).map(item => {
+      const normalized = saved.filter(item => item && getProduct(item.productId)).map(item => {
         const product=getProduct(item.productId);
-        const version=item.version === 'reforcada' ? 'reforcada' : 'economica';
+        const version=!product.hideVersionSelector && item.version === 'reforcada' ? 'reforcada' : 'economica';
         let color=String(item.color || '');
-        let size=String(item.size || '');
+        let size=product.orderOptions?.sizeOptions ? String(item.size || '') : product.orderOptions?.fixedSize || '';
+        let variant=String(item.variant || '');
         let finish=String(item.finish || '');
-        let key=String(item.key || item.productId);
-        if (product.orderOptions) {
-          size=product.orderOptions.fixedSize;
-          if (finish === 'branco') finish='sem-cor';
-          if (finish === 'pintado') finish='colorido';
-          if (finish === 'sem-cor') color='';
-          key=`${item.productId}::${version}::${color}::${size}::${finish}`;
+        if (product.variantOptions) {
+          if (!product.variantOptions.some(option => option.value === variant)) variant='';
+          if (!productColors(product).includes(color)) color='';
         }
-        return { key, productId:item.productId, version, quantity:Math.max(1,Math.min(99,Number.parseInt(item.quantity,10)||1)), color, size, finish, note:String(item.note || '').slice(0,500) };
+        if (product.orderOptions) {
+          if (product.orderOptions.sizeOptions && !product.orderOptions.sizeOptions.includes(size)) size='';
+          if (finish === 'branco' || finish === 'sem-cor') finish='sem-pintura';
+          if (finish === 'pintado') finish='colorido';
+          if (finish === 'sem-pintura') color='';
+          if (finish === 'colorido' && !product.orderOptions.colors.includes(color)) color='';
+        }
+        const key=product.orderOptions ? `${item.productId}::${version}::${size}::${color}::${finish}` : product.variantOptions ? `${item.productId}::variant::${variant}::${color}` : `${item.productId}::${version}::${color}`;
+        return { key, productId:item.productId, version, quantity:Math.max(1,Math.min(99,Number.parseInt(item.quantity,10)||1)), color, size, variant, finish, note:String(item.note || '').slice(0,500) };
       });
+      const unique = new Map();
+      normalized.forEach(item => {
+        const existing=unique.get(item.key);
+        if (!existing) unique.set(item.key,item);
+        else {
+          existing.quantity=Math.min(99,existing.quantity+item.quantity);
+          if (item.note) existing.note=item.note;
+        }
+      });
+      return [...unique.values()];
     } catch { return []; }
   }
   function loadCustomRequest() {
@@ -249,15 +285,15 @@
     const demonstrative = product.demonstrative !== false;
     const variations = product.orderOptions
       ? `<span>Opções: ${escapeHTML(product.orderOptions.finishes.map(finish => finish.label).join(', '))}</span>`
-      : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span><span>Opções: ${escapeHTML(PRODUCT_SIZES.join(', '))}</span>`;
+      : `<span>Cores: ${escapeHTML(productColors(product).join(', '))}</span>`;
     return `<article class="product-card">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link${product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
     if (!isCatalogPage) return;
-    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"><span class="category-illustration-label">FOTO ILUSTRATIVA</span></span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
+    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360">${category.illustrative === false ? '' : '<span class="category-illustration-label">FOTO ILUSTRATIVA</span>'}</span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
   }
   function renderCategories() {
     if (!isCatalogPage) return;
@@ -401,7 +437,7 @@
       .sort((a,b) => (a.featured || 999) - (b.featured || 999));
     grid.innerHTML = visible.map(product => {
       const image = productImages(product)[0];
-      return `<article class="all-products-card"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
+      return `<article class="all-products-card"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name${product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
     }).join('');
     const count = $('#allProductsCount');
     count.textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
@@ -411,15 +447,16 @@
   function addProduct(product, opts = {}) {
     const previousCart = cart.map(item => ({ ...item }));
     const color = opts.color || '';
-    const size = opts.size || product.orderOptions?.fixedSize || '';
-    const version = opts.version === 'reforcada' ? 'reforcada' : 'economica';
+    const size = product.orderOptions ? (opts.size || product.orderOptions.fixedSize || '') : '';
+    const variant = opts.variant || '';
+    const version = !product.hideVersionSelector && opts.version === 'reforcada' ? 'reforcada' : 'economica';
     const finish = opts.finish || '';
-    const key = product.orderOptions ? `${product.id}::${version}::${color}::${size}::${finish}` : `${product.id}::${version}::${color}::${size}`;
+    const key = product.orderOptions ? `${product.id}::${version}::${size}::${color}::${finish}` : product.variantOptions ? `${product.id}::variant::${variant}::${color}` : `${product.id}::${version}::${color}`;
     let existing = cart.find(item => item.key === key);
     if (existing) {
       existing.quantity = Math.min(99, existing.quantity + (Number(opts.quantity) || 1));
       if (opts.note) existing.note = opts.note.slice(0,500);
-    } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, finish, note:(opts.note || '').slice(0,500) });
+    } else cart.push({ key, productId:product.id, version, quantity:Math.min(99,Math.max(1,Number(opts.quantity)||1)), color, size, variant, finish, note:(opts.note || '').slice(0,500) });
     if (!saveCart()) {
       cart = previousCart;
       renderCart();
@@ -447,11 +484,15 @@
       const image = productImages(product)[0];
       const orderOptions = product.orderOptions;
       const cartOptionMarkup = orderOptions
-        ? `<div class="cart-options"><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}"><option value="" ${item.finish ? '' : 'selected'}>Selecione uma opção</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' ? `<label>Cor do manto<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
-        : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label><label class="cart-size-label">Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}">${optionList(PRODUCT_SIZES,item.size,'Selecione uma opção')}</select></label></div>`;
+        ? `<div class="cart-options"><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.sizeOptions || [],item.size,'Selecione um tamanho')}</select></label><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}" required><option value="" ${item.finish ? '' : 'selected'}>Selecione um acabamento</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' ? `<label>Cor do manto<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
+        : product.variantOptions
+        ? `<div class="cart-options"><label>Tamanho / kit<select data-field="variant" data-key="${escapeHTML(item.key)}"><option value="" ${item.variant ? '' : 'selected'}>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
+        : product.hideVersionSelector
+        ? `<div class="cart-options"><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
+        : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`;
       const unitPrice = cartUnitPrice(product,item);
       const selectedFinish = orderOptions?.finishes.find(finish => finish.value === item.finish);
-      const unitLabel = orderOptions ? (unitPrice == null ? '' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`;
+      const unitLabel = orderOptions || product.variantOptions ? (unitPrice == null ? 'Selecione as opções' : money(unitPrice)) : product.hideVersionSelector ? product.price == null ? 'Consulte disponibilidade' : `${money(versionPrice(product,item.version))} / un.` : product.price == null ? 'Consulte disponibilidade' : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`;
       return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
         ${cartOptionMarkup}
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
@@ -537,33 +578,37 @@
   }
   function openDetails(id, selectedVersion = 'economica') {
     const product = getProduct(id); if (!product) return;
-    selectedVersion = selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
+    selectedVersion = !product.hideVersionSelector && selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
-    const priceDetails = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))}</strong>`;
+    const priceDetails = product.orderOptions || product.variantOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))}</strong>`;
     const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
     const orderFields = product.orderOptions
-      ? `<p class="detail-version-description detail-order-observation">Tamanhos disponíveis: 3 cm, 7,5 cm e 10 cm.<br><br>Para mais quantidades, consulte pelo WhatsApp.</p><div class="dialog-fields"><label class="detail-option-field"><span class="sr-only">Acabamento</span><select id="detailFinish" name="finish" aria-label="Acabamento" aria-describedby="finishError" required><option value="" selected hidden>Acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)}</option>`).join('')}</select><span class="field-error" id="finishError" hidden>Selecione um acabamento para continuar.</span></label><label class="detail-option-field" data-sash-field hidden><span class="sr-only">Cor do manto</span><select id="detailColor" name="color" aria-label="Cor do manto" aria-describedby="colorError"><option value="" selected hidden>Cor do manto</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select><span class="field-error" id="colorError" hidden>Selecione uma cor do manto para continuar.</span></label></div><p class="detail-version-description" data-detail-version-description>Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.</p>`
-      : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label><label>Tamanho<select name="size">${optionList(PRODUCT_SIZES,'','Selecione uma opção')}</select></label></div><p class="detail-version-description" data-detail-version-description>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
-    const initialSubtotal = product.orderOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,1,selectedVersion))}`;
+      ? `<div class="dialog-fields"><label class="detail-option-field">Tamanho<select id="detailSize" name="size" aria-label="Tamanho do Mini Jesus" aria-describedby="sizeError" required><option value="" selected hidden>Selecione um tamanho</option>${product.orderOptions.sizeOptions.map(size => `<option value="${escapeHTML(size)}">${escapeHTML(size)}</option>`).join('')}</select><span class="field-error" id="sizeError" hidden>Selecione um tamanho para continuar.</span></label><label class="detail-option-field">Acabamento<select id="detailFinish" name="finish" aria-label="Acabamento" aria-describedby="finishError" required><option value="" selected hidden>Selecione um acabamento</option>${product.orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}">${escapeHTML(finish.label)} — ${money(finish.price)}</option>`).join('')}</select><span class="field-error" id="finishError" hidden>Selecione um acabamento para continuar.</span></label><label class="detail-option-field" data-sash-field hidden>Cor do manto<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select id="detailColor" name="color" aria-label="Cor do manto" aria-describedby="colorError"><option value="" selected hidden>Selecione uma cor</option>${product.orderOptions.colors.map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor do manto para continuar.</span></label></div>`
+      : product.variantOptions
+      ? `<div class="dialog-fields"><label class="detail-option-field">Tamanho / kit<select name="variant" aria-label="Tamanho ou kit da Rena Natalina" aria-describedby="variantError" required><option value="" selected>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione um tamanho ou kit.</span></label><label class="detail-option-field">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color" aria-label="Cor da Rena Natalina" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor.</span></label></div>`
+      : product.hideVersionSelector
+      ? `<div class="dialog-fields"><label class="detail-option-field">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color" aria-label="Cor do produto" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor para continuar.</span></label></div>`
+      : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label></div><p class="detail-version-description" data-detail-version-description ${product.price != null && !versionDescription(selectedVersion) ? 'hidden' : ''}>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
+    const initialSubtotal = product.orderOptions || product.variantOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Valor: ${money(productSubtotal(product,1,selectedVersion))}`;
     const noteLabel = product.orderOptions ? 'Observações para cotação' : 'Observações ou personalização';
-    const notePlaceholder = product.orderOptions ? 'Informe outro tamanho ou quantidade para consultar pelo WhatsApp.' : 'Opcional';
+    const notePlaceholder = 'Opcional: informe personalizações ou detalhes do pedido.';
     $('#dialogContent').innerHTML = `<div class="dialog-layout">
       ${galleryMarkup(product)}
       <div class="dialog-info">
-        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName">${escapeHTML(product.name)}</h2>
+        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2>
         <div class="dialog-price">${priceDetails}</div>
         ${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
         <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
           ${orderFields}
-          <label class="dialog-note">${noteLabel}<span class="dialog-help">${product.orderOptions ? 'Use este campo para informar tamanhos ou quantidades especiais.' : 'Opcional: informe personalizações ou detalhes do pedido.'}</span><textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>
+          <label class="dialog-note">${noteLabel}${product.orderOptions ? '<span class="dialog-help">Use este campo para informar detalhes adicionais do pedido.</span>' : ''}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>
           <div class="dialog-add-row">
             <label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>
-            <output class="detail-quantity-price${product.orderOptions ? ' detail-price-highlight' : ''}" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
-            <button class="button button-dark" type="submit" data-add-to-quote aria-label="Adicionar ${escapeHTML(product.name)} à cotação">Adicionar à cotação</button>
+            <output class="detail-quantity-price detail-price-highlight" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
+            <button class="button button-dark" type="submit" data-add-to-quote aria-label="Adicionar ${escapeHTML(product.name)} à cotação">Adicionar</button>
           </div>
         </form>
       </div>
@@ -585,18 +630,27 @@
       if (product.orderOptions) {
         const finish = product.orderOptions.finishes.find(entry => entry.value === item.finish);
         lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Acabamento: ${finish?.label || 'a definir'}`);
-        if (finish?.value === 'colorido') lines.push(`   Cor do manto: ${item.color || 'a definir'}`, '   A cor escolhida altera somente a faixa do manto; as demais partes permanecem conforme o modelo original.');
-        if (finish?.value === 'sem-cor') lines.push('   O boneco inteiro será branco, sem pintura.');
+        if (finish?.value === 'colorido') lines.push(`   Cor do manto: ${item.color || 'a definir'}`, '   A cor escolhida altera somente o manto; as demais partes permanecem conforme o modelo original.');
+        if (finish?.value === 'sem-pintura') lines.push('   Produto sem pintura.');
         if (item.note.trim()) lines.push(`   Observações para cotação: ${item.note.trim()}`);
         const unitPrice = cartUnitPrice(product,item);
         lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`);
-        lines.push(`   ${product.orderOptions.discountNote}`,'');
+        lines.push('');
         return;
       }
-      lines.push(`   Cor: ${item.color || 'a definir'}`, `   Tamanho: ${item.size || 'a definir'}`);
+      if (product.variantOptions) {
+        const option=product.variantOptions.find(entry => entry.value === item.variant);
+        lines.push(`   Tamanho / kit: ${option?.label || 'a definir'}`, `   Cor: ${item.color || 'a definir'}`);
+        if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
+        const unitPrice=cartUnitPrice(product,item);
+        lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`, '');
+        return;
+      }
+      lines.push(`   Cor: ${item.color || 'a definir'}`);
       if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-      lines.push(`   Versão: ${versionName(item.version)}`);
-      lines.push(`   Preço unitário: ${product.price == null ? 'A consultar' : `${money(versionPrice(product,item.version))}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
+      if (!product.hideVersionSelector) lines.push(`   Versão: ${versionName(item.version)}`);
+      const unitPrice=cartUnitPrice(product,item);
+      lines.push(`   Preço unitário: ${unitPrice == null ? 'A consultar' : `${money(unitPrice)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
       if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}; outras quantidades a ${money(versionPrice(product,item.version))} por unidade.`);
       lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`, '');
     });
@@ -620,9 +674,11 @@
     if (!cart.length && !customRequest) { showToast('Adicione produtos à lista antes de solicitar um orçamento.'); return; }
     const incomplete = cart.some(item => {
       const product = getProduct(item.productId);
-      return product?.orderOptions && (!item.size || !item.finish || (item.finish === 'colorido' && !item.color));
+      return product?.orderOptions && (!product.orderOptions.sizeOptions?.includes(item.size) || !item.finish || (item.finish === 'colorido' && !product.orderOptions.colors.includes(item.color)))
+        || product?.variantOptions && (!product.variantOptions.some(option => option.value === item.variant) || !productColors(product).includes(item.color))
+        || product?.hideVersionSelector && !productColors(product).includes(item.color);
     });
-    if (incomplete) { showToast('Selecione o acabamento e a cor do manto se escolher a opção colorido.'); return; }
+    if (incomplete) { showToast('Preencha as opções obrigatórias dos produtos antes de solicitar o orçamento.'); return; }
     if (!/^\d{12,13}$/.test(CONFIG.WHATSAPP_NUMBER)) { showToast('O número de WhatsApp precisa ser configurado com DDI e DDD.'); return; }
     const url = `https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(buildWhatsAppMessage())}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -641,7 +697,7 @@
   [productGrid,trendingTrack,$('#allProductsGrid')].filter(Boolean).forEach(grid => {
     grid.addEventListener('click', event => {
       const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]');
-      if (add) { const product=getProduct(add.dataset.add); if (product?.orderOptions) openDetails(product.id); else if (product) addProduct(product); }
+      if (add) { const product=getProduct(add.dataset.add); if (product?.orderOptions || product?.variantOptions || product?.hideVersionSelector) openDetails(product.id); else if (product) addProduct(product); }
       if (details) openDetails(details.dataset.details);
     });
   });
@@ -658,7 +714,7 @@
     if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1));
     else item[input.dataset.field]=input.value;
     if (itemProduct?.orderOptions && input.dataset.field === 'finish' && item.finish !== 'colorido') item.color='';
-    item.key=itemProduct?.orderOptions ? `${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}::${item.finish || ''}` : `${item.productId}::${item.version || 'economica'}::${item.color}::${item.size}`;
+    item.key=itemProduct?.orderOptions ? `${item.productId}::${item.version || 'economica'}::${item.size || ''}::${item.color}::${item.finish || ''}` : itemProduct?.variantOptions ? `${item.productId}::variant::${item.variant || ''}::${item.color}` : `${item.productId}::${item.version || 'economica'}::${item.color}`;
     const duplicate=cart.find(entry=>entry!==item&&entry.key===item.key);
     if (duplicate) { duplicate.quantity=Math.min(99,duplicate.quantity+item.quantity); if (item.note) duplicate.note=item.note; cart=cart.filter(entry=>entry!==item); }
     saveCart(); renderCart();
@@ -702,25 +758,26 @@
   });
   $('#dialogContent').addEventListener('input', event => {
     const quantity = event.target.closest('#detailForm [name="quantity"]');
-    if (!quantity) return;
-    const quantityError = $('#quantityError');
-    if (quantityError) quantityError.hidden = true;
-    quantity.removeAttribute('aria-invalid');
     const product = getProduct($('#detailForm')?.dataset.product);
-    const value = Number.parseInt(quantity.value, 10);
+    if (!product) return;
+    if (quantity) {
+      const quantityError = $('#quantityError');
+      if (quantityError) quantityError.hidden = true;
+      quantity.removeAttribute('aria-invalid');
+    }
+    const value = Number.parseInt($('#detailForm [name="quantity"]')?.value, 10);
     const output = $('#detailQuantityPrice');
-    if (!product || !output) return;
+    if (!output) return;
+    if (product.variantOptions) { updateVariantProductPrice(product,value); return; }
+    if (!quantity) return;
     if (product.orderOptions) {
       const finish = $('#detailForm [name="finish"]')?.value;
-      const size = product.orderOptions.fixedSize;
-      const color = $('#detailForm [name="color"]')?.value || '';
-      const ready = finish === 'sem-cor' || (finish === 'colorido' && color);
-      const unitPrice = ready && size === product.orderOptions.pricedSize ? product.orderOptions.finishes.find(entry => entry.value === finish)?.price : null;
+      const unitPrice = product.orderOptions.finishes.find(entry => entry.value === finish)?.price ?? null;
       output.textContent = !Number.isFinite(value) || value < 1 || value > 99 ? 'Informe de 1 a 99 unidades' : unitPrice == null ? '' : `${value > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * value)}`;
       return;
     }
     const version = $('#detailForm [name="version"]')?.value || 'economica';
-    output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `Subtotal: ${money(productSubtotal(product,value,version))}` : 'Informe de 1 a 99 unidades';
+      output.textContent = product.price == null ? 'Consulte disponibilidade' : Number.isFinite(value) && value > 0 && value <= 99 ? `${value > 1 ? 'Total' : 'Valor'}: ${money(productSubtotal(product,value,version))}` : 'Informe de 1 a 99 unidades';
   });
   $('#dialogContent').addEventListener('click', event => {
     const button = event.target.closest('[data-detail-quantity-step]');
@@ -732,7 +789,19 @@
   });
   $('#dialogContent').addEventListener('change', event => {
     const product = getProduct($('#detailForm')?.dataset.product);
-    if (product?.orderOptions && event.target.matches('#detailForm [name="finish"], #detailForm [name="color"]')) {
+    if (product?.variantOptions && event.target.matches('#detailForm [name="variant"], #detailForm [name="color"]')) {
+      const errorId=event.target.name === 'variant' ? 'variantError' : 'colorError';
+      const error=$(`#${errorId}`);
+      if (error) error.hidden=true;
+      event.target.removeAttribute('aria-invalid');
+      if (event.target.name === 'color') {
+        const swatch=$('[data-color-swatch]',event.target.parentElement);
+        if (swatch) swatch.style.setProperty('--swatch-color',PRODUCT_COLOR_SWATCHES[event.target.value] || '#e7e9e3');
+      }
+      updateVariantProductPrice(product,Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1);
+      return;
+    }
+    if (product?.orderOptions && event.target.matches('#detailForm [name="size"], #detailForm [name="finish"], #detailForm [name="color"]')) {
       const finishValue = $('#detailForm [name="finish"]').value;
       const finish = product.orderOptions.finishes.find(entry => entry.value === finishValue);
       const sashField = $('[data-sash-field]');
@@ -743,7 +812,7 @@
         colorSelect.required = showColor;
         if (!showColor) colorSelect.value = '';
       }
-      const changedError = event.target.name === 'finish' ? $('#finishError') : $('#colorError');
+      const changedError = event.target.name === 'size' ? $('#sizeError') : event.target.name === 'finish' ? $('#finishError') : $('#colorError');
       if (changedError) changedError.hidden = true;
       event.target.removeAttribute('aria-invalid');
       if (!showColor) {
@@ -751,9 +820,12 @@
         if (colorError) colorError.hidden = true;
         colorSelect?.removeAttribute('aria-invalid');
       }
+      if (event.target.name === 'color') {
+        const swatch=$('[data-color-swatch]',event.target.parentElement);
+        if (swatch) swatch.style.setProperty('--swatch-color',PRODUCT_COLOR_SWATCHES[event.target.value] || '#e7e9e3');
+      }
       const output = $('#detailQuantityPrice');
-      const ready = finishValue === 'sem-cor' || (finishValue === 'colorido' && colorSelect?.value);
-      const unitPrice = ready && product.orderOptions.fixedSize === product.orderOptions.pricedSize ? finish?.price : null;
+      const unitPrice = finish?.price ?? null;
       const quantity = Number.parseInt($('#detailForm [name="quantity"]')?.value,10) || 1;
       if (output) {
         output.textContent = unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
@@ -767,8 +839,6 @@
       }
       const unitLabel = $('[data-detail-unit-price]');
       if (unitLabel) unitLabel.textContent = unitPrice == null ? 'Selecione uma opção' : money(unitPrice);
-      const choiceNote = $('[data-detail-version-description]');
-      if (choiceNote) choiceNote.textContent = finish?.value === 'sem-cor' ? 'Sem cor: o boneco inteiro será branco, sem pintura.' : finish?.value === 'colorido' ? 'Colorido: escolha a cor do manto; somente a faixa muda de cor.' : 'Sem cor: o boneco inteiro será branco, sem pintura. Colorido: escolha a cor do manto; somente a faixa muda de cor.';
       return;
     }
     const version = event.target.closest('#detailForm [name="version"]');
@@ -778,9 +848,13 @@
       const unitPrice = $('[data-detail-unit-price]');
       if (product?.price != null && unitPrice) unitPrice.textContent = money(versionPrice(product,version.value));
       const detailDescription = $('[data-detail-version-description]');
-      if (detailDescription) detailDescription.textContent = product?.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(version.value);
+      if (detailDescription) {
+        const description = product?.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(version.value);
+        detailDescription.textContent = description;
+        detailDescription.hidden = !description;
+      }
       const output = $('#detailQuantityPrice');
-      if (output) output.textContent = product?.price == null ? 'Consulte disponibilidade' : `Subtotal: ${money(productSubtotal(product,quantity,version.value))}`;
+      if (output) output.textContent = product?.price == null ? 'Consulte disponibilidade' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(productSubtotal(product,quantity,version.value))}`;
     }
     const select = event.target.closest('#detailForm [name="color"]');
     if (!select) return;
@@ -806,10 +880,14 @@
     const data = new FormData(form);
     const finish = String(data.get('finish') || '');
     const color = String(data.get('color') || '');
+    const size = String(data.get('size') || '');
+    const variant = String(data.get('variant') || '');
     const quantityText = String(data.get('quantity') || '');
     const quantity = Number(quantityText);
     const finishSelect = form.querySelector('[name="finish"]');
     const colorSelect = form.querySelector('[name="color"]');
+    const sizeSelect = form.querySelector('[name="size"]');
+    const variantSelect = form.querySelector('[name="variant"]');
     const quantityInput = form.querySelector('[name="quantity"]');
     const setError = (input, errorId, message) => {
       const error = $(`#${errorId}`);
@@ -818,6 +896,10 @@
       input?.focus();
       showToast(message);
     };
+    if (product.orderOptions && !product.orderOptions.sizeOptions.includes(size)) {
+      setError(sizeSelect,'sizeError','Selecione um tamanho para continuar.');
+      return;
+    }
     if (product.orderOptions && !product.orderOptions.finishes.some(option => option.value === finish)) {
       setError(finishSelect,'finishError','Selecione um acabamento para continuar.');
       return;
@@ -826,19 +908,30 @@
       setError(colorSelect,'colorError','Selecione uma cor do manto para continuar.');
       return;
     }
+    if (product.hideVersionSelector && !productColors(product).includes(color)) {
+      setError(colorSelect,'colorError','Selecione uma cor para continuar.');
+      return;
+    }
+    if (product.variantOptions && !product.variantOptions.some(option => option.value === variant)) {
+      setError(variantSelect,'variantError','Selecione um tamanho ou kit para continuar.');
+      return;
+    }
+    if (product.variantOptions && !productColors(product).includes(color)) {
+      setError(colorSelect,'colorError','Selecione uma cor para continuar.');
+      return;
+    }
     if (!/^\d+$/.test(quantityText) || !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
       setError(quantityInput,'quantityError','Informe uma quantidade entre 1 e 99.');
       return;
     }
     const submitButton = form.querySelector('[data-add-to-quote]');
-    const originalLabel = submitButton?.textContent || 'Adicionar à cotação';
+    const originalLabel = submitButton?.textContent || 'Adicionar';
     quoteSubmitPending = true;
     if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Adicionando...'; }
     try {
       await new Promise(resolve => window.requestAnimationFrame(resolve));
       addProduct(product,{
-        version:data.get('version'), finish, color,
-        size:product.orderOptions?.fixedSize || data.get('size'),
+        version:data.get('version'), finish, color, size, variant,
         quantity, note:String(data.get('note') || '')
       });
     } catch (error) {
