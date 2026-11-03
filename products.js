@@ -18,16 +18,86 @@ window.CUBIC_PRODUCTS = [
   { id:'letreiro-feliz-natal-floco-neve', name:'Letreiro Feliz Natal com Floco de Neve – 14 cm', category:'Natal', categories:['Natal'], price:27.00, description:'Letreiro Feliz Natal em impressão 3D com delicado detalhe de floco de neve. Altura aprox. 14 cm e largura aprox. 13 cm.', fullDescription:'Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve. Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.', detailContent:{paragraphs:['Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve.','Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.'],features:['Produzido por impressão 3D.','Design Feliz Natal com detalhe de floco de neve.','Peça leve e resistente.','Ideal para decoração de mesa e ambientes natalinos.'],sections:[{title:'Dimensões aproximadas',items:['Altura: 14 cm.','Largura: 13 cm.']}]}, image:'assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp', imageAlt:'Letreiro Feliz Natal vermelho com floco de neve, decoração impressa em 3D', imageAlts:['Letreiro Feliz Natal vermelho com floco de neve','Letreiro Feliz Natal vermelho em aparador decorado para o Natal','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal com indicação visual das medidas aproximadas'], images:['assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-aparador.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-verde.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-dourado.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-medidas.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:10 },
   { id:'arvore-natal-decorativa-3d-canelada', name:'Árvore de Natal Espiral Decorativa – 12,8 cm', category:'Natal', categories:['Natal'], price:30.00, description:'Árvore de Natal espiral produzida em impressão 3D, com design minimalista. Altura aproximada de 12,8 cm sem estrela.', fullDescription:'Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D. Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes. Produzida por impressão 3D, tem design moderno, é leve e decorativa, ideal para decoração natalina e presentes criativos. Altura aproximada de 12,8 cm sem estrela. Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.', detailContent:{paragraphs:['Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D.','Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes.'],features:['Produzida por impressão 3D.','Design moderno com formato espiral.','Peça leve e decorativa.','Ideal para decoração natalina e presentes criativos.'],sections:[{title:'Dimensões',items:['Altura: aproximadamente 12,8 cm sem estrela.']}],note:'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.'}, image:'assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp', imageAlt:'Árvore de Natal canelada vermelha impressa em 3D com estrela dourada', imageAlts:['Árvore de Natal canelada vermelha com estrela dourada','Árvore de Natal canelada verde-oliva com estrela dourada','Árvore de Natal canelada branca com estrela dourada','Árvore de Natal canelada cor areia com estrela dourada'], images:['assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-verde-oliva-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-branca-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-areia-estrela-dourada.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:11 }
   ,{
-    id:'mini-jesus-sentado', name:'Mini Jesus Sentado – Fé e Delicadeza 3,6 cm', whatsappName:'Mini Jesus sentado', category:'Religião', categories:['Religião'], price:15.00, cardPrice:15.00,
-    description:'Uma peça decorativa delicada, ideal para levar um toque de fé e espiritualidade ao seu dia a dia. Perfeita para decorar mesas, nichos, prateleiras e pequenos ambientes, além de ser uma opção especial para presentear.',
-    fullDescription:'Uma peça decorativa delicada, ideal para levar um toque de fé e espiritualidade ao seu dia a dia. Perfeita para decorar mesas, nichos, prateleiras e pequenos ambientes, além de ser uma opção especial para presentear.',
-    detailContent:{paragraphs:['Uma peça decorativa delicada, ideal para levar um toque de fé e espiritualidade ao seu dia a dia. Perfeita para decorar mesas, nichos, prateleiras e pequenos ambientes, além de ser uma opção especial para presentear.'],features:['Design detalhado e delicado.','Produzido por impressão 3D.','A versão sem pintura pode ser personalizada em casa com canetinhas acrílicas ou tintas acrílicas/PVA próprias para materiais impressos em 3D.'],note:'Na versão colorida, somente o manto recebe a cor escolhida. As demais partes permanecem conforme o modelo original.'},
+    id:'mini-jesus-sentado', name:'Mini Jesus Cristo para Monitor – 3,7 cm', whatsappName:'Mini Jesus Cristo para Monitor', category:'Religião', categories:['Religião'], price:25.00, cardPrice:25.00,
+    description:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Compacta, é ideal para monitores, escrivaninhas e espaços de trabalho ou estudo.',
+    fullDescription:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Com tamanho compacto, é ideal para decorar monitores, escrivaninhas e espaços de trabalho ou estudo. Produzido em impressão 3D com PLA, tem acabamento colorido com opção de personalização, altura aproximada de 3,7 cm e largura aproximada de 1,64 cm. Também disponível totalmente branco, sem pintura, para personalizar em casa, ou em outros tamanhos sob encomenda. Se desejar uma opção diferente, informe o tamanho ou acabamento desejado na caixa de observações abaixo.',
+    detailContent:{
+      paragraphs:['Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo.','Com tamanho compacto, é ideal para decorar monitores, escrivaninhas e espaços de trabalho ou estudo.'],
+      features:['Produzido em impressão 3D com PLA.','Acabamento colorido, com opção de personalização.','Altura aproximada: 3,7 cm.','Largura aproximada: 1,64 cm.'],
+      sections:[{title:'Personalização',items:['Também disponível totalmente branco, sem pintura, para personalizar em casa, ou em outros tamanhos sob encomenda.']}],
+      note:'Se desejar uma opção diferente, informe o tamanho ou acabamento desejado na caixa de observações abaixo.'
+    },
     image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp', imageAlt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',
     imageAlts:['Mini Jesus sentado com o manto vermelho em cenário de decoração','Mini Jesus sentado branco sem pintura sobre uma tela','Mini Jesus sentado branco sem pintura em uma impressora 3D'],
     images:['assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp','assets/photos/products/jesus/mini-jesus-sentado-sem-pintura-impressao-3d.webp','assets/photos/products/jesus/mini-jesus-sentado-branco-impressao-3d.webp'],
-    material:'Material de impressão 3D',  colors:[], demonstrative:false,
-    orderOptions:{sizeOptions:['3 cm','7,5 cm','10 cm'],finishes:[{value:'sem-pintura',label:'Sem pintura',price:15},{value:'colorido',label:'Colorido',price:25}],colors:['Verde-oliva','Preto','Vermelho','Marrom','Areia']},
+    material:'Material de impressão 3D', demonstrative:false,
+    hideVersionSelector:true, colorFieldLabel:'Cor do manto', colorOptions:['Verde-oliva','Preto','Vermelho','Marrom','Areia'], colors:['Verde-oliva','Preto','Vermelho','Marrom','Areia'],
     featured:12
+  },
+  {
+    id:'mini-jesus-no-trono',
+    name:'Mini Jesus no Trono – Decoração Religiosa 3D',
+    category:'Presentes criativos', categories:['Religião','Presentes criativos'],
+    price:35.00, cardPrice:35.00,
+    description:'Mini Jesus colorido com trono incluído, uma peça delicada para decorar cantinhos de oração e outros ambientes.',
+    fullDescription:'Uma miniatura delicada e cheia de significado, ideal para decorar cantinhos de oração, aparadores, estantes e escritórios. O Mini Jesus possui detalhes coloridos, com túnica branca, faixa vermelha e um trono que acompanha a peça.',
+    detailContent:{
+      paragraphs:['Uma miniatura delicada e cheia de significado, ideal para decorar cantinhos de oração, aparadores, estantes e escritórios.','O Mini Jesus possui detalhes coloridos, com túnica branca, faixa vermelha e um trono que acompanha a peça.'],
+      features:['Produzido em impressão 3D com PLA.','Mini Jesus colorido.','Acompanha trono e cadeira.','Peça decorativa com detalhes delicados.'],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Altura: 4,7 cm.','Largura: 3 cm.']},
+        {title:'O que acompanha',items:['1 Mini Jesus sentado.','1 trono na cor escolhida.']}
+      ],
+      note:'Produto vendido em conjunto, incluindo o Mini Jesus e o trono. Outras cores de cadeira podem ser solicitadas na caixa de observações.\n\nPor ser produzido em impressão 3D, pode apresentar pequenas marcas naturais do processo de fabricação, sem comprometer sua qualidade ou utilização.'
+    },
+    image:'assets/photos/products/mini-jesus-cadeira-reta/1-mini-jesus-no-trono-decoracao-religiosa-impressao-3d.webp',
+    imageAlt:'Mini Jesus sentado em trono marrom, peça decorativa impressa em 3D',
+    imageAlts:[
+      'Mini Jesus sentado em cadeira reta marrom',
+      'Mini Jesus e cadeira apresentados como conjunto de duas peças',
+      'Mini Jesus no trono em ambiente de oração',
+      'Dimensões e detalhes do Mini Jesus no trono'
+    ],
+    images:[
+      'assets/photos/products/mini-jesus-cadeira-reta/1-mini-jesus-no-trono-decoracao-religiosa-impressao-3d.webp',
+      'assets/photos/products/mini-jesus-cadeira-reta/2-mini-jesus-trono-cadeira-conjunto-duas-pecas.webp',
+      'assets/photos/products/mini-jesus-cadeira-reta/3-mini-jesus-no-trono-decoracao-religiosa.webp',
+      'assets/photos/products/mini-jesus-cadeira-reta/4-mini-jesus-no-trono-dimensoes-altura-largura.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false, hidePrintFinishNote:true,
+    colorChoiceSummary:'Cores da cadeira e do manto selecionadas separadamente.',
+    colorChoices:[
+      {key:'chairColor',label:'Cor da cadeira',partLabel:'altera somente o trono',options:['Marrom','Bege','Preto','Branco']},
+      {key:'mantleColor',label:'Cor do manto',partLabel:'altera somente o manto do Mini Jesus',options:['Vermelho','Verde-oliva','Preto','Marrom','Areia']}
+    ],
+    featured:13
+  },
+  {
+    id:'rena-natal-geometrica-20cm',
+    name:'Rena de Natal Geométrica – 20 cm',
+    category:'Natal', categories:['Natal'],
+    price:60.00,
+    description:'Rena geométrica facetada produzida em impressão 3D. Opções individuais e kits a partir de R$ 60,00.',
+    fullDescription:'Adicione elegância à sua decoração natalina com esta rena geométrica produzida em impressão 3D. Seu design moderno e facetado, com galhos imponentes, traz personalidade e sofisticação para qualquer ambiente. Ideal para decorar mesas, estantes, aparadores e composições natalinas. Também é uma ótima opção para presentear.',
+    detailContent:{
+      paragraphs:['Adicione elegância à sua decoração natalina com esta rena geométrica produzida em impressão 3D. Seu design moderno e facetado, com galhos imponentes, traz personalidade e sofisticação para qualquer ambiente.','Ideal para decorar mesas, estantes, aparadores e composições natalinas. Também é uma ótima opção para presentear.'],
+      features:['Produzida por impressão 3D.','Design geométrico com acabamento facetado.','Estilo moderno e minimalista.','Disponível em diferentes cores.','Ideal para decoração natalina e presentes criativos.'],
+      sections:[{title:'Tamanhos das peças',items:['Rena individual: 20 cm de altura.','Kit com 2 renas: ambas com 20 cm de altura.','Kit misto: uma rena de 20 cm e uma rena de 10 cm.']}]
+    },
+    image:'assets/photos/products/Rena de Natal – Elegante Feriado Grande 20cm/rena-grande-e-peq-20 e 10cm.webp',
+    imageAlt:'Rena geométrica de Natal em 20 cm e rena menor de 10 cm, impressas em 3D',
+    images:['assets/photos/products/Rena de Natal – Elegante Feriado Grande 20cm/rena-grande-e-peq-20 e 10cm.webp'],
+    dimensions:null,
+    variantLabel:'Tamanho e quantidade',
+    variantOptions:[
+      {value:'rena-20',label:'1 rena de 20 cm — R$ 60,00',price:60},
+      {value:'kit-2x20',label:'Kit com 2 renas de 20 cm — R$ 120,00',price:120},
+      {value:'kit-20-10',label:'Kit com 1 rena de 20 cm + 1 rena de 10 cm — R$ 75,00',price:75}
+    ],
+    colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    demonstrative:false,
+    featured:13
   }
 ];
 
@@ -112,12 +182,12 @@ window.CUBIC_CATEGORY_GROUPS = [
   //    {name:'Suportes e acessórios',slug:'suportes-e-acessorios',image:'assets/photos/categories/suportes-e-acessorios.webp',alt:'Foto ilustrativa de suporte para celular e acessórios',icon:'📱'},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'}
   ]},
-  //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
-  //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
+  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
+    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
   //    {name:'Geek e games',slug:'geek-e-games',image:'assets/photos/categories/geek-e-games.webp',alt:'Foto ilustrativa de controle para videogame',icon:'🎮'},
   //    {name:'Pets',slug:'pets',image:'assets/photos/categories/pets.webp',alt:'Foto ilustrativa de pata e acessórios para pets',icon:'🐾'},
   //    {name:'Personalizados',slug:'personalizados',image:'assets/photos/categories/personalizados.webp',alt:'Foto ilustrativa de peça personalizada em impressão 3D',icon:'✨'}
-  //  ]},
+  ]},
   //  { title:'Empresas e profissionais', intro:'Possibilidades de suportes, organizadores, expositores, brindes e peças personalizadas, sempre sujeitas à avaliação de viabilidade técnica.', categories:[
   //    {name:'Tecnologia e informática',slug:'tecnologia-e-informatica',image:'assets/photos/categories/tecnologia-e-informatica.webp',alt:'Foto ilustrativa de suportes para celulares e controles',icon:'📱'},
   //    {name:'Farmácias',slug:'farmacias',image:'assets/photos/categories/farmacias.webp',alt:'Foto ilustrativa de organizadores para balcão de farmácia',icon:'💊'},
