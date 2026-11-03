@@ -375,6 +375,48 @@ window.CUBIC_PRODUCTS = [
     dimensions:null, material:'PLA', demonstrative:false,
     hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
     featured:20
+  },
+  {
+    id:'placa-ele-vive-coroa-de-espinhos',
+    name:'Placa Ele Vive com a Coroa de Espinhos',
+    cardTitleSingleLine:true,
+    category:'Religião', categories:['Religião'],
+    price:40.00,
+    description:'Placa decorativa “Ele Vive” com letras em relevo e coroa de espinhos. Cores personalizáveis.',
+    fullDescription:'Peça decorativa produzida em impressão 3D, com a mensagem “Ele Vive”, letras em relevo e detalhes da coroa de espinhos. Ideal para decorar cantinhos de oração, estantes, aparadores e outros ambientes.',
+    detailContent:{
+      paragraphs:['Peça decorativa produzida em impressão 3D, com a mensagem “Ele Vive”, letras em relevo e detalhes da coroa de espinhos. Ideal para decorar cantinhos de oração, estantes, aparadores e outros ambientes.'],
+      features:[
+        'Material: PLA.',
+        'Largura aproximada: 15 cm.',
+        'Altura aproximada: 8 cm.',
+        'Acabamento fosco.',
+        'Peça decorativa com base estável.',
+        'Conteúdo: 1 unidade.'
+      ],
+      note:'Deseja outra combinação de cores ou tamanho? Informe sua preferência no campo de observações.'
+    },
+    image:'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-decoracao-religiosa-01.webp',
+    imageAlt:'Placa Ele Vive com coroa de espinhos em impressão 3D',
+    imageAlts:[
+      'Placa Ele Vive com coroa de espinhos e dimensão aproximada de 15 cm',
+      'Detalhe das letras em relevo e da coroa de espinhos na placa Ele Vive',
+      'Placa Ele Vive branca e marrom com base estável',
+      'Placa Ele Vive em combinação azul e dourado',
+      'Placa Ele Vive em cinco combinações de cores disponíveis'
+    ],
+    images:[
+      'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-decoracao-religiosa-01.webp',
+      'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-letras-em-relevo-02.webp',
+      'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-base-estavel-03.webp',
+      'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-azul-dourado-04.webp',
+      'assets/photos/products/ele-vive/placa-ele-vive-coroa-espinhos-opcoes-de-cores-05.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, colorFieldLabel:'Cor',
+    colorOptions:['Azul / Dourado','Verde / Bege','Preto / Branco','Marrom / Branco','Branco / Marrom'],
+    hidePrintFinishNote:true,
+    featured:21
   }
 ];
 

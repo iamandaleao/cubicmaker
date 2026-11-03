@@ -30,6 +30,22 @@
   let sharedTrendingCounts = null;
   let trendingTimer = null;
   let trendingOpenerId = null;
+  const addConfirmationToast = document.createElement('div');
+  addConfirmationToast.className = 'add-cart-toast';
+  addConfirmationToast.setAttribute('role','status');
+  addConfirmationToast.setAttribute('aria-live','polite');
+  addConfirmationToast.innerHTML = '<span class="add-cart-toast-icon" aria-hidden="true">✓</span><span>Adicionado ao carrinho</span>';
+  let addConfirmationTimer;
+
+  function showAddConfirmation() {
+    clearTimeout(addConfirmationTimer);
+    if (dialog.open) dialog.append(addConfirmationToast);
+    else document.body.append(addConfirmationToast);
+    addConfirmationToast.classList.remove('is-visible');
+    void addConfirmationToast.offsetWidth;
+    addConfirmationToast.classList.add('is-visible');
+    addConfirmationTimer = setTimeout(() => addConfirmationToast.classList.remove('is-visible'),2000);
+  }
 
   $$('[data-whatsapp-contact]').forEach(link => {
     if (!/^\d{12,13}$/.test(CONFIG.WHATSAPP_NUMBER)) return;
@@ -479,7 +495,7 @@
       return false;
     }
     renderCart();
-    showToast('Produto adicionado à cotação.');
+    showAddConfirmation();
     return true;
   }
   function renderCart() {
