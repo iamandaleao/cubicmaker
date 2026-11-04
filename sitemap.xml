@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://cubicmaker.com/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://cubicmaker.com/catalogo.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cubicmaker.com/materiais-e-versoes.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cubicmaker.com/indicacoes.html</loc>
+    <lastmod>2026-11-04</lastmod>
+    <priority>0.6</priority>
+  </url>
+</urlset>
