@@ -94,7 +94,7 @@
   }
   function configuredUnitPrice(product, item) {
     if (product?.colorChoices) {
-      return product.colorChoices.every(choice => choice.options.includes(item?.colorSelections?.[choice.key])) ? Number(product.price) : null;
+      return product.price != null && product.colorChoices.every(choice => choice.options.includes(item?.colorSelections?.[choice.key])) ? Number(product.price) : null;
     }
     if (product?.variantOptions) {
       if (!product.hideVariantColorSelector && !productColors(product).includes(item?.color)) return null;
@@ -312,18 +312,17 @@
   }
   function productCard(product) {
     const image = productImages(product)[0];
-    const demonstrative = product.demonstrative !== false;
     const variations = product.orderOptions
       ? `<span>Opções: ${escapeHTML(product.orderOptions.finishes.map(finish => finish.label).join(', '))}</span>`
       : '';
     return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}">
-      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}${demonstrative ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
+      <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
       <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span><span class="product-code">CM / ${escapeHTML(String(product.featured || '01').padStart(2,'0'))}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.cardDescription || product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-variations">${variations}</div><div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
     if (!isCatalogPage) return;
-    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360">${category.illustrative === false ? '' : '<span class="category-illustration-label">FOTO ILUSTRATIVA</span>'}</span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
+    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"></span><span class="category-card-name">${escapeHTML(category.name)}<span aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
   }
   function renderCategories() {
     if (!isCatalogPage) return;
@@ -530,19 +529,18 @@
         : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`;
       const unitPrice = cartUnitPrice(product,item);
       const selectedFinish = orderOptions?.finishes.find(finish => finish.value === item.finish);
-      const unitLabel = orderOptions || product.variantOptions || product.colorChoices ? (unitPrice == null ? 'Selecione as opções' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : product.hideVersionSelector ? `${money(versionPrice(product,item.version))} / un.` : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`;
+      const unitLabel = orderOptions || product.variantOptions || product.colorChoices ? (unitPrice == null ? 'Selecione as opções' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : product.hideVersionSelector ? `${money(versionPrice(product,item.version))} / un.` : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}`;
       return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
         ${cartOptionMarkup}
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
-        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${escapeHTML(unitLabel)}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}${product.demonstrative !== false && subtotal != null ? '¹' : ''}</strong></div></div></article>`;
+        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${escapeHTML(unitLabel)}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}</strong></div></div></article>`;
     }).join('');
     const customHtml = customRequest ? `<article class="cart-item custom-cart-item"><div class="custom-cart-icon">✳</div><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">PERSONALIZADO</span><h3>Projeto personalizado</h3></div><button class="remove-item" type="button" data-remove-custom aria-label="Remover pedido personalizado">×</button></div><p class="custom-summary">${escapeHTML(customRequest.idea || 'Solicitação de avaliação')}${customRequest.dimensions ? ` · ${escapeHTML(customRequest.dimensions)}` : ''}${customRequest.color ? ` · ${escapeHTML(customRequest.color)}` : ''}</p><span class="cart-unit">Valor a definir após avaliação</span></div></article>` : '';
     $('#cartContent').innerHTML = productRows + customHtml;
     const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
     const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
-    const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
     $('#cartTotal').innerHTML = known
-      ? `<span>Total estimado dos produtos</span><strong>${money(total)}${hasDemo ? '¹' : ''}</strong><small>${hasDemo ? '¹ Preços demonstrativos, sujeitos a confirmação.' : 'Valores cadastrados; confirme disponibilidade e frete pelo WhatsApp.'}</small>`
+      ? `<span>Total dos produtos</span><strong>${money(total)}</strong><small>Confirme disponibilidade e frete pelo WhatsApp.</small>`
       : '<span>Valores a confirmar pelo WhatsApp</span><small>Há itens sem preço cadastrado; solicite o orçamento.</small>';
     $('#requestQuote').disabled = false;
   }
@@ -568,7 +566,7 @@
       },
       faq: {
         title:'Perguntas frequentes',
-        body:'<ul><li><strong>Como faço um pedido?</strong> Selecione os produtos, escolha as variações e envie sua lista pelo WhatsApp para confirmar o orçamento.</li><li><strong>Os produtos podem ser personalizados?</strong> Envie sua ideia, medidas aproximadas e cor. Cada projeto passa por avaliação de viabilidade.</li><li><strong>Os preços e prazos são finais?</strong> Os exemplos do catálogo são demonstrativos. Disponibilidade, preço e prazo precisam ser confirmados no atendimento.</li><li><strong>Posso pedir algo que não está no catálogo?</strong> Sim, você pode enviar a ideia para avaliação.</li></ul>'
+        body:'<ul><li><strong>Como faço um pedido?</strong> Selecione os produtos, escolha as variações e envie sua lista pelo WhatsApp para confirmar o orçamento.</li><li><strong>Os produtos podem ser personalizados?</strong> Envie sua ideia, medidas aproximadas e cor. Cada projeto passa por avaliação de viabilidade.</li><li><strong>Como confirmo preço e prazo?</strong> Disponibilidade, preço, prazo e frete são confirmados no atendimento.</li><li><strong>Posso pedir algo que não está no catálogo?</strong> Sim, você pode enviar a ideia para avaliação.</li></ul>'
       },
       delivery: {
         title:'Compra e entrega',
@@ -612,7 +610,7 @@
     const hasGallery = images.length > 1;
     const thumbnails = hasGallery ? `<div class="product-gallery-thumbs" aria-label="Miniaturas de ${escapeHTML(product.name)}">${images.map((src,index) => `<button type="button" data-gallery-image="${index}" aria-label="Visualizar imagem ${index + 1} de ${escapeHTML(product.name)}" aria-controls="dialogMainImage" aria-pressed="${index === 0}"><img src="${escapeHTML(src)}" alt="" loading="lazy" width="96" height="72"></button>`).join('')}</div>` : '';
     const navigation = hasGallery ? `<div class="gallery-navigation"><span data-gallery-position aria-live="polite">1/${images.length}</span><button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button></div>` : '';
-    return `<div class="product-gallery${hasGallery ? ' has-thumbnails' : ''}">${thumbnails}<div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480">${product.demonstrative !== false ? '<span class="demo-tag">DEMONSTRAÇÃO</span>' : ''}</div>${navigation}</div>`;
+    return `<div class="product-gallery${hasGallery ? ' has-thumbnails' : ''}">${thumbnails}<div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480"></div>${navigation}</div>`;
   }
   function openDetails(id, selectedVersion = 'economica') {
     const product = getProduct(id); if (!product) return;
@@ -620,7 +618,7 @@
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
     const priceDetails = product.orderOptions || product.variantOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))}</strong>`;
-    const categoryLabel = product.demonstrative === false ? escapeHTML(product.category) : `${escapeHTML(product.category)} / PEÇA DEMONSTRATIVA`;
+    const categoryLabel = escapeHTML(product.category);
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
@@ -660,7 +658,7 @@
     </div>`;
     $('#dialogContent').scrollTop = 0;
     if (!dialog.open) dialog.showModal();
-    $('#closeDialog').focus();
+    $('#closeDialog').focus({preventScroll:true});
   }
   function buildWhatsAppMessage() {
     const lines = ['Olá! Gostaria de solicitar um orçamento para os seguintes produtos da Cubic Maker:', ''];
@@ -670,13 +668,11 @@
       itemNumber += 1;
       const subtotal = cartSubtotal(product,item);
       const unitPrice = cartUnitPrice(product,item);
-      const demoMark = product.demonstrative !== false && unitPrice != null ? ' (demonstrativo)' : '';
-      const totalDemoMark = product.demonstrative !== false && subtotal != null ? ' (demonstrativo)' : '';
       lines.push(
         `${itemNumber}. ${product.name}`,
         `   Quantidade: ${item.quantity}`,
-        `   Valor unitário: ${unitPrice == null ? 'A consultar' : `${money(unitPrice)}${demoMark}`}`,
-        `   Valor total: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${totalDemoMark}`}`
+        `   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`,
+        `   Valor total: ${subtotal == null ? 'A consultar' : money(subtotal)}`
       );
       const productLink = product.url || product.productUrl;
       if (productLink) lines.push(`   Link: ${productLink}`);
@@ -707,8 +703,7 @@
     });
     const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
     const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
-    const hasDemo = cart.some(item => getProduct(item.productId)?.demonstrative !== false);
-    if (cart.length && known) lines.push(`Total estimado dos produtos: ${money(total)}${hasDemo ? ' (inclui preços demonstrativos)' : ''}`, '');
+    if (cart.length && known) lines.push(`Total dos produtos: ${money(total)}`, '');
     if (customRequest) {
       lines.push(`${itemNumber ? `${itemNumber + 1}. ` : ''}Projeto personalizado`, '   Solicitação de avaliação');
       if (customRequest.idea) lines.push(`   Ideia: ${customRequest.idea}`);
@@ -717,7 +712,6 @@
       lines.push('   Preço: a definir após avaliação', '');
     }
     lines.push('Gostaria de confirmar a disponibilidade, o prazo de produção e o valor do frete.');
-    if (cart.some(item => getProduct(item.productId)?.demonstrative !== false)) lines.push('', 'Os valores demonstrativos precisam ser confirmados.');
     return lines.join('\n');
   }
   function sendWhatsApp() {

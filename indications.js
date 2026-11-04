@@ -55,7 +55,7 @@
         ? `<a class="button button-dark affiliate-product-link" href="${escapeHTML(draftUrl)}" target="_blank" rel="sponsored nofollow noopener noreferrer">Ver produto <span aria-hidden="true">↗</span></a>`
         : '<button class="button button-dark affiliate-product-link affiliate-draft-button" type="button" disabled aria-disabled="true" title="Cole o link de afiliada em affiliateUrl para ativar este botão">Ver produto</button>';
       return `<article class="affiliate-product-card affiliate-product-card-draft">
-        <div class="affiliate-product-image affiliate-draft-visual"><img src="${escapeHTML(imageSource(product.image) || '')}" alt="${escapeHTML(product.imageAlt || 'Imagem ilustrativa, não é foto confirmada do produto')}" loading="lazy" decoding="async" width="640" height="480"><small>Imagem ilustrativa</small></div>
+        <div class="affiliate-product-image affiliate-draft-visual"><img src="${escapeHTML(imageSource(product.image) || '')}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" decoding="async" width="640" height="480"></div>
         <div class="affiliate-product-copy">
           <h3>${escapeHTML(product.name)}</h3>
           <p class="affiliate-product-description">${escapeHTML(product.description)}</p>
@@ -89,7 +89,7 @@
 
     resultsCount.textContent = filtered.length ? `${filtered.length} ${filtered.length === 1 ? 'indicação encontrada' : 'indicações encontradas'}` : '';
     if (filtered.length) {
-      const notice = hasDrafts ? '<aside class="affiliate-draft-notice"><strong>Modelos para personalizar</strong><span>Os produtos e as descrições são exemplos. As imagens são ilustrativas e os links de loja ainda estão vazios. Troque as informações antes de publicar.</span></aside>' : '';
+      const notice = hasDrafts ? '<aside class="affiliate-draft-notice"><strong>Modelos para personalizar</strong><span>Os produtos e as descrições são modelos para personalização, e os links de loja ainda estão vazios. Troque as informações antes de publicar.</span></aside>' : '';
       root.innerHTML = `${notice}<div class="affiliate-product-grid">${filtered.map(productCard).join('')}</div>`;
     } else if (!products.length && !term && !selectedCategory) {
       root.innerHTML = '<div class="affiliate-empty"><span aria-hidden="true">✳</span><div><h3>Novas indicações serão adicionadas em breve</h3><p>Estamos preparando esta seleção. Volte em breve para conhecer novos produtos.</p></div></div>';

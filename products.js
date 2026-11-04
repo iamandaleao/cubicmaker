@@ -313,18 +313,18 @@ window.CUBIC_PRODUCTS = [
       sections:[{title:'Dimensões aproximadas',items:['Comprimento: 17 cm.','Largura: 17,56 cm.','Altura: 2,88 cm.']}],
       note:'Não indicado para contato direto com alimentos sem embalagem. Por ser produzido em impressão 3D, pode apresentar pequenas marcas naturais do processo de fabricação. Evite exposição a temperaturas elevadas. Não encontrou a cor desejada? Informe no campo de observações para consultar a disponibilidade.'
     },
-    image:'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-ilustrativos.webp',
-    imageAlt:'Tigela individual em formato de árvore de Natal com doces embalados ilustrativos',
+    image:'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-embalados.webp',
+    imageAlt:'Tigela individual em formato de árvore de Natal com doces embalados',
     imageAlts:[
-      'Tigela individual em formato de árvore de Natal com doces embalados ilustrativos',
-      'Tigelas natalinas em formato de árvore com doces ilustrativos',
+      'Tigela individual em formato de árvore de Natal com doces embalados',
+      'Tigelas natalinas em formato de árvore com doces embalados',
       'Tigelas de árvore de Natal com lembrancinhas embaladas em uma composição festiva',
       'Tigelas em formato de árvore de Natal em composição de mesa',
       'Tigelas natalinas empilhadas com detalhes do acabamento de impressão 3D'
     ],
     images:[
-      'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-ilustrativos.webp',
-      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-sortidas-doces-ilustrativos.webp',
+      'assets/photos/products/tigela-arvore-natal/tigela-arvore-natal-vermelha-doces-embalados.webp',
+      'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-sortidas-doces-embalados.webp',
       'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-empilhaveis-decoracao.webp',
       'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-lembrancinhas.webp',
       'assets/photos/products/tigela-arvore-natal/tigelas-arvore-natal-empilhadas-detalhes-impressao-3d.webp'
@@ -360,12 +360,12 @@ window.CUBIC_PRODUCTS = [
         {title:'Dimensões aproximadas',items:['Largura: 17,5 cm.','Profundidade: 17,5 cm.','Altura: 13 cm.']},
         {title:'Conteúdo',items:['1 cesto decorativo.']}
       ],
-      note:'Panetone, chocotone, laços, doces e demais itens das fotos são ilustrativos e não acompanham o produto. As medidas são aproximadas e podem apresentar pequenas variações.'
+      note:'Panetone, chocotone, laços, doces e demais itens decorativos não acompanham o produto. As medidas são aproximadas e podem apresentar pequenas variações.'
     },
     image:'assets/photos/products/cesto-panetone/1.webp',
-    imageAlt:'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone ilustrativo',
+    imageAlt:'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone',
     imageAlts:[
-      'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone ilustrativo',
+      'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone',
       'Cesto porta-panetone natalino sem conteúdo, com acabamento texturizado'
     ],
     images:[
@@ -422,7 +422,7 @@ window.CUBIC_PRODUCTS = [
     id:'kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja',
     name:'Kit Decoração Wabi-Sabi Japonês – Vaso, Porta-Velas e Bandeja',
     cardTitleSingleLine:true,
-    category:'Casa e Decoração', categories:['Bandejas'],
+    category:'Casa e Decoração', categories:['Kits'],
     price:70.00,
     description:'Conjunto minimalista Wabi-Sabi com vaso, porta-velas e bandeja canelados.',
     cardDescription:'Conjunto canelado Wabi-Sabi com vaso, porta-velas e bandeja.',
@@ -440,7 +440,7 @@ window.CUBIC_PRODUCTS = [
         {title:'O kit contém',items:['1 vaso decorativo canelado.','1 porta-velas canelado.','1 bandeja redonda decorativa.']},
         {title:'Dimensões das bandejas',items:['Bandeja grande redonda: diâmetro de 220 mm.','Bandeja pequena redonda: diâmetro de 178 mm.','Bandeja elíptica: 182 × 95 mm.']}
       ],
-      note:'A vela e as flores secas mostradas nas imagens são apenas ilustrativas e não acompanham o produto. O porta-velas é indicado para velas LED com até 38 mm de diâmetro. Use o campo de observações para solicitar outras cores ou tamanhos.'
+      note:'A vela e as flores secas não acompanham o produto. O porta-velas é indicado para velas LED com até 38 mm de diâmetro. Use o campo de observações para solicitar outras cores ou tamanhos.'
     },
     image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
     imageAlt:'Kit Wabi-Sabi bege com vaso, porta-velas e bandeja redonda canelados',
@@ -517,6 +517,47 @@ window.CUBIC_PRODUCTS = [
     colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
     hideVariantColorSelector:false, hideVersionSelector:true, hidePrintFinishNote:true,
     featured:23
+  },
+  {
+    id:'kit-decorativo-japandi-coracao-vaso-bandeja-porta-vela',
+    name:'Kit Decorativo Japandi – Vaso, Bandeja e Porta-Vela',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Kits'],
+    price:90.00,
+    description:'Kit Japandi minimalista com vaso, bandeja e porta-vela para decorar a casa.',
+    cardDescription:'Composição Japandi de três peças para mesas, aparadores e estantes.',
+    fullDescription:'Kit Decorativo Japandi, uma composição delicada e minimalista que combina três peças para trazer harmonia e aconchego ao ambiente. Ideal para decorar mesas, aparadores, estantes e cantinhos especiais da sua casa.',
+    detailContent:{
+      paragraphs:['Kit Decorativo Japandi, uma composição delicada e minimalista que combina três peças para trazer harmonia e aconchego ao ambiente.','Ideal para decorar mesas, aparadores, estantes e cantinhos especiais da sua casa.'],
+      features:[
+        'Material: PLA.',
+        'Fabricação por impressão 3D.',
+        'Estilo Japandi e acabamento minimalista.'
+      ],
+      sections:[
+        {title:'O kit contém',items:['1 vaso decorativo.','1 bandeja.','1 porta-vela.']},
+        {title:'Dimensões das peças',items:['Bandeja: 24,5 × 11,5 × 2 cm.','Vaso: 9,5 × 9,5 × 12 cm.','Porta-vela: 6,9 × 6,9 × 4,2 cm.']}
+      ],
+      note:'Kit produzido sob demanda e destinado à decoração. A vela e os itens decorativos das fotos não acompanham o produto. Pequenas variações de tonalidade e acabamento são características da impressão 3D.'
+    },
+    image:'assets/photos/products/kit-vaso-3peças/IMG_0558.PNG',
+    imageAlt:'Kit decorativo Japandi em tons areia e verde oliva com vaso, bandeja e porta-vela',
+    imageAlts:[
+      'Kit decorativo Japandi em tons areia e verde oliva com vaso, bandeja e porta-vela',
+      'Kit decorativo Japandi preto com vaso, bandeja e porta-vela'
+    ],
+    images:[
+      'assets/photos/products/kit-vaso-3peças/IMG_0558.PNG',
+      'assets/photos/products/kit-vaso-3peças/IMG_0560.PNG'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    colorChoices:[
+      {key:'trayColor',label:'Cor da bandeja',partLabel:'bandeja',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'vaseColor',label:'Cor do vaso',partLabel:'vaso',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'candleHolderColor',label:'Cor do porta-vela',partLabel:'porta-vela',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+    ],
+    hidePrintFinishNote:true,
+    featured:24
   }
 ];
 
@@ -592,6 +633,7 @@ window.CUBIC_CATEGORY_GROUPS = [
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
     {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️',illustrative:false},
+    {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
     {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp',alt:'Vaso espiral branco decorativo de 15 cm produzido em impressão 3D',icon:'♧',illustrative:false}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
