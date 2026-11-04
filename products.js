@@ -417,6 +417,53 @@ window.CUBIC_PRODUCTS = [
     colorOptions:['Azul / Dourado','Verde / Bege','Preto / Branco','Marrom / Branco','Branco / Marrom'],
     hidePrintFinishNote:true,
     featured:21
+  },
+  {
+    id:'kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja',
+    name:'Kit Decoração Wabi-Sabi Japonês – Vaso, Porta-Velas e Bandeja',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Bandejas'],
+    price:70.00,
+    description:'Conjunto minimalista Wabi-Sabi com vaso, porta-velas e bandeja canelados.',
+    cardDescription:'Conjunto canelado Wabi-Sabi com vaso, porta-velas e bandeja.',
+    fullDescription:'Conjunto decorativo inspirado no estilo Wabi-Sabi japonês, com design minimalista e acabamento canelado. Uma combinação de formas e texturas que traz elegância e aconchego para salas, quartos, aparadores e mesas.',
+    detailContent:{
+      paragraphs:['Conjunto decorativo inspirado no estilo Wabi-Sabi japonês, com design minimalista e acabamento canelado. Uma combinação de formas e texturas que traz elegância e aconchego para salas, quartos, aparadores e mesas.'],
+      features:[
+        'Material: PLA.',
+        'Fabricação por impressão 3D.',
+        'Design moderno e minimalista.',
+        'Acabamento canelado.',
+        'Peças leves e decorativas.'
+      ],
+      sections:[
+        {title:'O kit contém',items:['1 vaso decorativo canelado.','1 porta-velas canelado.','1 bandeja redonda decorativa.']}
+      ],
+      note:'A vela e as flores secas mostradas nas imagens são apenas ilustrativas e não acompanham o produto. O porta-velas é indicado para velas LED com até 38 mm de diâmetro. Use o campo de observações para solicitar outras cores ou tamanhos.'
+    },
+    image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
+    imageAlt:'Kit Wabi-Sabi bege com vaso, porta-velas e bandeja redonda canelados',
+    imageAlts:[
+      'Kit Wabi-Sabi bege com vaso, porta-velas e bandeja redonda canelados',
+      'Conjunto decorativo Wabi-Sabi bege em ambiente minimalista',
+      'Kit Wabi-Sabi branco com vaso, porta-velas e bandeja canelados',
+      'Porta-velas LED e vaso decorativo Wabi-Sabi em bandeja redonda',
+      'Conjunto Wabi-Sabi bege com vaso, porta-velas e bandeja',
+      'Conjunto Wabi-Sabi preto com vaso, porta-velas e bandeja redonda'
+    ],
+    images:[
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-02-bege-minimalista.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-03-branco-canelado.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-04-vela-led-flores-secas.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-06-kit-preto.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, colorFieldLabel:'Cor',
+    colorOptions:['Verde oliva','Branco','Preto','Cinza','Areia'],
+    hidePrintFinishNote:true,
+    featured:22
   }
 ];
 

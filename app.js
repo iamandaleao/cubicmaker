@@ -669,50 +669,41 @@
       const product = getProduct(item.productId); if (!product) return;
       itemNumber += 1;
       const subtotal = cartSubtotal(product,item);
-      lines.push(`${itemNumber}. ${product.name}`, `   Quantidade: ${item.quantity}`);
+      const unitPrice = cartUnitPrice(product,item);
+      const demoMark = product.demonstrative !== false && unitPrice != null ? ' (demonstrativo)' : '';
+      const totalDemoMark = product.demonstrative !== false && subtotal != null ? ' (demonstrativo)' : '';
+      lines.push(
+        `${itemNumber}. ${product.name}`,
+        `   Quantidade: ${item.quantity}`,
+        `   Valor unitário: ${unitPrice == null ? 'A consultar' : `${money(unitPrice)}${demoMark}`}`,
+        `   Valor total: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${totalDemoMark}`}`
+      );
       const productLink = product.url || product.productUrl;
       if (productLink) lines.push(`   Link: ${productLink}`);
-      if (product.hideOrderSelectors) {
-        if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-        const unitPrice=cartUnitPrice(product,item);
-        lines.push(`   Preço unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`, '');
-        return;
-      }
-      if (product.colorChoices) {
+      if (!product.hideOrderSelectors && product.colorChoices) {
         product.colorChoices.forEach(choice => lines.push(`   ${choice.label}: ${item.colorSelections?.[choice.key] || 'a definir'} (${choice.partLabel})`));
-        if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-        const unitPrice=cartUnitPrice(product,item);
-        lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`, '');
-        return;
       }
-      if (product.orderOptions) {
+      if (!product.hideOrderSelectors && product.orderOptions) {
         const finish = product.orderOptions.finishes.find(entry => entry.value === item.finish);
         lines.push(`   Tamanho: ${item.size || 'a definir'}`, `   Acabamento: ${finish?.label || 'a definir'}`);
         if (finish?.value === 'colorido' || product.orderOptions.alwaysShowColor) lines.push(`   ${product.orderOptions.colorFieldLabel || (finish?.value === 'colorido' ? 'Cor do manto' : 'Cor')}: ${item.color || 'a definir'}`);
         if (finish?.value === 'colorido') lines.push('   A cor escolhida altera somente o manto; as demais partes permanecem conforme o modelo original.');
         if (finish?.value === 'sem-pintura') lines.push('   Produto sem pintura.');
-        if (item.note.trim()) lines.push(`   Observações para cotação: ${item.note.trim()}`);
-        const unitPrice = cartUnitPrice(product,item);
-        lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`);
-        lines.push('');
-        return;
       }
-      if (product.variantOptions) {
+      if (!product.hideOrderSelectors && product.variantOptions) {
         const option=product.variantOptions.find(entry => entry.value === item.variant);
         lines.push(`   ${product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
         if (!product.hideVariantColorSelector) lines.push(`   Cor: ${item.color || 'a definir'}`);
-        if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-        const unitPrice=cartUnitPrice(product,item);
-        lines.push(`   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`, `   Subtotal: ${subtotal == null ? 'A consultar' : money(subtotal)}`, '');
-        return;
       }
-      lines.push(`   ${product.colorFieldLabel || 'Cor'}: ${item.color || 'a definir'}`);
-      if (item.note.trim()) lines.push(`   Observações: ${item.note.trim()}`);
-      if (!product.hideVersionSelector) lines.push(`   Versão: ${versionName(item.version)}`);
-      const unitPrice=cartUnitPrice(product,item);
-      lines.push(`   Preço unitário: ${unitPrice == null ? 'A consultar' : `${money(unitPrice)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`);
-      if (product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}; outras quantidades a ${money(versionPrice(product,item.version))} por unidade.`);
-      lines.push(`   Subtotal: ${subtotal == null ? 'A consultar' : `${money(subtotal)}${product.demonstrative !== false ? ' (demonstrativo)' : ''}`}`, '');
+      if (!product.hideOrderSelectors && !product.colorChoices && !product.orderOptions && !product.variantOptions) {
+        if (product.hideVersionSelector) lines.push(`   ${product.colorFieldLabel || 'Cor'}: ${item.color || 'a definir'}`);
+        else {
+          lines.push(`   Cor: ${item.color || 'a definir'}`, `   Versão: ${versionName(item.version)}`);
+        }
+      }
+      if (!product.hideOrderSelectors && product.bundleOffer) lines.push(`   Condição: exatamente ${product.bundleOffer.quantity} unidades por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}; outras quantidades a ${money(versionPrice(product,item.version))} por unidade.`);
+      if (item.note.trim()) lines.push(`   Outras informações: ${item.note.trim()}`);
+      lines.push('');
     });
     const known = cart.every(item => cartSubtotal(getProduct(item.productId),item) != null);
     const total = cart.reduce((sum,item) => sum + (cartSubtotal(getProduct(item.productId),item) || 0), 0);
