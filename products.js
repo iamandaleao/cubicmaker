@@ -591,8 +591,8 @@ window.CUBIC_CATEGORY_GROUPS = [
   //  ]},
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
     {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
-    {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'},
-    {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/categories/vasos-decorativos.webp',alt:'Vasos decorativos espirais em composição elegante',icon:'♧'}
+    {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️',illustrative:false},
+    {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp',alt:'Vaso espiral branco decorativo de 15 cm produzido em impressão 3D',icon:'♧',illustrative:false}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
   //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
