@@ -718,7 +718,6 @@
     }
     lines.push('Gostaria de confirmar a disponibilidade, o prazo de produção e o valor do frete.');
     if (cart.some(item => getProduct(item.productId)?.demonstrative !== false)) lines.push('', 'Os valores demonstrativos precisam ser confirmados.');
-    lines.push('', 'A abertura do WhatsApp não envia a mensagem automaticamente; confirme o envio no aplicativo.');
     return lines.join('\n');
   }
   function sendWhatsApp() {
