@@ -1,0 +1,27 @@
+# Cubic Maker
+
+> Site brasileiro de produtos em impressão 3D para decoração, organização, utilidades e projetos personalizados.
+
+## Páginas principais
+
+- [Página inicial](https://cubicmaker.com/): apresentação da Cubic Maker e acesso às principais áreas do site.
+- [Catálogo de produtos](https://cubicmaker.com/catalogo.html): produtos, categorias, fotos, preços e opções de compra. Consulte esta página para informações atuais de cada item.
+- [Materiais e versões](https://cubicmaker.com/materiais-e-versoes.html): informações gerais sobre PLA, PETG e configurações de impressão.
+- [Indicações](https://cubicmaker.com/indicacoes.html): recomendações de produtos e informações sobre links de afiliados.
+
+## Como interpretar as informações do catálogo
+
+- Preços, cores, tamanhos, opções e disponibilidade variam conforme o produto; use os dados exibidos na página específica do item.
+- Projetos personalizados dependem de avaliação de medidas, finalidade e viabilidade de produção.
+- Informações gerais sobre materiais não substituem as características indicadas na página de cada produto.
+- Na página de indicações, a Cubic Maker pode receber comissão por compras feitas em links de afiliados; a venda e o atendimento desses itens são responsabilidade das lojas parceiras.
+
+## Contato e pedidos
+
+- As páginas do site oferecem acesso ao WhatsApp e às informações de contato da Cubic Maker.
+- Os produtos do catálogo podem ser adicionados à lista de interesse para enviar uma solicitação de orçamento pelo WhatsApp.
+
+## Arquivos úteis
+
+- [Sitemap](https://cubicmaker.com/sitemap.xml)
+- [Robots](https://cubicmaker.com/robots.txt)
