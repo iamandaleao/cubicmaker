@@ -142,7 +142,7 @@
     const form=$('#detailForm');
     const selected=product.variantOptions.find(option => option.value === form?.querySelector('[name="variant"]')?.value);
     const color=form?.elements.color?.value || '';
-    const unitPrice=selected && (product.hideVariantColorSelector || productColors(product).includes(color)) ? Number(selected.price) : null;
+    const unitPrice=selected && (product.variantPriceBeforeColor || product.hideVariantColorSelector || productColors(product).includes(color)) ? Number(selected.price) : null;
     const output=$('#detailQuantityPrice');
     if (!output) return;
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) output.textContent='Informe de 1 a 99 unidades';

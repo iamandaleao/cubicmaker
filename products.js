@@ -437,7 +437,8 @@ window.CUBIC_PRODUCTS = [
         'Peças leves e decorativas.'
       ],
       sections:[
-        {title:'O kit contém',items:['1 vaso decorativo canelado.','1 porta-velas canelado.','1 bandeja redonda decorativa.']}
+        {title:'O kit contém',items:['1 vaso decorativo canelado.','1 porta-velas canelado.','1 bandeja redonda decorativa.']},
+        {title:'Dimensões das bandejas',items:['Bandeja grande redonda: diâmetro de 220 mm.','Bandeja pequena redonda: diâmetro de 178 mm.','Bandeja elíptica: 182 × 95 mm.']}
       ],
       note:'A vela e as flores secas mostradas nas imagens são apenas ilustrativas e não acompanham o produto. O porta-velas é indicado para velas LED com até 38 mm de diâmetro. Use o campo de observações para solicitar outras cores ou tamanhos.'
     },
@@ -449,7 +450,8 @@ window.CUBIC_PRODUCTS = [
       'Kit Wabi-Sabi branco com vaso, porta-velas e bandeja canelados',
       'Porta-velas LED e vaso decorativo Wabi-Sabi em bandeja redonda',
       'Conjunto Wabi-Sabi bege com vaso, porta-velas e bandeja',
-      'Conjunto Wabi-Sabi preto com vaso, porta-velas e bandeja redonda'
+      'Conjunto Wabi-Sabi preto com vaso, porta-velas e bandeja redonda',
+      'Kit Wabi-Sabi bege com bandeja oval, vaso e porta-velas canelado'
     ],
     images:[
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
@@ -457,13 +459,64 @@ window.CUBIC_PRODUCTS = [
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-03-branco-canelado.webp',
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-04-vela-led-flores-secas.webp',
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',
-      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-06-kit-preto.webp'
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-06-kit-preto.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-bandeja-oval-redonda-porta-velas-bege.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     hideVersionSelector:true, colorFieldLabel:'Cor',
     colorOptions:['Verde oliva','Branco','Preto','Cinza','Areia'],
     hidePrintFinishNote:true,
     featured:22
+  },
+  {
+    id:'vaso-espiral-decorativo-3d',
+    name:'Vaso Espiral Decorativo 3D – 15 cm',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Vasos decorativos'],
+    price:30.00,
+    description:'Vaso decorativo de 15 cm com design espiral, produzido em impressão 3D.',
+    cardDescription:'Vaso espiral moderno para decorar salas, escritórios, estantes e mesas.',
+    fullDescription:'Vaso decorativo com design espiral moderno, produzido em impressão 3D. Ideal para decorar salas, escritórios, estantes e mesas, combinando beleza e originalidade.',
+    detailContent:{
+      paragraphs:['Vaso decorativo com design espiral moderno, produzido em impressão 3D. Ideal para decorar salas, escritórios, estantes e mesas, combinando beleza e originalidade.'],
+      features:[
+        'Altura: 15 cm.',
+        'Largura: 8 cm.',
+        'Diâmetro da boca: 5 cm.',
+        'Diâmetro da base: 8 cm.',
+        'Capacidade aproximada: 500 ml.',
+        'Material: PLA.',
+        'Acabamento espiral.'
+      ],
+      sections:[
+        {title:'Tamanho e valores',items:['Vaso de 15 cm: R$ 30,00.','Vaso de 18 cm: R$ 45,00.','Kit com 1 vaso de 15 cm e 1 vaso de 18 cm: R$ 70,00.']},
+        {title:'Personalização',items:['O tamanho padrão é 15 cm. Escolha o tamanho ou kit e a cor nos seletores.']}
+      ],
+      note:'Indicado para decoração com flores, folhagens e plantas naturais ou artificiais. Produzido por impressão 3D; pequenas variações de acabamento são características do processo de fabricação.'
+    },
+    image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.png',
+    imageAlt:'Vasos espirais decorativos em ambiente elegante',
+    imageAlts:[
+      'Vasos espirais decorativos em ambiente elegante',
+      'Vasos espirais decorativos pretos em tamanhos diferentes',
+      'Vaso espiral decorativo branco de 15 cm produzido em impressão 3D'
+    ],
+    images:[
+      'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.png',
+      'assets/photos/products/vaso-espiral/vasos-espirais-decorativos-3d-02-preto.webp',
+      'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    variantLabel:'Tamanho',
+    variantPriceBeforeColor:true,
+    variantOptions:[
+      {value:'vaso-15cm',label:'Vaso 15 cm',price:30.00},
+      {value:'vaso-18cm',label:'Vaso 18 cm',price:45.00},
+      {value:'kit-15cm-18cm',label:'1 vaso 15 cm + 1 vaso 18 cm',price:70.00}
+    ],
+    colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    hideVariantColorSelector:false, hideVersionSelector:true, hidePrintFinishNote:true,
+    featured:23
   }
 ];
 
@@ -538,7 +591,8 @@ window.CUBIC_CATEGORY_GROUPS = [
   //  ]},
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
     {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
-    {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'}
+    {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/mini-jesus-sentado-faixa-vermelha-decoracao-religiosa.webp',alt:'Mini Jesus sentado com o manto vermelho, peça religiosa impressa em 3D',icon:'✝️'},
+    {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/categories/vasos-decorativos.webp',alt:'Vasos decorativos espirais em composição elegante',icon:'♧'}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
   //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},

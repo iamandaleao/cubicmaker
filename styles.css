@@ -295,7 +295,7 @@
 .product-dialog{position:relative;width:min(1080px,calc(100% - 32px));max-height:90vh;overflow:hidden}
 #dialogContent{max-height:90vh;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
 .dialog-layout{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);min-height:0;align-items:start}
-.product-gallery{display:grid;grid-template-columns:minmax(0,1fr);min-width:0;min-height:0;height:auto;background:#f0f0ea}
+.product-gallery{position:sticky;top:0;z-index:2;align-self:start;display:grid;grid-template-columns:minmax(0,1fr);min-width:0;min-height:0;height:auto;background:#f0f0ea}
 .product-gallery.has-thumbnails{grid-template-columns:68px minmax(0,1fr);grid-template-rows:clamp(360px,68vh,650px) 56px;column-gap:10px}
 .product-gallery .dialog-image{grid-column:1;grid-row:1;display:grid;place-items:center;width:100%;height:clamp(360px,68vh,650px);min-height:360px;overflow:hidden}
 .product-gallery.has-thumbnails .dialog-image{grid-column:2}
@@ -343,7 +343,7 @@
   .product-dialog{width:min(620px,calc(100% - 24px));max-height:92vh}
   #dialogContent{max-height:92vh}
   .dialog-layout{grid-template-columns:minmax(0,1fr);gap:0}
-  .product-gallery{width:100%}
+  .product-gallery{position:static;width:100%}
   .product-gallery .dialog-image{height:clamp(250px,58vw,400px);min-height:250px}
   .product-gallery.has-thumbnails{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 58px 54px;column-gap:0}
   .product-gallery.has-thumbnails .dialog-image{grid-column:1;grid-row:1}
