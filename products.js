@@ -137,6 +137,48 @@ window.CUBIC_PRODUCTS = [
     featured:14
   },
   {
+    id:'presepio-asa-anjo-iluminado-3d',
+    name:'Presépio Asa Anjo Iluminado 3D',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:45.00,
+    description:'Presépio decorativo com asas abertas envolvendo a cena do nascimento de Jesus, produzido em impressão 3D e compatível com iluminação LED.',
+    cardDescription:'Presépio com asas angelicais e espaço para iluminação.',
+    fullDescription:'Presépio decorativo com asas abertas envolvendo a cena do nascimento de Jesus. Produzido em impressão 3D, possui detalhes em relevo e espaço para iluminação, criando um ambiente acolhedor e especial. Ideal para decorar mesas, aparadores, cantinhos de oração e outros ambientes.',
+    detailContent:{
+      paragraphs:[
+        'Presépio decorativo com asas abertas envolvendo a cena do nascimento de Jesus. Produzido em impressão 3D, possui detalhes em relevo e espaço para iluminação, criando um ambiente acolhedor e especial.',
+        'Ideal para decorar mesas, aparadores, cantinhos de oração e outros ambientes.'
+      ],
+      features:[
+        'Material: PLA.',
+        'Fabricação por impressão 3D.',
+        'Iluminação compatível com LED MH001 e vela Tea Light.'
+      ],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Altura: 10 cm.','Largura: 10 cm.','Profundidade: 8,5 cm.','Peso: aproximadamente 82 g.']},
+        {title:'Informações importantes',items:['A vela e o LED não acompanham o produto.','Produto destinado à decoração.','Pequenas variações de acabamento são características da impressão 3D.']}
+      ],
+      note:'Não encontrou a cor desejada? Informe sua preferência no campo de observações para consultar a disponibilidade.'
+    },
+    image:'assets/photos/products/presepio-iluminado/presepio-asa-anjo-iluminado-natal-3d-branco.webp',
+    imageAlt:'Presépio branco com asas de anjo iluminado em decoração de Natal',
+    imageAlts:[
+      'Presépio branco com asas de anjo iluminado em decoração de Natal',
+      'Presépio Asa Anjo iluminado com LED e vela Tea Light sobre uma mesa'
+    ],
+    images:[
+      'assets/photos/products/presepio-iluminado/presepio-asa-anjo-iluminado-natal-3d-branco.webp',
+      'assets/photos/products/presepio-iluminado/presepio-asa-anjo-iluminado-3d-com-led-tea-light.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    colorChoices:[
+      {key:'nativityColor',label:'Cor do presépio',partLabel:'presépio',options:['Branco','Areia','Verde-oliva']}
+    ],
+    hidePrintFinishNote:true,
+    featured:25
+  },
+  {
     id:'centro-mesa-chapeu-papai-noel-16cm',
     name:'Centro de Mesa Chapéu de Papai Noel – 16 cm',
     cardTitleSingleLine:true,
