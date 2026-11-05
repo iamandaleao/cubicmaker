@@ -463,6 +463,44 @@ window.CUBIC_PRODUCTS = [
     featured:26
   },
   {
+    id:'tigela-decorativa-papai-noel-3d',
+    name:'Tigela Decorativa Papai Noel 3D',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:28.00,
+    description:'Tigela decorativa natalina com detalhes em relevo, que combina decoração e funcionalidade.',
+    cardDescription:'Tigela natalina para decorar e acomodar doces embalados ou pequenos objetos.',
+    fullDescription:'Deixe sua decoração natalina ainda mais encantadora com a Tigela Decorativa Papai Noel! Com design temático e detalhes em relevo, é uma peça criativa que combina decoração e funcionalidade. Ideal para compor a mesa de Natal, decorar aparadores e acomodar doces embalados, biscoitos e pequenos objetos.',
+    detailContent:{
+      paragraphs:[
+        'Deixe sua decoração natalina ainda mais encantadora com a Tigela Decorativa Papai Noel! Com design temático e detalhes em relevo, é uma peça criativa que combina decoração e funcionalidade.',
+        'Ideal para compor a mesa de Natal, decorar aparadores e acomodar doces embalados, biscoitos e pequenos objetos.'
+      ],
+      features:[
+        'Material: PLA.',
+        'Fabricação por impressão 3D.',
+        'Conteúdo: 1 tigela decorativa.'
+      ],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 10,16 cm.','Profundidade: 10,16 cm.','Altura: 8,13 cm.']}
+      ],
+      note:'Doces e itens das fotos não acompanham o produto. Para contato com alimentos, utilize embalagens ou recipientes apropriados. Outros tamanhos podem ser solicitados; informe sua preferência nas observações para cotarmos.'
+    },
+    image:'assets/photos/products/tigela-papai-noel/tigela-decorativa-papai-noel-3d-natal-01.webp',
+    imageAlt:'Tigela natalina decorativa do Papai Noel com relevo e doces embalados',
+    imageAlts:[
+      'Tigela decorativa Papai Noel 3D com doces embalados',
+      'Tigela de Natal em formato de Papai Noel com panetone'
+    ],
+    images:[
+      'assets/photos/products/tigela-papai-noel/tigela-decorativa-papai-noel-3d-natal-01.webp',
+      'assets/photos/products/tigela-papai-noel/tigela-papai-noel-decorativa-3d-doces-02.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    featured:27
+  },
+  {
     id:'placa-ele-vive-coroa-de-espinhos',
     name:'Placa Ele Vive com a Coroa de Espinhos',
     cardTitleSingleLine:true,
