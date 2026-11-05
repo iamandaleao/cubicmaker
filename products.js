@@ -138,7 +138,7 @@ window.CUBIC_PRODUCTS = [
   },
   {
     id:'presepio-asa-anjo-iluminado-3d',
-    name:'Presépio Asa Anjo Iluminado 3D',
+    name:'Presépio Asa Anjo Iluminado 3D - 10cm',
     cardTitleSingleLine:true,
     category:'Natal', categories:['Natal'],
     price:45.00,

@@ -588,6 +588,10 @@ body.catalog-mode.catalog-products-view .catalog-section{min-height:0;padding:28
 .site-header .main-nav>a,.site-header .mobile-nav>a,
 .site-header .main-nav>a:hover,.site-header .mobile-nav>a:hover,
 .site-header .main-nav>a[aria-current="page"],.site-header .mobile-nav>a[aria-current="page"]{font-size:14px!important;line-height:1.25!important;font-weight:600!important}
+
+/* Remove o espaço reservado às opções ausentes e aproxima o preço da descrição. */
+.product-variations:empty{display:none}
+.product-info>p{margin-bottom:8px}
 .materials-hero h1{font-size:clamp(40px,5vw,58px)}
 .materials-hero-inner>p:not(.section-kicker){font-size:14px}
 .materials-heading h2{font-size:clamp(38px,5vw,58px)}
