@@ -38,6 +38,53 @@ window.CUBIC_PRODUCTS = [
     hideVariantColorSelector:false,
     demonstrative:false
   },
+  {
+    id:'kit-safari-minimalista-infantil-3d-quatro-animais',
+    name:'Kit Safari Minimalista Infantil 3D – 4 Animais',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração',
+    categories:['Kits'],
+    price:27.50,
+    description:'Kit decorativo infantil com macaco, girafa, elefante e leão em estilo safari minimalista.',
+    cardDescription:'Quatro animais safari minimalistas para decorar o quarto infantil.',
+    fullDescription:'Transforme o quarto infantil em uma pequena aventura na savana! O Kit Safari Minimalista reúne quatro animais com design moderno e delicado: macaco, girafa, elefante e leão.',
+    detailContent:{
+      paragraphs:['Transforme o quarto infantil em uma pequena aventura na savana! O Kit Safari Minimalista reúne quatro animais com design moderno e delicado: macaco, girafa, elefante e leão.'],
+      features:['Tema Safari.','Estilo minimalista, sem traços faciais.','Material: PLA.','Produzido por impressão 3D.','Peças leves e decorativas.','A opção Colorido reúne animais em cores variadas.'],
+      sections:[
+        {title:'O que acompanha',items:['1 macaco.','1 girafa.','1 elefante.','1 leão.']},
+        {title:'Medidas',items:['Os animais possuem tamanhos entre 12 e 15 cm, conforme o modelo.']},
+        {title:'Opções de kit',items:['1 kit com 4 animais: R$ 27,50.','5 kits com 20 animais: R$ 102,80 no total (R$ 20,56 por kit).']}
+      ]
+    },
+    image:'assets/photos/products/kit-animais/kit-safari-minimalista-infantil-3d-quatro-animais.png',
+    imageAlt:'Kit safari minimalista infantil com macaco, girafa, elefante e leão em decoração de quarto',
+    imageAlts:[
+      'Kit safari minimalista infantil com macaco, girafa, elefante e leão em decoração de quarto',
+      'Animais decorativos safari infantil em cores variadas',
+      'Kit de quatro animais safari minimalistas em madeira sobre móvel de quarto infantil',
+      'Decoração de quarto infantil com quatro animais tema safari na parede',
+      'Animais decorativos safari minimalistas em cor rosa no quarto infantil'
+    ],
+    images:[
+      'assets/photos/products/kit-animais/kit-safari-minimalista-infantil-3d-quatro-animais.png',
+      'assets/photos/products/kit-animais/kit-safari-infantil-animais-coloridos.webp',
+      'assets/photos/products/kit-animais/kit-safari-infantil-quatro-animais-madeira.webp',
+      'assets/photos/products/kit-animais/kit-safari-infantil-decoracao-quarto.webp',
+      'assets/photos/products/kit-animais/kit-safari-minimalista-infantil-animais-rosa.webp'
+    ],
+    variantLabel:'Quantidade',
+    variantOptions:[
+      {value:'1-kit',label:'1 kit',price:27.50},
+      {value:'5-kits',label:'5 kits',price:102.80}
+    ],
+    colorOptions:['Marrom','Amarelo','Azul','Laranja','Verde','Vermelho','Preto','Bege','Colorido'],
+    colorSwatches:{'Amarelo':'#e4bd37','Azul':'#4f8ca8','Laranja':'#e78335','Verde':'#558363','Vermelho':'#bf443d','Preto':'#272927','Bege':'#d6c4a3','Colorido':'linear-gradient(135deg, #6c4b33 0 25%, #e4bd37 25% 50%, #4f8ca8 50% 75%, #d97737 75%)'},
+    variantPriceBeforeColor:false,
+    hideVariantColorSelector:false,
+    hidePrintFinishNote:true,
+    demonstrative:false
+  },
   // Temporariamente pausados; remova os comentários para reativar os produtos.
   //  { id:'demo-01', name:'Vaso modular', category:'Decoração', categories:['Vasos decorativos','Decoração'], price:39.90, description:'Um volume geométrico para dar destaque a pequenos arranjos e composições.', fullDescription:'Exemplo demonstrativo de peça decorativa. A forma modular cria um ponto de interesse em estantes, mesas e aparadores. As dimensões, o material e as opções de acabamento devem ser confirmados antes do cadastro como produto real.', image:'assets/photos/categories/vasos-decorativos.webp', dimensions:{height:120,width:90,depth:90}, material:'PLA (exemplo)', colors:['Areia','Terracota','Preto'],  leadTime:'Consulte disponibilidade', featured:1 },
   //  { id:'demo-02', name:'Organizador de mesa', category:'Organização', categories:['Organização da casa','Escritórios','Identificação e organização profissional'], price:34.90, description:'Compartimentos práticos para deixar seus pequenos itens sempre à mão.', fullDescription:'Exemplo demonstrativo para organização de mesa. Uma peça com divisórias que pode ser adaptada às necessidades do espaço. Medidas e configuração final devem ser avaliadas antes da produção.', image:'assets/photos/categories/organizacao-da-casa.webp', dimensions:{height:45,width:180,depth:100}, material:'PLA (exemplo)', colors:['Branco','Cinza','Verde oliva'],  leadTime:'Consulte disponibilidade', featured:2 },

@@ -768,7 +768,7 @@
         <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
           ${orderFields}
           ${descriptionAfterFields}
-          <label class="dialog-note">${noteLabel}${product.orderOptions ? '<span class="dialog-help">Use este campo para informar detalhes adicionais do pedido.</span>' : ''}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>
+          <label class="dialog-note">${noteLabel}${product.orderOptions ? '<span class="dialog-help">Use este campo para informar detalhes adicionais do pedido.</span>' : ''}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>${product.noteBelowObservations ? `<p class="dialog-help dialog-product-note">${escapeHTML(product.noteBelowObservations)}</p>` : ''}
           <div class="dialog-add-row">
             <label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>
             <output class="detail-quantity-price detail-price-highlight" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
