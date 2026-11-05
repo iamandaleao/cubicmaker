@@ -7,6 +7,14 @@
   const products = Array.isArray(window.CUBIC_PRODUCTS) ? window.CUBIC_PRODUCTS : [];
   const categoryGroups = Array.isArray(window.CUBIC_CATEGORY_GROUPS) ? window.CUBIC_CATEGORY_GROUPS : [];
   const categoryEntries = categoryGroups.flatMap(group => group.categories.map(category => ({ ...category, groupTitle:group.title, groupIntro:group.intro })));
+  const homeDecorGroup = categoryGroups.find(group => group.title === 'Casa e decoração');
+  if (homeDecorGroup) categoryEntries.push({
+    name:homeDecorGroup.title,
+    slug:'casa-e-decoracao',
+    groupTitle:homeDecorGroup.title,
+    groupIntro:homeDecorGroup.intro,
+    memberNames:homeDecorGroup.categories.map(category => category.name)
+  });
   const categoryBySlug = new Map(categoryEntries.map(category => [category.slug, category]));
   const STORAGE_KEY = 'cubicmaker-interest-v1';
   const TRENDING_STORAGE_KEY = 'cubicmaker-product-clicks-v1';
@@ -252,6 +260,26 @@
   }
   function initTrendingCarousel() {
     if (!trendingCarousel || !trendingTrack) return;
+    let trendingScrollEndTimer = null;
+    let wrappingTrending = false;
+    const wrapTrendingAtEnd = () => {
+      if (!matchMedia('(max-width: 700px)').matches) return;
+      const maxScroll = trendingCarousel.scrollWidth - trendingCarousel.clientWidth;
+      if (maxScroll > 2 && trendingCarousel.scrollLeft >= maxScroll - 3) {
+        wrappingTrending = true;
+        trendingCarousel.scrollLeft = 0;
+        requestAnimationFrame(() => { wrappingTrending = false; });
+      }
+    };
+    trendingCarousel.addEventListener('scroll', () => {
+      if (wrappingTrending) return;
+      clearTimeout(trendingScrollEndTimer);
+      trendingScrollEndTimer = setTimeout(wrapTrendingAtEnd, 160);
+    }, { passive:true });
+    trendingCarousel.addEventListener('scrollend', () => {
+      clearTimeout(trendingScrollEndTimer);
+      wrapTrendingAtEnd();
+    }, { passive:true });
     $('#trendingPrev')?.addEventListener('click', () => moveTrending(-1));
     $('#trendingNext')?.addEventListener('click', () => moveTrending(1));
     trendingCarousel.addEventListener('pointerenter', stopTrendingAutoplay);
@@ -449,7 +477,13 @@
     const search = $('#searchInput').value.trim();
     const sort = $('#sortSelect').value;
     const selected = currentCategory ? categoryBySlug.get(currentCategory) : null;
-    let visible = products.filter(product => (!selected || (product.categories || [product.category]).includes(selected.name)) && matchesSearch(product, search));
+    let visible = products.filter(product => {
+      const productCategories = product.categories || [product.category];
+      const inCategory = !selected || (selected.memberNames
+        ? productCategories.some(name => selected.memberNames.includes(name))
+        : productCategories.includes(selected.name));
+      return inCategory && matchesSearch(product, search);
+    });
     if (sort === 'asc' || sort === 'desc') visible.sort((a,b) => {
       if (a.price == null) return 1;
       if (b.price == null) return -1;
@@ -460,7 +494,12 @@
     $('#noResults').hidden = visible.length !== 0;
     productGrid.hidden = visible.length === 0;
     if (selected) {
-      const categoryHasProducts = products.some(product => (product.categories || [product.category]).includes(selected.name));
+      const categoryHasProducts = products.some(product => {
+        const productCategories = product.categories || [product.category];
+        return selected.memberNames
+          ? productCategories.some(name => selected.memberNames.includes(name))
+          : productCategories.includes(selected.name);
+      });
       $('#emptyCategoryTitle').textContent = categoryHasProducts ? 'Nenhuma peça encontrada' : 'Ainda não há produtos nesta categoria';
       $('#emptyCategoryText').textContent = categoryHasProducts ? 'Tente outro termo ou fale com a Cubic Maker para pedir uma peça personalizada.' : 'Não encontrou o que procura? Conte sua ideia para a Cubic Maker!';
       $('#emptyCategoryRequest').hidden = false;
@@ -594,7 +633,7 @@
     if (!page || !content || !infoDialog) return;
     content.innerHTML = `<div class="info-dialog-content"><p class="section-kicker">CUBIC MAKER / INFORMAÇÕES</p><h2 id="infoTitle">${page.title}</h2>${page.body}</div>`;
     infoDialog.showModal();
-    $('#closeInfoDialog').focus();
+    $('#closeInfoDialog').focus({ preventScroll:true });
   }
   function openCart() {
     lastFocus = document.activeElement; renderCart(); overlay.hidden = false; cartPanel.inert = false; cartPanel.setAttribute('aria-hidden','false');

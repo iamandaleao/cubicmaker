@@ -29,7 +29,7 @@
 .footer-info-trigger{border:0;padding:0;background:none;color:#47584d;font-size:10px;line-height:1.5;text-align:left;cursor:pointer}
 .footer-info-trigger:hover,.footer-info-trigger:focus-visible{color:var(--orange-dark);text-decoration:underline;text-underline-offset:3px}
 .footer-column>p{margin:0}
-.footer-favorites{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px}.footer-favorites h2{grid-column:1/-1}.footer-favorites>a{min-width:0}
+.footer-favorites{display:grid;grid-template-columns:minmax(0,1fr);gap:6px 12px}.footer-favorites h2{grid-column:1/-1}.footer-favorites>a{min-width:0}
 .footer-favorites>a{font-size:9px}
 .footer-socials{display:flex;align-items:center;gap:7px;margin-top:14px}
 .footer-socials>a{display:grid;place-items:center;width:31px;height:31px;border:1px solid #cbd3c7;border-radius:50%;background:var(--sage);color:var(--ink);transition:background .18s,color .18s,transform .18s}
@@ -59,7 +59,7 @@
 .floating-whatsapp svg{width:25px;height:25px;stroke-width:1.7}
 .floating-whatsapp:focus-visible{outline:3px solid #f5c7ae;outline-offset:4px}
 .floating-whatsapp img{display:block;width:25px;height:25px;object-fit:contain}
-.info-dialog{position:relative;width:min(620px,calc(100% - 32px));max-width:none;max-height:min(86vh,720px);padding:40px clamp(22px,5vw,48px);border:1px solid var(--line);background:#fbfbf8;color:var(--ink);box-shadow:var(--shadow);overflow:auto}
+.info-dialog{position:fixed;top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);margin:0;width:min(620px,calc(100% - 32px));max-width:none;max-height:min(86vh,720px);padding:40px clamp(22px,5vw,48px);border:1px solid var(--line);background:#fbfbf8;color:var(--ink);box-shadow:var(--shadow);overflow:auto}
 .info-dialog::backdrop{background:rgba(22,34,28,.55);backdrop-filter:blur(3px)}
 .info-dialog-close{position:absolute;top:13px;right:13px}
 .info-dialog-content .section-kicker{margin:0 0 8px}
@@ -375,7 +375,7 @@
 @media(prefers-reduced-motion:reduce){.gallery-arrow,.product-gallery-thumbs button{transition:none}}
 .product-title-link:hover,.product-title-link:focus-visible{color:var(--orange-dark);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:1100px){.footer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:29px 36px}.footer-bottom{grid-column:1/-1}}
-@media(max-width:600px){.site-footer{padding:36px 0 18px}.footer-grid{gap:25px 18px}.footer-brand-block{grid-column:1/-1}.footer-brand-block,.footer-column{min-width:0}.footer-column h2{font-size:8px}.footer-column>a,.footer-info-trigger,.footer-brand-block>p,.footer-column>p{font-size:9px}.footer-bottom{flex-direction:column;gap:6px;padding-top:14px}.footer-socials{flex-wrap:nowrap;gap:6px}.footer-favorites{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 9px}.footer-socials>a,.footer-socials>button{width:29px;height:29px;flex:0 0 29px}.social-handle{white-space:nowrap}.floating-whatsapp{right:14px;bottom:14px;width:52px;height:52px}.floating-whatsapp img{width:23px;height:23px}.info-dialog{padding:35px 21px 25px}.info-dialog-content p,.info-dialog-content li{font-size:11px}}
+@media(max-width:600px){.site-footer{padding:36px 0 18px}.footer-grid{gap:25px 18px}.footer-brand-block{grid-column:1/-1}.footer-brand-block,.footer-column{min-width:0}.footer-column h2{font-size:8px}.footer-column>a,.footer-info-trigger,.footer-brand-block>p,.footer-column>p{font-size:9px}.footer-bottom{flex-direction:column;gap:6px;padding-top:14px}.footer-socials{flex-wrap:nowrap;gap:6px}.footer-favorites{grid-template-columns:minmax(0,1fr);gap:6px 9px}.footer-socials>a,.footer-socials>button{width:29px;height:29px;flex:0 0 29px}.social-handle{white-space:nowrap}.floating-whatsapp{right:14px;bottom:14px;width:52px;height:52px}.floating-whatsapp img{width:23px;height:23px}.info-dialog{padding:35px 21px 25px}.info-dialog-content p,.info-dialog-content li{font-size:11px}}
 
 /* Navegação do catálogo por grupos e categorias */
 [hidden]{display:none!important}
