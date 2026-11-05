@@ -133,7 +133,23 @@
       : product.fullDescription || product.description || '';
     const printFinishNote = visibleContent.includes(PRINT_FINISH_NOTE) ? '' : `<p class="description-suggestion">${escapeHTML(PRINT_FINISH_NOTE)}</p>`;
     if (!content) return `<div class="dialog-description"><p>${escapeHTML(visibleContent)}</p>${printFinishNote}</div>`;
-    return `<div class="dialog-description dialog-description-structured">${(content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('')}${content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : ''}${(content.sections || []).map(section => `<section class="description-feature-block"><h3>${escapeHTML(section.title || '')}</h3><ul>${(section.items || []).map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>`).join('')}${content.note ? `<p class="description-suggestion">${escapeHTML(content.note)}</p>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}${printFinishNote}</div>`;
+    const paragraphs = (content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('');
+    const features = content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : '';
+    const renderSection = section => `<section class="description-feature-block"><h3>${escapeHTML(section.title || '')}</h3><ul>${(section.items || []).map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>`;
+    const sections = content.sections || [];
+    const suggestions = `${content.note ? `<p class="description-suggestion">${escapeHTML(content.note)}</p>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}${printFinishNote}`;
+    if (product.orderFieldsAfterSection) {
+      const fieldSectionIndex = sections.findIndex(section => section.title === product.orderFieldsAfterSection);
+      if (fieldSectionIndex >= 0) {
+        const beforeFields = `${paragraphs}${features}${sections.slice(0,fieldSectionIndex + 1).map(renderSection).join('')}`;
+        const afterFields = `${sections.slice(fieldSectionIndex + 1).map(renderSection).join('')}${suggestions}`;
+        return {
+          beforeFields:`<div class="dialog-description dialog-description-structured">${beforeFields}</div>`,
+          afterFields:afterFields ? `<div class="dialog-description dialog-description-structured">${afterFields}</div>` : ''
+        };
+      }
+    }
+    return `<div class="dialog-description dialog-description-structured">${paragraphs}${features}${sections.map(renderSection).join('')}${suggestions}</div>`;
   }
   function colorSwatchStyle(color = '') {
     return `--swatch-color:${PRODUCT_COLOR_SWATCHES[color] || '#e7e9e3'}`;
@@ -311,7 +327,7 @@
     return `<option value="" ${selected ? '' : 'selected'}>${escapeHTML(placeholder)}</option>${values.map(value => `<option value="${escapeHTML(value)}" ${value === selected ? 'selected' : ''}>${escapeHTML(value)}</option>`).join('')}`;
   }
   function productCard(product) {
-    const image = productImages(product)[0];
+    const image = product.cardImage || productImages(product)[0];
     return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}${product.imageFitContain ? ' product-card-image-contain' : ''}">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
       <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.cardDescription || product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
@@ -619,6 +635,9 @@
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
     const specs = `${dimensionInDescription ? '' : dimensionsMarkup(product)}${product.leadTime ? `<div class="detail-spec"><span>PRAZO ESTIMADO</span><strong>${escapeHTML(product.leadTime)}</strong></div>` : ''}`;
+    const description = productDescriptionMarkup(product);
+    const descriptionBeforeFields = typeof description === 'string' ? description : description.beforeFields;
+    const descriptionAfterFields = typeof description === 'string' ? '' : description.afterFields;
     const orderFields = product.hideOrderSelectors
       ? ''
       : product.orderOptions
@@ -640,14 +659,14 @@
       <div class="dialog-info">
         <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2>
         <div class="dialog-price">${priceDetails}</div>
-        ${productDescriptionMarkup(product)}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
+        ${descriptionBeforeFields}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
         <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
           ${orderFields}
-          ${product.variantPriceInline ? `<output class="detail-quantity-price detail-price-highlight variant-price-inline" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>` : ''}
+          ${descriptionAfterFields}
           <label class="dialog-note">${noteLabel}${product.orderOptions ? '<span class="dialog-help">Use este campo para informar detalhes adicionais do pedido.</span>' : ''}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>
           <div class="dialog-add-row">
             <label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>
-            ${product.variantPriceInline ? '' : `<output class="detail-quantity-price detail-price-highlight" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>`}
+            <output class="detail-quantity-price detail-price-highlight" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
             <button class="button button-dark" type="submit" data-add-to-quote aria-label="Adicionar ${escapeHTML(product.name)} à cotação">Adicionar</button>
           </div>
         </form>
