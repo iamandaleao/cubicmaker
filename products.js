@@ -419,6 +419,50 @@ window.CUBIC_PRODUCTS = [
     featured:20
   },
   {
+    id:'rena-puxando-treno-natalino-3d-18cm',
+    name:'Rena Puxando Trenó Natalino 3D – 18 cm',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:35.00,
+    description:'Rena decorativa puxando um trenó organizador, produzido em impressão 3D.',
+    cardDescription:'Rena natalina com trenó organizador para pequenos objetos.',
+    fullDescription:'Uma peça decorativa natalina criativa e cheia de personalidade! A rena puxando o trenó traz um toque especial à decoração de mesas, aparadores, estantes e outros ambientes. O trenó também pode ser utilizado para acomodar pequenos objetos decorativos e itens leves.',
+    detailContent:{
+      paragraphs:[
+        'Uma peça decorativa natalina criativa e cheia de personalidade! A rena puxando o trenó traz um toque especial à decoração de mesas, aparadores, estantes e outros ambientes.',
+        'O trenó também pode ser utilizado para acomodar pequenos objetos decorativos e itens leves.'
+      ],
+      features:[
+        'Fabricação por impressão 3D.',
+        'Material: PLA.',
+        'Produto destinado à decoração.'
+      ],
+      sections:[
+        {title:'O que acompanha',items:['1 rena decorativa.','1 trenó organizador.']},
+        {title:'Dimensões aproximadas',items:['Comprimento: 18,12 cm.','Largura: 7,51 cm.','Altura: 12,49 cm.']}
+      ],
+      note:'Os objetos decorativos das fotos não acompanham o produto. Pequenas variações de acabamento são características da impressão 3D.'
+    },
+    image:'assets/photos/products/rena-treno/rena-puxando-treno-decoracao-natalina-18cm-01.webp',
+    imageAlt:'Rena branca puxando trenó decorativo com doces em composição de Natal',
+    imageAlts:[
+      'Rena branca puxando trenó decorativo em composição natalina',
+      'Rena dourada puxando trenó decorativo para o Natal',
+      'Rena verde puxando trenó organizador decorativo'
+    ],
+    images:[
+      'assets/photos/products/rena-treno/rena-puxando-treno-decoracao-natalina-18cm-01.webp',
+      'assets/photos/products/rena-treno/rena-puxando-treno-decoracao-natalina-18cm-02.webp',
+      'assets/photos/products/rena-treno/rena-puxando-treno-decoracao-natalina-18cm-03.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, colorFieldLabel:'Cor',
+    colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],
+    hidePrintFinishNote:true,
+    featured:26
+  },
+  {
     id:'placa-ele-vive-coroa-de-espinhos',
     name:'Placa Ele Vive com a Coroa de Espinhos',
     cardTitleSingleLine:true,
