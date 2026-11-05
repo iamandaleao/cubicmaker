@@ -312,7 +312,7 @@
   }
   function productCard(product) {
     const image = productImages(product)[0];
-    return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}">
+    return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}${product.imageFitContain ? ' product-card-image-contain' : ''}">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
       <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.cardDescription || product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
     </article>`;
@@ -667,7 +667,7 @@
       const unitPrice = cartUnitPrice(product,item);
       lines.push(
         `${itemNumber}. ${product.name}`,
-        `   Quantidade: ${item.quantity}`,
+        `   ${product.variantLabel === 'Quantidade' ? 'Quantidade de kits' : 'Quantidade'}: ${item.quantity}`,
         `   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`,
         `   Valor total: ${subtotal == null ? 'A consultar' : money(subtotal)}`
       );
@@ -685,7 +685,7 @@
       }
       if (!product.hideOrderSelectors && product.variantOptions) {
         const option=product.variantOptions.find(entry => entry.value === item.variant);
-        lines.push(`   ${product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
+        lines.push(`   ${product.variantLabel === 'Quantidade' ? 'Quantidade selecionada' : product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
         if (!product.hideVariantColorSelector) lines.push(`   Cor: ${item.color || 'a definir'}`);
       }
       if (!product.hideOrderSelectors && !product.colorChoices && !product.orderOptions && !product.variantOptions) {

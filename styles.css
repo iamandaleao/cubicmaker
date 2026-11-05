@@ -584,6 +584,11 @@ body.catalog-mode.catalog-products-view .catalog-section{min-height:0;padding:28
 .all-products-card-presepio .all-products-image:hover img{transform:scale(1.18)}
 .variant-price-inline{display:block;width:max-content;margin:9px 0 2px}
 
+.product-card-image-contain .product-image-button img{object-fit:contain;background:#f0f0ea}
+html{scrollbar-gutter:stable}
+.dialog-close{top:17px;right:17px;display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid #dfe3da;border-radius:50%;background:#fbfbf8;color:#35443b;font-size:22px;line-height:1;box-shadow:0 3px 12px rgba(26,43,34,.12)}
+.dialog-close:hover{background:#eef1eb;color:var(--ink)}
+
 /* Tipografia consistente entre o catálogo e a página de Materiais e Versões. */
 .site-header .main-nav>a,.site-header .mobile-nav>a,
 .site-header .main-nav>a:hover,.site-header .mobile-nav>a:hover,
