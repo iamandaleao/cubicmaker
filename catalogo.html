@@ -31,9 +31,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://cubicmaker.com/ogimage/cubic-maker-compartilhamento.jpg">
   <link rel="icon" href="assets/logo/cubic-maker-monograma-cm.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=footer-modal-scroll-20261105">
-  <script src="products.js?v=trending-ogimage-20261105" defer></script>
-  <script src="app.js?v=footer-modal-scroll-20261105" defer></script>
+  <link rel="stylesheet" href="styles.css?v=catalog-desktop-filters-20261105">
+  <script src="products.js?v=product-modal-cover-20261105" defer></script>
+  <script src="app.js?v=catalog-category-groups-20261105" defer></script>
 </head>
 <body class="catalog-mode">
   <a class="skip-link" href="#categoryGroups">Pular para as categorias</a>
@@ -66,16 +66,26 @@
             <p>Aqui você encontra produtos para datas especiais, decoração, organização, presentes, empresas e muito mais. Explore nossas categorias e descubra as opções disponíveis. Não encontrou o que procura? Entre em contato pelo WhatsApp! Será um prazer atender você e ajudar a transformar sua ideia em uma peça feita em impressão 3D.</p>
             <form class="catalog-quick-search" id="catalogQuickSearch" role="search">
               <label class="search-field" for="catalogQuickSearchInput"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="catalogQuickSearchInput" name="q" type="search" placeholder="Ex.: suporte para telefone" autocomplete="off" aria-label="Pesquisar em todos os produtos"></label>
-              <button class="button button-dark" type="submit">Buscar produtos <span aria-hidden="true">⌕</span></button>
+              <button class="button button-dark catalog-quick-search-submit" type="submit" aria-label="Buscar produtos"><span class="catalog-quick-search-label">Buscar produtos</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
             </form>
+          </div>
+          <div class="catalog-landing-filters" id="catalogLandingFilters">
+            <form class="all-products-search" id="catalogLandingSearchForm" role="search"><label class="search-field all-products-search-field" for="catalogLandingSearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="catalogLandingSearch" type="search" placeholder="Buscar produto..." autocomplete="off" aria-label="Buscar produtos no catálogo"></label></form>
+            <label class="all-products-category" for="catalogLandingCategory"><span>Categoria</span><select id="catalogLandingCategory" aria-label="Filtrar catálogo por categoria"><option value="">Todas as categorias</option></select></label>
+          </div>
+          <div class="catalog-landing-results" id="catalogLandingResults" hidden>
+            <span class="all-products-count" id="catalogLandingCount" aria-live="polite"></span>
+            <div class="all-products-grid" id="catalogLandingGrid"></div>
+            <div class="all-products-empty" id="catalogLandingEmpty" hidden>Nenhum produto encontrado. Tente outro termo ou categoria.</div>
           </div>
           <div id="categoryGroups" class="category-groups"></div>
         </div>
         <div id="allProductsView" class="all-products-view" hidden>
           <div class="all-products-heading"><h1 id="allProductsTitle">Nossos Produtos</h1><p>Conheça nossas peças impressas em 3D. Encontre opções para decorar, organizar e presentear.</p></div>
           <div class="all-products-toolbar">
-            <label class="search-field all-products-search" for="allProductsSearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="allProductsSearch" type="search" placeholder="Buscar produto..." autocomplete="off" aria-label="Buscar produtos"></label>
+            <form class="all-products-search" id="allProductsSearchForm" role="search"><label class="search-field all-products-search-field" for="allProductsSearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="allProductsSearch" type="search" placeholder="Buscar produto..." autocomplete="off" aria-label="Buscar produtos"></label><button class="all-products-search-submit" type="submit" aria-label="Buscar produtos"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button></form>
             <label class="all-products-category" for="allProductsCategory"><span>Categoria</span><select id="allProductsCategory" aria-label="Filtrar produtos por categoria"><option value="">Todas as categorias</option></select></label>
+            <div class="sort-field all-products-mobile-sort"><span>Ordenar por</span><div class="sort-dropdown" id="allProductsSortDropdown"><button class="sort-dropdown-toggle" id="allProductsSortDropdownToggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="allProductsSortDropdownMenu"><span id="allProductsSortDropdownLabel">Mais relevantes</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 6 4.5 4 4.5-4"/></svg></button><div class="sort-dropdown-menu" id="allProductsSortDropdownMenu" role="listbox" aria-label="Ordenar produtos" hidden><button type="button" role="option" data-all-sort-value="" aria-selected="true" class="is-selected">Mais relevantes</button><button type="button" role="option" data-all-sort-value="asc" aria-selected="false">Menor preço</button><button type="button" role="option" data-all-sort-value="desc" aria-selected="false">Maior preço</button></div><select id="allProductsSortSelect" aria-label="Ordenar produtos" hidden><option value="" selected>Mais relevantes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option></select></div></div>
             <span class="all-products-count" id="allProductsCount" aria-live="polite"></span>
           </div>
           <div class="all-products-grid" id="allProductsGrid"></div>
@@ -85,9 +95,8 @@
           <nav class="breadcrumbs" aria-label="Trilha de navegação"><a href="index.html#inicio">Início</a><span aria-hidden="true">›</span><a href="catalogo.html#catalogo">Catálogo</a><span aria-hidden="true">›</span><span id="breadcrumbCategory" aria-current="page"></span></nav>
           <button id="backToCategories" class="back-catalog" type="button"><span aria-hidden="true">←</span> Voltar ao catálogo</button>
           <div class="catalog-heading category-page-heading"><div><p class="section-kicker" id="categoryGroupName"></p><h1 id="categoryPageTitle"></h1></div><p id="categoryPageIntro"></p></div>
-          <div class="catalog-tools"><label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Busque por produto ou ideia" autocomplete="off" aria-label="Buscar produtos nesta categoria"></label><label class="sort-field"><span>Ordenar</span><select id="sortSelect" aria-label="Ordenar produtos"><option value="featured">Em destaque</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option></select></label></div>
+            <div class="catalog-tools"><form class="category-search-form" id="categorySearchForm" role="search"><label class="search-field" for="searchInput"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Busque por produto ou ideia" autocomplete="off" aria-label="Buscar produtos nesta categoria"></label><button class="category-search-submit" type="submit" aria-label="Buscar produtos nesta categoria"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button></form><label class="category-page-category" for="categoryPageCategory"><span>Categoria</span><select id="categoryPageCategory" aria-label="Escolher categoria"></select></label><div class="sort-field"><span>Ordenar por</span><div class="sort-dropdown" id="sortDropdown"><button class="sort-dropdown-toggle" id="sortDropdownToggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sortDropdownMenu"><span id="sortDropdownLabel">Mais relevantes</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 6 4.5 4 4.5-4"/></svg></button><div class="sort-dropdown-menu" id="sortDropdownMenu" role="listbox" aria-label="Ordenar produtos" hidden><button type="button" role="option" data-sort-value="" aria-selected="true" class="is-selected">Mais relevantes</button><button type="button" role="option" data-sort-value="asc" aria-selected="false">Menor preço</button><button type="button" role="option" data-sort-value="desc" aria-selected="false">Maior preço</button></div><select id="sortSelect" aria-label="Ordenar produtos" hidden><option value="" selected>Mais relevantes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option></select></div><div class="results-line"><span id="resultCount" aria-live="polite"></span></div></div>
           <div class="category-row" id="categoryFilters" aria-label="Categorias relacionadas"></div>
-          <div class="results-line"><span id="resultCount" aria-live="polite"></span></div>
           <div class="product-grid" id="productGrid"></div>
           <div class="no-results" id="noResults" hidden><span class="no-results-icon">⌕</span><h3 id="emptyCategoryTitle">Ainda não há produtos nesta categoria</h3><p id="emptyCategoryText">Não encontrou o que procura? Conte sua ideia para a Cubic Maker!</p><button class="button button-dark" id="emptyCategoryRequest" type="button">Solicitar peça personalizada <span aria-hidden="true">↗</span></button></div>
         </div>

@@ -31,6 +31,7 @@
   let cart = loadCart();
   let customRequest = loadCustomRequest();
   let currentCategory = null;
+  let catalogLandingFilterActive = false;
   let toastTimer;
   let lastFocus = null;
   let quoteSubmitPending = false;
@@ -350,15 +351,15 @@
     return true;
   }
   function optionList(options, selected = '', placeholder = 'Consulte disponibilidade') {
-    if (!Array.isArray(options) || !options.length) return `<option value="">${escapeHTML(placeholder)}</option>`;
+    if (!Array.isArray(options) || !options.length) return `<option value="" hidden>${escapeHTML(placeholder)}</option>`;
     const values = selected && !options.includes(selected) ? [selected, ...options] : options;
-    return `<option value="" ${selected ? '' : 'selected'}>${escapeHTML(placeholder)}</option>${values.map(value => `<option value="${escapeHTML(value)}" ${value === selected ? 'selected' : ''}>${escapeHTML(value)}</option>`).join('')}`;
+    return `<option value="" ${selected ? '' : 'selected'} hidden>${escapeHTML(placeholder)}</option>${values.map(value => `<option value="${escapeHTML(value)}" ${value === selected ? 'selected' : ''}>${escapeHTML(value)}</option>`).join('')}`;
   }
   function productCard(product) {
     const image = product.cardImage || productImages(product)[0];
-    return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}${product.imageFitContain ? ' product-card-image-contain' : ''}">
+    return `<article class="product-card${product.id === 'presepio-natal-sagrada-familia' ? ' product-card-presepio' : ''}${product.imageFitContain ? ' product-card-image-contain' : ''}${product.cardImageFitCover ? ' product-card-image-cover' : ''}">
       <div class="product-image-wrap"><button type="button" class="product-image-button" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : `<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>`}</button><button type="button" class="quick-add" data-add="${escapeHTML(product.id)}" aria-label="Adicionar ${escapeHTML(product.name)} à cotação">+</button></div>
-      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.cardDescription || product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}">Ver detalhes <span aria-hidden="true">↗</span></button></div></div>
+      <div class="product-info"><div class="product-meta"><span>${escapeHTML(product.category)}</span></div><h3><button type="button" class="product-title-link${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" data-details="${escapeHTML(product.id)}" aria-label="Ver detalhes de ${escapeHTML(product.name)}">${escapeHTML(product.name)}</button></h3><p>${escapeHTML(product.cardDescription || product.description || '')}</p>${product.cardNote ? `<p class="product-card-note">${escapeHTML(product.cardNote)}</p>` : ''}<div class="product-bottom"><div class="price">${productPriceMarkup(product)}</div><button class="details-link" type="button" data-details="${escapeHTML(product.id)}"><span class="details-link-label">Ver detalhes</span><span aria-hidden="true">↗</span></button></div></div>
     </article>`;
   }
   function renderCategoryGroups() {
@@ -367,6 +368,12 @@
   }
   function renderCategories() {
     if (!isCatalogPage) return;
+    const categorySelect = $('#categoryPageCategory');
+    if (categorySelect) {
+      const uniqueCategories = [...new Map(categoryEntries.filter(category => !category.hidden).map(category => [category.slug,category])).values()];
+      categorySelect.innerHTML = `<option value="">Todas as categorias</option>${uniqueCategories.map(category => `<option value="${escapeHTML(category.slug)}">${escapeHTML(category.name)}</option>`).join('')}`;
+      categorySelect.value = currentCategory || '';
+    }
     if (!currentCategory) { $('#categoryFilters').innerHTML = ''; return; }
     const category = categoryBySlug.get(currentCategory);
     const group = categoryGroups.find(entry => entry.categories.some(item => item.slug === currentCategory));
@@ -384,7 +391,14 @@
     $('#categoryProductsView').hidden = true;
     $('#catalogQuickSearchInput').value = '';
     $('#searchInput').value = '';
+    if ($('#allProductsSearch')) $('#allProductsSearch').value = '';
+    if ($('#allProductsCategory')) $('#allProductsCategory').value = '';
+    if ($('#catalogLandingSearch')) $('#catalogLandingSearch').value = '';
+    if ($('#catalogLandingCategory')) $('#catalogLandingCategory').value = '';
+    catalogLandingFilterActive = false;
+    populateAllProductCategorySelects();
     renderCategoryGroups();
+    renderCatalogLandingProducts();
     window.scrollTo({top:0,behavior:'smooth'});
   }
   function showSearchResults(query) {
@@ -414,6 +428,15 @@
     if (location.hash !== target) history.pushState(null,'',target);
     showSearchResults(term);
   }
+  function updateCategoryPageHeading(category) {
+    const desktopCategoryLayout = matchMedia('(min-width: 701px)').matches;
+    $('#categoryPageTitle').textContent = desktopCategoryLayout ? 'Nossos Produtos' : category.name;
+    $('#categoryPageIntro').textContent = desktopCategoryLayout
+      ? 'Conheça nossas peças impressas em 3D. Encontre opções para decorar, organizar e presentear.'
+      : category.groupTitle === 'Empresas e profissionais'
+        ? 'Possibilidades de suportes, organizadores, expositores, brindes e peças personalizadas, sujeitas à viabilidade técnica.'
+        : category.groupIntro;
+  }
   function showCategory(slug) {
     if (!isCatalogPage) return;
     const category = categoryBySlug.get(slug);
@@ -421,16 +444,13 @@
     document.title = `${category.name} — Catálogo | Cubic Maker`;
     currentCategory = slug;
     document.body.classList.add('catalog-mode');
-    document.body.classList.add('catalog-products-view');
+    document.body.classList.remove('catalog-products-view');
     $('#catalogLanding').hidden = true;
-    if ($('#allProductsView')) $('#allProductsView').hidden = true;
-    $('#categoryProductsView').hidden = false;
-    $('#breadcrumbCategory').textContent = category.name;
-    $('#categoryGroupName').textContent = `CATÁLOGO / ${category.groupTitle.toLocaleUpperCase('pt-BR')}`;
-    $('#categoryPageTitle').textContent = category.name;
-    $('#categoryPageIntro').textContent = category.groupTitle === 'Empresas e profissionais' ? 'Possibilidades de suportes, organizadores, expositores, brindes e peças personalizadas, sujeitas à viabilidade técnica.' : category.groupIntro;
-    renderCategories();
-    renderProducts();
+    $('#allProductsView').hidden = false;
+    $('#categoryProductsView').hidden = true;
+    populateAllProductCategorySelects();
+    $('#allProductsCategory').value = category.name;
+    renderAllProducts();
     window.scrollTo({top:0,behavior:'smooth'});
   }
   function openCategory(slug) {
@@ -451,11 +471,7 @@
     $('#catalogLanding').hidden = true;
     $('#categoryProductsView').hidden = true;
     $('#allProductsView').hidden = false;
-    const select = $('#allProductsCategory');
-    if (select.options.length === 1) {
-      const categories = [...new Set(products.flatMap(product => product.categories || [product.category]).filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
-      select.insertAdjacentHTML('beforeend', categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`).join(''));
-    }
+    populateAllProductCategorySelects();
     renderAllProducts();
     window.scrollTo({top:0,behavior:'smooth'});
   }
@@ -490,7 +506,7 @@
       return sort === 'asc' ? a.price - b.price : b.price - a.price;
     }); else visible.sort((a,b) => (a.featured || 999) - (b.featured || 999));
     productGrid.innerHTML = visible.map(productCard).join('');
-    $('#resultCount').textContent = `${visible.length} ${visible.length === 1 ? 'peça encontrada' : 'peças encontradas'}`;
+    $('#resultCount').textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
     $('#noResults').hidden = visible.length !== 0;
     productGrid.hidden = visible.length === 0;
     if (selected) {
@@ -512,18 +528,65 @@
   function renderAllProducts() {
     const grid = $('#allProductsGrid');
     if (!grid) return;
-    const query = $('#allProductsSearch').value.trim();
-    const category = $('#allProductsCategory').value;
-    const visible = products.filter(product => (!category || (product.categories || [product.category]).includes(category)) && matchesSearch(product,query))
-      .sort((a,b) => (a.featured || 999) - (b.featured || 999));
-    grid.innerHTML = visible.map(product => {
-      const image = productImages(product)[0];
-      return `<article class="all-products-card${product.id === 'presepio-natal-sagrada-familia' ? ' all-products-card-presepio' : ''}"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
-    }).join('');
+    const visible = getAllProductsMatching($('#allProductsSearch').value, $('#allProductsCategory').value, $('#allProductsSortSelect')?.value || '');
+    grid.innerHTML = renderAllProductsCards(visible);
     const count = $('#allProductsCount');
     count.textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
     $('#allProductsEmpty').hidden = visible.length !== 0;
     grid.hidden = visible.length === 0;
+  }
+  function getAllProductsMatching(query = '', category = '', sort = '') {
+    return products.filter(product => matchesCatalogCategory(product,category) && matchesSearch(product,query))
+      .sort((a,b) => {
+        if (sort === 'asc' || sort === 'desc') {
+          if (a.price == null) return 1;
+          if (b.price == null) return -1;
+          return sort === 'asc' ? a.price - b.price : b.price - a.price;
+        }
+        return (a.featured || 999) - (b.featured || 999);
+      });
+  }
+  function matchesCatalogCategory(product, categoryName) {
+    if (!categoryName) return true;
+    const productCategories = product.categories || [product.category];
+    const category = categoryEntries.find(entry => !entry.hidden && entry.name === categoryName);
+    if (category?.memberNames) return productCategories.some(name => category.memberNames.includes(name));
+    return productCategories.includes(category?.name || categoryName);
+  }
+  function renderAllProductsCards(visible) {
+    return visible.map(product => {
+      const image = productImages(product)[0];
+      return `<article class="all-products-card${product.id === 'presepio-natal-sagrada-familia' ? ' all-products-card-presepio' : ''}"><button class="all-products-image" type="button" data-details="${escapeHTML(product.id)}" aria-label="Abrir detalhes de ${escapeHTML(product.name)}">${image ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.imageAlt || product.name)}" loading="lazy" width="640" height="480">` : '<span class="product-image-placeholder" aria-hidden="true">Cubic Maker</span>'}</button><h2><button class="all-products-name${product.cardTitleSingleLine || product.id === 'letreiro-feliz-natal-floco-neve' ? ' product-title-single-line' : ''}" type="button" data-details="${escapeHTML(product.id)}">${escapeHTML(product.name)}</button></h2><p class="all-products-price">${productPriceMarkup(product)}</p></article>`;
+    }).join('');
+  }
+  function populateAllProductCategorySelects() {
+    const categories = [...new Set([
+      ...products.flatMap(product => product.categories || [product.category]),
+      ...categoryEntries.filter(category => !category.hidden).map(category => category.name)
+    ].filter(Boolean))].sort((a,b) => a.localeCompare(b,'pt-BR'));
+    ['allProductsCategory','catalogLandingCategory'].forEach(id => {
+      const select = $(`#${id}`);
+      if (!select || select.options.length > 1) return;
+      select.insertAdjacentHTML('beforeend', categories.map(category => `<option value="${escapeHTML(category)}">${escapeHTML(category)}</option>`).join(''));
+    });
+  }
+  function renderCatalogLandingProducts() {
+    const search = $('#catalogLandingSearch');
+    const category = $('#catalogLandingCategory');
+    const grid = $('#catalogLandingGrid');
+    if (!search || !category || !grid) return;
+    if (!catalogLandingFilterActive) {
+      $('#catalogLandingResults').hidden = true;
+      $('#categoryGroups').hidden = false;
+      return;
+    }
+    const visible = getAllProductsMatching(search.value,category.value);
+    grid.innerHTML = renderAllProductsCards(visible);
+    $('#catalogLandingCount').textContent = `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
+    $('#catalogLandingEmpty').hidden = visible.length !== 0;
+    grid.hidden = visible.length === 0;
+    $('#catalogLandingResults').hidden = false;
+    $('#categoryGroups').hidden = true;
   }
   function addProduct(product, opts = {}) {
     const previousCart = cart.map(item => ({ ...item }));
@@ -571,11 +634,11 @@
         : product.colorChoices
         ? `<div class="cart-options">${product.colorChoices.map(choice => `<label>${escapeHTML(choice.label)}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.colorSelections?.[choice.key])}"></span><select data-choice-key="${escapeHTML(choice.key)}" data-key="${escapeHTML(item.key)}" required>${optionList(choice.options,item.colorSelections?.[choice.key],'Selecione uma cor')}</select></span></label>`).join('')}</div>`
         : orderOptions
-        ? `<div class="cart-options"><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.sizeOptions || [],item.size,'Selecione um tamanho')}</select></label><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}" required><option value="" ${item.finish ? '' : 'selected'}>Selecione um acabamento</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' || orderOptions.alwaysShowColor ? `<label>${escapeHTML(orderOptions.colorFieldLabel || (item.finish === 'colorido' ? 'Cor do manto' : 'Cor'))}<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
+        ? `<div class="cart-options"><label>Tamanho<select data-field="size" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.sizeOptions || [],item.size,'Selecione um tamanho')}</select></label><label>Acabamento<select data-field="finish" data-key="${escapeHTML(item.key)}" required><option value="" ${item.finish ? '' : 'selected'} hidden>Selecione um acabamento</option>${orderOptions.finishes.map(finish => `<option value="${escapeHTML(finish.value)}" ${item.finish === finish.value ? 'selected' : ''}>${escapeHTML(finish.label)}</option>`).join('')}</select></label>${item.finish === 'colorido' || orderOptions.alwaysShowColor ? `<label>${escapeHTML(orderOptions.colorFieldLabel || (item.finish === 'colorido' ? 'Cor do manto' : 'Cor'))}<select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(orderOptions.colors,item.color,'Selecione uma cor')}</select></label>` : ''}</div>`
         : product.variantOptions
         ? product.hideVariantColorSelector
-          ? `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}" required><option value="" ${item.variant ? '' : 'selected'}>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label></div>`
-          : `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}"><option value="" ${item.variant ? '' : 'selected'}>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
+          ? `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}" required><option value="" ${item.variant ? '' : 'selected'} hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label></div>`
+          : `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}"><option value="" ${item.variant ? '' : 'selected'} hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
         : product.hideVersionSelector
         ? `<div class="cart-options"><label class="cart-color-label">${escapeHTML(product.colorFieldLabel || 'Cor')}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
         : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`;
@@ -685,8 +748,8 @@
       ? `<div class="dialog-fields">${product.colorChoices.map(choice => `<label class="detail-option-field">${escapeHTML(choice.label)}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="${escapeHTML(choice.key)}" aria-label="${escapeHTML(choice.label)} do ${escapeHTML(product.name)}" aria-describedby="${escapeHTML(choice.key)}Error" required>${optionList(choice.options,'','Selecione uma cor')}</select></span><span class="field-error" id="${escapeHTML(choice.key)}Error" hidden>Selecione ${escapeHTML(choice.label.toLocaleLowerCase('pt-BR'))}.</span></label>`).join('')}</div>`
       : product.variantOptions
       ? product.hideVariantColorSelector
-        ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione uma opção para continuar.</span></label></div>`
-        : `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione um tamanho ou kit.</span></label><label class="detail-option-field">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color" aria-label="Cor de ${escapeHTML(product.name)}" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor.</span></label></div>`
+        ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione uma opção para continuar.</span></label></div>`
+        : `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione um tamanho ou kit.</span></label><label class="detail-option-field">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color" aria-label="Cor de ${escapeHTML(product.name)}" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor.</span></label></div>`
       : product.hideVersionSelector
       ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.colorFieldLabel || 'Cor')}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color" aria-label="${escapeHTML(product.colorFieldLabel || 'Cor do produto')}" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor para continuar.</span></label></div>`
       : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle()}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label></div><p class="detail-version-description" data-detail-version-description ${product.price != null && !versionDescription(selectedVersion) ? 'hidden' : ''}>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
@@ -788,13 +851,93 @@
   renderCart();
   initTrendingCarousel();
   const year = $('#year'); if (year) year.textContent = new Date().getFullYear();
+  function initSortDropdown({rootId,toggleId,menuId,labelId,selectId,optionAttribute,changeHandler}) {
+    const root = $(`#${rootId}`);
+    const toggle = $(`#${toggleId}`);
+    const menu = $(`#${menuId}`);
+    const label = $(`#${labelId}`);
+    const select = $(`#${selectId}`);
+    if (!root || !toggle || !menu || !label || !select) return;
+    const options = $$(`[${optionAttribute}]`,menu);
+    const optionValue = option => option.getAttribute(optionAttribute) || '';
+    const sync = () => {
+      const selected = options.find(option => optionValue(option) === select.value);
+      label.textContent = selected?.textContent.trim() || 'Mais relevantes';
+      options.forEach(option => {
+        const isSelected = option === selected;
+        option.classList.toggle('is-selected',isSelected);
+        option.setAttribute('aria-selected',String(isSelected));
+      });
+    };
+    const setOpen = (open,focusSelected = false) => {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded',String(open));
+      if (open && focusSelected) (options.find(option => optionValue(option) === select.value) || options[0])?.focus();
+    };
+    sync();
+    toggle.addEventListener('click',() => setOpen(menu.hidden));
+    toggle.addEventListener('keydown',event => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      setOpen(true,true);
+    });
+    menu.addEventListener('click',event => {
+      const option = event.target.closest(`[${optionAttribute}]`);
+      if (!option) return;
+      select.value = optionValue(option);
+      select.dispatchEvent(new Event('change',{bubbles:true}));
+      setOpen(false);
+      toggle.focus({preventScroll:true});
+    });
+    menu.addEventListener('keydown',event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false);
+        toggle.focus({preventScroll:true});
+        return;
+      }
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      const index = options.indexOf(document.activeElement);
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      options[(index + step + options.length) % options.length]?.focus();
+    });
+    root.addEventListener('focusout',event => {
+      if (!root.contains(event.relatedTarget)) setOpen(false);
+    });
+    document.addEventListener('click',event => {
+      if (!root.contains(event.target)) setOpen(false);
+    });
+    select.addEventListener('change',sync);
+    if (changeHandler) select.addEventListener('change',changeHandler);
+  }
+  initSortDropdown({rootId:'sortDropdown',toggleId:'sortDropdownToggle',menuId:'sortDropdownMenu',labelId:'sortDropdownLabel',selectId:'sortSelect',optionAttribute:'data-sort-value',changeHandler:renderProducts});
+  initSortDropdown({rootId:'allProductsSortDropdown',toggleId:'allProductsSortDropdownToggle',menuId:'allProductsSortDropdownMenu',labelId:'allProductsSortDropdownLabel',selectId:'allProductsSortSelect',optionAttribute:'data-all-sort-value',changeHandler:renderAllProducts});
   if ($('#categoryFilters')) $('#categoryFilters').addEventListener('click', event => { const button = event.target.closest('[data-category]'); if (!button) return; openCategory(button.dataset.category); });
   if ($('#catalogQuickSearch')) $('#catalogQuickSearch').addEventListener('submit', event => { event.preventDefault(); searchCatalog($('#catalogQuickSearchInput').value); });
+  if ($('#catalogLandingSearchForm')) $('#catalogLandingSearchForm').addEventListener('submit', event => { event.preventDefault(); catalogLandingFilterActive = true; renderCatalogLandingProducts(); });
+  if ($('#catalogLandingSearch')) $('#catalogLandingSearch').addEventListener('input', () => { catalogLandingFilterActive = true; renderCatalogLandingProducts(); });
+  if ($('#catalogLandingCategory')) $('#catalogLandingCategory').addEventListener('change', () => { catalogLandingFilterActive = true; renderCatalogLandingProducts(); });
+  if ($('#categorySearchForm')) $('#categorySearchForm').addEventListener('submit', event => { event.preventDefault(); renderProducts(); });
+  if ($('#allProductsSearchForm')) $('#allProductsSearchForm').addEventListener('submit', event => { event.preventDefault(); renderAllProducts(); });
+  if ($('#categoryPageCategory')) $('#categoryPageCategory').addEventListener('change', event => event.target.value ? openCategory(event.target.value) : openCatalog());
   if ($('#categoryGroups')) $('#categoryGroups').addEventListener('click', event => { const link = event.target.closest('[data-open-category]'); if (link) { event.preventDefault(); openCategory(link.dataset.openCategory); } });
   if ($('#backToCategories')) $('#backToCategories').addEventListener('click', openCatalog);
   if ($('#emptyCategoryRequest')) $('#emptyCategoryRequest').addEventListener('click', () => { const category = categoryBySlug.get(currentCategory); sendCategoryWhatsApp(category?.name || 'Outras ideias'); });
   window.addEventListener('hashchange', routeFromHash);
-  [productGrid,trendingTrack,$('#allProductsGrid')].filter(Boolean).forEach(grid => {
+  window.addEventListener('resize',() => {
+    if (isCatalogPage && !$('#catalogLanding').hidden) {
+      const mobileLayout = matchMedia('(max-width: 700px)').matches;
+      if (mobileLayout && catalogLandingFilterActive) {
+        catalogLandingFilterActive = false;
+        renderCatalogLandingProducts();
+      }
+    }
+    if (!currentCategory) return;
+    const category = categoryBySlug.get(currentCategory);
+    if (category) updateCategoryPageHeading(category);
+  });
+  [productGrid,trendingTrack,$('#allProductsGrid'),$('#catalogLandingGrid')].filter(Boolean).forEach(grid => {
     grid.addEventListener('click', event => {
       const add = event.target.closest('[data-add]'); const details = event.target.closest('[data-details]');
       if (add) { const product=getProduct(add.dataset.add); if (product?.orderOptions || product?.variantOptions || product?.colorChoices || product?.hideVersionSelector && !product?.hideOrderSelectors || product?.hideOrderSelectors) openDetails(product.id); else if (product) addProduct(product); }
@@ -804,7 +947,17 @@
   if ($('#searchInput')) $('#searchInput').addEventListener('input', renderProducts);
   if ($('#sortSelect')) $('#sortSelect').addEventListener('change', renderProducts);
   if ($('#allProductsSearch')) $('#allProductsSearch').addEventListener('input', renderAllProducts);
-  if ($('#allProductsCategory')) $('#allProductsCategory').addEventListener('change', renderAllProducts);
+  if ($('#allProductsCategory')) $('#allProductsCategory').addEventListener('change', event => {
+    const selectedName = event.target.value;
+    const selectedCategory = categoryEntries.find(category => !category.hidden && category.name === selectedName);
+    if (selectedName && selectedCategory) { openCategory(selectedCategory.slug); return; }
+    if (location.hash.startsWith('#catalogo/')) {
+      if (location.hash !== '#produtos') history.pushState(null,'','#produtos');
+      showAllProducts();
+      return;
+    }
+    renderAllProducts();
+  });
   $('#openCart').addEventListener('click', openCart); $('#closeCart').addEventListener('click', closeCart); overlay.addEventListener('click', closeCart);
   $('#cartContent').addEventListener('click', event => { if (event.target.closest('[data-close-cart]')) { closeCart(); if (isCatalogPage) openCatalog(); return; } const step=event.target.closest('[data-quantity-step]'); if (step) { const item=cart.find(entry=>entry.key===step.dataset.key); if (!item) return; item.quantity=Math.min(99,Math.max(1,item.quantity + Number(step.dataset.quantityStep))); saveCart(); renderCart(); return; } const remove=event.target.closest('[data-remove]'); if (remove) { cart=cart.filter(item=>item.key !== remove.dataset.remove); saveCart(); renderCart(); showToast('Produto removido da lista.'); } if (event.target.closest('[data-remove-custom]')) { customRequest=null; saveCart(); renderCart(); showToast('Solicitação personalizada removida.'); } });
   $('#cartContent').addEventListener('change', event => {
