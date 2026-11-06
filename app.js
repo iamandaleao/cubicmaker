@@ -118,7 +118,9 @@
   }
   function configuredSubtotal(product, item) {
     const unitPrice = configuredUnitPrice(product,item);
-    return unitPrice == null ? null : unitPrice * Math.min(99,Math.max(1,Number.parseInt(item?.quantity,10)||1));
+    if (unitPrice == null) return null;
+    if (product?.variantPriceIsTotal) return unitPrice;
+    return unitPrice * Math.min(99,Math.max(1,Number.parseInt(item?.quantity,10)||1));
   }
   function cartUnitPrice(product,item) { return product?.orderOptions || product?.variantOptions || product?.colorChoices ? configuredUnitPrice(product,item) : versionPrice(product,item?.version); }
   function cartSubtotal(product,item) { return product?.orderOptions || product?.variantOptions || product?.colorChoices ? configuredSubtotal(product,item) : productSubtotal(product,item?.quantity,item?.version); }
@@ -174,7 +176,7 @@
     const output=$('#detailQuantityPrice');
     if (!output) return;
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) output.textContent='Informe de 1 a 99 unidades';
-    else output.textContent=unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(unitPrice * quantity)}`;
+    else output.textContent=unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(product.variantPriceIsTotal ? unitPrice : unitPrice * quantity)}`;
   }
   function productPriceMarkup(product, version = 'economica') {
     if (product.orderOptions) {
@@ -647,11 +649,11 @@
         : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color,product)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`;
       const unitPrice = cartUnitPrice(product,item);
       const selectedFinish = orderOptions?.finishes.find(finish => finish.value === item.finish);
-      const unitLabel = orderOptions || product.variantOptions || product.colorChoices ? (unitPrice == null ? 'Selecione as opções' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : product.hideVersionSelector ? `${money(versionPrice(product,item.version))} / un.` : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}`;
+      const unitLabel = orderOptions || product.variantOptions || product.colorChoices ? (unitPrice == null ? 'Selecione as opções' : product.variantPriceIsTotal ? 'Valor do pacote' : money(unitPrice)) : product.price == null ? 'Consulte disponibilidade' : product.hideVersionSelector ? `${money(versionPrice(product,item.version))} / un.` : `${versionName(item.version)} · ${money(versionPrice(product,item.version))} / un.${product.bundleOffer ? ` · ${product.bundleOffer.quantity} un. por ${money(product.bundleOffer.price * (item.version === 'reforcada' ? 2 : 1))}` : ''}`;
       return `<article class="cart-item" data-key="${escapeHTML(item.key)}">${image ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" width="96" height="72">` : '<span class="cart-image-placeholder" aria-hidden="true">CM</span>'}<div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">${escapeHTML(product.category)}</span><h3>${escapeHTML(product.name)}</h3></div><button class="remove-item" type="button" data-remove="${escapeHTML(item.key)}" aria-label="Remover ${escapeHTML(product.name)}">×</button></div>
         ${cartOptionMarkup}
         <label class="cart-note-label">Observações<textarea data-field="note" data-key="${escapeHTML(item.key)}" rows="2" maxlength="500" placeholder="Personalização ou detalhes">${escapeHTML(item.note)}</textarea></label>
-        <div class="cart-item-bottom"><div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div><span class="cart-unit">${escapeHTML(unitLabel)}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}</strong></div></div></article>`;
+        <div class="cart-item-bottom">${product.variantPriceIsTotal ? `<span class="quantity-field">${escapeHTML(product.variantOptions.find(option => option.value === item.variant)?.quantity || 1)} unidades</span>` : `<div class="quantity-field"><span>Qtd.</span><div class="quantity-stepper"><button type="button" data-quantity-step="-1" data-key="${escapeHTML(item.key)}" aria-label="Diminuir quantidade de ${escapeHTML(product.name)}">−</button><input data-field="quantity" data-key="${escapeHTML(item.key)}" type="number" min="1" max="99" value="${item.quantity}" aria-label="Quantidade de ${escapeHTML(product.name)}"><button type="button" data-quantity-step="1" data-key="${escapeHTML(item.key)}" aria-label="Aumentar quantidade de ${escapeHTML(product.name)}">+</button></div></div>`}<span class="cart-unit">${escapeHTML(unitLabel)}</span><strong>${subtotal == null ? 'A consultar' : money(subtotal)}</strong></div></div></article>`;
     }).join('');
     const customHtml = customRequest ? `<article class="cart-item custom-cart-item"><div class="custom-cart-icon">✳</div><div class="cart-item-main"><div class="cart-item-head"><div><span class="cart-category">PERSONALIZADO</span><h3>Projeto personalizado</h3></div><button class="remove-item" type="button" data-remove-custom aria-label="Remover pedido personalizado">×</button></div><p class="custom-summary">${escapeHTML(customRequest.idea || 'Solicitação de avaliação')}${customRequest.dimensions ? ` · ${escapeHTML(customRequest.dimensions)}` : ''}${customRequest.color ? ` · ${escapeHTML(customRequest.color)}` : ''}</p><span class="cart-unit">Valor a definir após avaliação</span></div></article>` : '';
     $('#cartContent').innerHTML = productRows + customHtml;
@@ -770,7 +772,7 @@
           ${descriptionAfterFields}
           <label class="dialog-note">${noteLabel}${product.orderOptions ? '<span class="dialog-help">Use este campo para informar detalhes adicionais do pedido.</span>' : ''}<textarea name="note" rows="2" maxlength="500" placeholder="${notePlaceholder}"></textarea></label>${product.noteBelowObservations ? `<p class="dialog-help dialog-product-note">${escapeHTML(product.noteBelowObservations)}</p>` : ''}
           <div class="dialog-add-row">
-            <label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>
+            ${product.hideQuantitySelector ? '<input name="quantity" type="hidden" value="1">' : '<label class="quantity-field">Quantidade<span class="detail-quantity-stepper"><input name="quantity" type="number" min="1" max="99" value="1" aria-label="Quantidade" aria-describedby="quantityError"><span class="quantity-arrow-buttons"><button type="button" data-detail-quantity-step="1" aria-label="Aumentar quantidade">+</button><button type="button" data-detail-quantity-step="-1" aria-label="Diminuir quantidade">−</button></span></span><span class="field-error" id="quantityError" hidden>Informe uma quantidade entre 1 e 99.</span></label>'}
             <output class="detail-quantity-price detail-price-highlight" id="detailQuantityPrice" aria-live="polite">${initialSubtotal}</output>
             <button class="button button-dark" type="submit" data-add-to-quote aria-label="Adicionar ${escapeHTML(product.name)} à cotação">Adicionar</button>
           </div>
@@ -791,8 +793,8 @@
       const unitPrice = cartUnitPrice(product,item);
       lines.push(
         `${itemNumber}. ${product.name}`,
-        `   ${product.variantLabel === 'Quantidade' ? 'Quantidade de kits' : 'Quantidade'}: ${item.quantity}`,
-        `   Valor unitário: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`,
+        `   ${product.variantPriceIsTotal ? 'Quantidade do pacote' : product.variantLabel === 'Quantidade' ? 'Quantidade de kits' : 'Quantidade'}: ${product.variantPriceIsTotal ? `${product.variantOptions.find(option => option.value === item.variant)?.quantity || 1} unidades` : item.quantity}`,
+        `   ${product.variantPriceIsTotal ? 'Valor do pacote' : 'Valor unitário'}: ${unitPrice == null ? 'A consultar' : money(unitPrice)}`,
         `   Valor total: ${subtotal == null ? 'A consultar' : money(subtotal)}`
       );
       const productLink = product.url || product.productUrl;
@@ -809,7 +811,7 @@
       }
       if (!product.hideOrderSelectors && product.variantOptions) {
         const option=product.variantOptions.find(entry => entry.value === item.variant);
-        lines.push(`   ${product.variantLabel === 'Quantidade' ? 'Quantidade selecionada' : product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
+        if (!product.variantPriceIsTotal) lines.push(`   ${product.variantLabel === 'Quantidade' ? 'Quantidade selecionada' : product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
         if (!product.hideVariantColorSelector) lines.push(`   Cor: ${item.color || 'a definir'}`);
       }
       if (!product.hideOrderSelectors && !product.colorChoices && !product.orderOptions && !product.variantOptions) {
@@ -1192,7 +1194,7 @@
       return;
     }
     if (product.variantOptions && !product.variantOptions.some(option => option.value === variant)) {
-      setError(variantSelect,'variantError','Selecione um tamanho ou kit para continuar.');
+      setError(variantSelect,'variantError',`Selecione ${product.variantLabel === 'Quantidade' ? 'uma quantidade' : 'uma opção'} para continuar.`);
       return;
     }
     if (product.variantOptions && !product.hideVariantColorSelector && !productColors(product).includes(color)) {
