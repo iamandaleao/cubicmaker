@@ -669,25 +669,21 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'A vela e as flores secas não acompanham o produto. O porta-velas é indicado para velas LED com até 38 mm de diâmetro. Use o campo de observações para solicitar outras cores ou tamanhos.'
     },
-    image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
+    image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',
     imageAlt:'Kit Wabi-Sabi bege com vaso, porta-velas e bandeja redonda canelados',
     imageAlts:[
-      'Kit Wabi-Sabi bege com vaso, porta-velas e bandeja redonda canelados',
+      'Conjunto Wabi-Sabi bege com vaso, porta-velas e bandeja',
       'Conjunto decorativo Wabi-Sabi bege em ambiente minimalista',
       'Kit Wabi-Sabi branco com vaso, porta-velas e bandeja canelados',
       'Porta-velas LED e vaso decorativo Wabi-Sabi em bandeja redonda',
-      'Conjunto Wabi-Sabi bege com vaso, porta-velas e bandeja',
-      'Conjunto Wabi-Sabi preto com vaso, porta-velas e bandeja redonda',
-      'Kit Wabi-Sabi bege com bandeja oval, vaso e porta-velas canelado'
+      'Conjunto Wabi-Sabi preto com vaso, porta-velas e bandeja redonda'
     ],
     images:[
-      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-02-bege-minimalista.webp',
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-03-branco-canelado.webp',
       'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-04-vela-led-flores-secas.webp',
-      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',
-      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-06-kit-preto.webp',
-      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-bandeja-oval-redonda-porta-velas-bege.webp'
+      'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-06-kit-preto.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     hideVersionSelector:true, colorFieldLabel:'Cor',
@@ -750,7 +746,7 @@ window.CUBIC_PRODUCTS = [
     name:'Kit Decorativo Japandi – Vaso, Bandeja e Porta-Vela',
     cardTitleSingleLine:true,
     category:'Casa e Decoração', categories:['Kits'],
-    price:90.00,
+    price:80.00,
     description:'Kit Japandi minimalista com vaso, bandeja e porta-vela para decorar a casa.',
     cardDescription:'Composição Japandi de três peças para mesas, aparadores e estantes.',
     fullDescription:'Kit Decorativo Japandi, uma composição delicada e minimalista que combina três peças para trazer harmonia e aconchego ao ambiente. Ideal para decorar mesas, aparadores, estantes e cantinhos especiais da sua casa.',
@@ -785,6 +781,48 @@ window.CUBIC_PRODUCTS = [
     ],
     hidePrintFinishNote:true,
     featured:24
+  },
+  {
+    id:'conjunto-decoracao-japandi',
+    name:'Conjunto de Decoração Japandi',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Kits','Vasos decorativos'],
+    price:90.00,
+    description:'Conjunto Japandi canelado com vaso, bandeja oval, porta-vela esférico e coração decorativo.',
+    cardDescription:'Quatro peças caneladas para compor uma decoração minimalista e aconchegante.',
+    fullDescription:'Leve elegância, harmonia e aconchego para sua decoração com o Conjunto Japandi. Inspirado na combinação do minimalismo japonês com o estilo escandinavo, o kit reúne peças com design moderno e acabamento canelado. Ideal para salas, quartos, escritórios, aparadores e mesas decorativas.',
+    detailContent:{
+      paragraphs:['Leve elegância, harmonia e aconchego para sua decoração com o Conjunto Japandi. Inspirado na combinação do minimalismo japonês com o estilo escandinavo, o kit reúne peças com design moderno e acabamento canelado.','Uma ótima opção para renovar a decoração ou presentear alguém especial.'],
+      features:[
+        'Design minimalista e sofisticado.',
+        'Textura canelada em todas as peças.',
+        'Peças que combinam entre si.',
+        'Ideal para salas, quartos, escritórios, aparadores e mesas decorativas.',
+        'Material: PLA, produzido por impressão 3D.',
+        'Peso aproximado do conjunto: 400 g.'
+      ],
+      sections:[
+        {title:'O conjunto inclui',items:['1 vaso decorativo canelado.','1 bandeja oval.','1 porta-vela esférico.','1 coração decorativo.']},
+        {title:'Dimensões informadas',items:['Conjunto: aproximadamente 10 × 10 × 16 cm.']}
+      ]
+    },
+    image:'assets/photos/products/Conjunto de Decoração Japandi -/71-qBepStpL._AC_SL1448_.jpg',
+    imageAlt:'Conjunto Japandi bege com vaso canelado, bandeja oval, porta-vela esférico e coração decorativo',
+    imageAlts:[
+      'Conjunto Japandi bege com vaso canelado, bandeja oval, porta-vela esférico e coração decorativo',
+      'Conjunto de decoração Japandi preto com vaso, bandeja e porta-vela canelados',
+      'Conjunto Japandi verde oliva com vaso, bandeja oval, porta-vela e coração decorativo',
+      'Conjunto Japandi bege com peças caneladas em uma mesa de madeira'
+    ],
+    images:[
+      'assets/photos/products/Conjunto de Decoração Japandi -/71-qBepStpL._AC_SL1448_.jpg',
+      'assets/photos/products/Conjunto de Decoração Japandi -/71NzrtYw+bL._AC_SL1448_.jpg',
+      'assets/photos/products/Conjunto de Decoração Japandi -/714Rf6hizoL._AC_SL1448_.jpg',
+      'assets/photos/products/Conjunto de Decoração Japandi -/dc37b7b1080e4c5d.webp'
+    ],
+    dimensions:null, material:'PLA', demonstrative:false,
+    hideVersionSelector:true, hidePrintFinishNote:true,
+    featured:25
   }
 ];
 
@@ -856,7 +894,7 @@ window.CUBIC_CATEGORY_GROUPS = [
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
     {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/br-11134207-820lt-mtbngwn55t6ob0.webp',alt:'Mini Jesus sentado na borda de um monitor de computador',icon:'✝️',illustrative:false},
-    {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-01-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
+    {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
     {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp',alt:'Vaso espiral branco decorativo de 15 cm produzido em impressão 3D',icon:'♧',illustrative:false}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
