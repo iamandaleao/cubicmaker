@@ -844,7 +844,7 @@
       return product?.colorChoices && !colorChoicesComplete(product,item)
         || product?.orderOptions && (!product.orderOptions.sizeOptions?.includes(item.size) || !item.finish || ((item.finish === 'colorido' || product.orderOptions.alwaysShowColor) && !product.orderOptions.colors.includes(item.color)))
         || product?.variantOptions && (!product.variantOptions.some(option => option.value === item.variant) || !product.hideVariantColorSelector && !productColors(product).includes(item.color))
-        || product?.hideVersionSelector && !product?.hideOrderSelectors && !productColors(product).includes(item.color);
+        || product?.hideVersionSelector && !product?.hideOrderSelectors && !product?.variantOptions && !product?.colorChoices && !product?.orderOptions && !productColors(product).includes(item.color);
     });
     if (incomplete) { showToast('Preencha as opções obrigatórias dos produtos antes de solicitar o orçamento.'); return; }
     if (!/^\d{12,13}$/.test(CONFIG.WHATSAPP_NUMBER)) { showToast('O número de WhatsApp precisa ser configurado com DDI e DDD.'); return; }
@@ -1189,7 +1189,7 @@
       setError(colorSelect,'colorError',`Selecione ${product.orderOptions.colorFieldLabel ? 'uma cor' : 'uma cor do manto'} para continuar.`);
       return;
     }
-    if (product.hideVersionSelector && !product.hideOrderSelectors && !productColors(product).includes(color)) {
+    if (product.hideVersionSelector && !product.hideOrderSelectors && !product.variantOptions && !product.colorChoices && !product.orderOptions && !productColors(product).includes(color)) {
       setError(colorSelect,'colorError','Selecione uma cor para continuar.');
       return;
     }
