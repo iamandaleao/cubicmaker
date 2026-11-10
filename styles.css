@@ -620,6 +620,12 @@ body.catalog-mode.catalog-products-view .catalog-section{min-height:0;padding:28
 .filament-copy .feature-list li{font-size:11px}
 .cart-option-static{grid-column:1/-1;color:#68736a;font-size:11px;line-height:1.4}
 .dialog-info h2.dialog-title-compact{font-size:clamp(20px,2.5vw,29px);white-space:nowrap}
+@media(min-width:601px){.site-header .brand-mark{width:72px;height:72px;flex:0 0 72px}.site-header .brand-name{display:none}}
+@media(min-width:601px) and (max-width:900px){.site-header .brand-mark{width:60px;height:60px;flex-basis:60px}}
+.site-header .brand-name,.site-footer .brand-name{display:none}
+.site-header .brand{min-width:0}
+.site-footer .brand-mark{width:48px;height:48px;flex:0 0 48px}
+@media(max-width:600px){.site-header .brand-mark{width:40px;height:40px;flex-basis:40px}}
 @media(max-width:600px){.dialog-info h2.dialog-title-compact{font-size:clamp(19px,6.3vw,26px)}}
 .product-title-single-line{display:block;width:100%;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dialog-info h2.dialog-title-responsive{display:-webkit-box;max-width:100%;font-size:clamp(19px,2.2vw,27px);line-height:1.15;overflow:hidden;text-overflow:clip;white-space:normal;-webkit-box-orient:vertical;-webkit-line-clamp:2}
