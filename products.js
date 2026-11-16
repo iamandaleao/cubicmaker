@@ -85,6 +85,42 @@ window.CUBIC_PRODUCTS = [
     hidePrintFinishNote:true,
     demonstrative:false
   },
+  {
+    id:'enfeite-balao-personalizado-nascimento',
+    name:'Enfeite Balão Personalizado – Nascimento',
+    category:'Lembrancinhas',
+    categories:['Lembrancinhas'],
+    price:60,
+    description:'Uma lembrança delicada para celebrar a chegada do bebê, personalizada com nome e dados do nascimento.',
+    fullDescription:'Uma lembrança delicada e especial para celebrar a chegada do bebê! O Enfeite Balão Personalizado é produzido em impressão 3D e eterniza os primeiros dados do nascimento em uma peça decorativa cheia de significado.',
+    detailContent:{
+      paragraphs:['Uma lembrança delicada e especial para celebrar a chegada do bebê! O Enfeite Balão Personalizado é produzido em impressão 3D e eterniza os primeiros dados do nascimento em uma peça decorativa cheia de significado.'],
+      features:['Peça decorativa produzida em impressão 3D.','Personalize com nome do bebê, data e horário de nascimento, peso e altura.','Ideal para o quarto do bebê, porta-maternidade, chá de bebê, lembrança de nascimento ou presente para os pais.'],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Altura: 17 cm.','Largura: 14 cm.']},
+        {title:'Personalização após a compra',items:['Envie o nome do bebê, os dados do nascimento (data, horário, peso e altura) e as cores desejadas para a confecção da peça.']}
+      ],
+      note:'Por ser produzida em impressão 3D, a peça pode apresentar pequenas marcas características do processo. As cores podem variar levemente conforme a iluminação e a tela.'
+    },
+    image:'assets/photos/products/balao-nascimento/1.webp',
+    imageAlt:'Enfeites de balão personalizados com dados de nascimento em várias cores pastel',
+    images:[
+      'assets/photos/products/balao-nascimento/1.webp',
+      'assets/photos/products/balao-nascimento/br-11134207-820lu-moacd0jjaqklc8.webp',
+      'assets/photos/products/balao-nascimento/br-11134207-820ln-mqmdeowgohs138.webp',
+      'assets/photos/products/balao-nascimento/br-11134201-820ll-mto8jfkhjf2a84.webp'
+    ],
+    imageAlts:[
+      'Enfeites de balão personalizados com dados de nascimento em várias cores pastel',
+      'Balão personalizado azul com dados de nascimento e indicação de 17 por 14 centímetros',
+      'Enfeite balão personalizado em tons neutros e rosa no quarto do bebê',
+      'Enfeite balão personalizado em tons neutros e azul no quarto do bebê'
+    ],
+    colorOptions:['Branco','Areia','Rosa','Verde','Marrom','Lilás'],
+    colorSwatches:{'Rosa':'#e58cac','Verde':'#78825b','Marrom':'#7b5138','Lilás':'#a98acb'},
+    hideVersionSelector:true,
+    demonstrative:false
+  },
   // Temporariamente pausados; remova os comentários para reativar os produtos.
   //  { id:'demo-01', name:'Vaso modular', category:'Decoração', categories:['Vasos decorativos','Decoração'], price:39.90, description:'Um volume geométrico para dar destaque a pequenos arranjos e composições.', fullDescription:'Exemplo demonstrativo de peça decorativa. A forma modular cria um ponto de interesse em estantes, mesas e aparadores. As dimensões, o material e as opções de acabamento devem ser confirmados antes do cadastro como produto real.', image:'assets/photos/categories/vasos-decorativos.webp', dimensions:{height:120,width:90,depth:90}, material:'PLA (exemplo)', colors:['Areia','Terracota','Preto'],  leadTime:'Consulte disponibilidade', featured:1 },
   //  { id:'demo-02', name:'Organizador de mesa', category:'Organização', categories:['Organização da casa','Escritórios','Identificação e organização profissional'], price:34.90, description:'Compartimentos práticos para deixar seus pequenos itens sempre à mão.', fullDescription:'Exemplo demonstrativo para organização de mesa. Uma peça com divisórias que pode ser adaptada às necessidades do espaço. Medidas e configuração final devem ser avaliadas antes da produção.', image:'assets/photos/categories/organizacao-da-casa.webp', dimensions:{height:45,width:180,depth:100}, material:'PLA (exemplo)', colors:['Branco','Cinza','Verde oliva'],  leadTime:'Consulte disponibilidade', featured:2 },
@@ -784,43 +820,48 @@ window.CUBIC_PRODUCTS = [
   },
   {
     id:'conjunto-decoracao-japandi',
-    name:'Conjunto de Decoração Japandi',
+    name:'Conjunto Decorativo Japandi',
     cardTitleSingleLine:true,
     category:'Casa e Decoração', categories:['Kits','Vasos decorativos'],
     price:90.00,
-    description:'Conjunto Japandi canelado com vaso, bandeja oval, porta-vela esférico e coração decorativo.',
-    cardDescription:'Quatro peças caneladas para compor uma decoração minimalista e aconchegante.',
-    fullDescription:'Leve elegância, harmonia e aconchego para sua decoração com o Conjunto Japandi. Inspirado na combinação do minimalismo japonês com o estilo escandinavo, o kit reúne peças com design moderno e acabamento canelado. Ideal para salas, quartos, escritórios, aparadores e mesas decorativas.',
+    description:'Conjunto Japandi minimalista com vaso, aromatizador, bandeja e coração decorativo para compor ambientes elegantes e aconchegantes.',
+    cardDescription:'Quatro peças Japandi para salas, quartos, escritórios e aparadores.',
+    fullDescription:'O Conjunto Decorativo Japandi é perfeito para quem busca um ambiente elegante, aconchegante e minimalista. Inspirado no estilo Japandi, combina simplicidade e sofisticação para valorizar salas, quartos, escritórios e diversos outros ambientes.',
     detailContent:{
-      paragraphs:['Leve elegância, harmonia e aconchego para sua decoração com o Conjunto Japandi. Inspirado na combinação do minimalismo japonês com o estilo escandinavo, o kit reúne peças com design moderno e acabamento canelado.','Uma ótima opção para renovar a decoração ou presentear alguém especial.'],
+      paragraphs:['O Conjunto Decorativo Japandi é perfeito para quem busca um ambiente elegante, aconchegante e minimalista. Inspirado no estilo Japandi, combina simplicidade e sofisticação para valorizar salas, quartos, escritórios e diversos outros ambientes.'],
       features:[
         'Design minimalista e sofisticado.',
-        'Textura canelada em todas as peças.',
-        'Peças que combinam entre si.',
-        'Ideal para salas, quartos, escritórios, aparadores e mesas decorativas.',
-        'Material: PLA, produzido por impressão 3D.',
-        'Peso aproximado do conjunto: 400 g.'
+        'Peças decorativas produzidas em impressão 3D.',
+        'Ideal para salas de estar, quartos, escritórios, aparadores, mesas de centro, estantes, nichos e ambientes residenciais ou comerciais.'
       ],
       sections:[
-        {title:'O conjunto inclui',items:['1 vaso decorativo canelado.','1 bandeja oval.','1 porta-vela esférico.','1 coração decorativo.']},
-        {title:'Dimensões informadas',items:['Conjunto: aproximadamente 10 × 10 × 16 cm.']}
-      ]
+        {title:'O conjunto inclui',items:['1 vaso decorativo.','1 aromatizador de ambiente.','1 bandeja decorativa.','1 coração decorativo.']},
+        {title:'Dimensões aproximadas das peças',items:['Bandeja: 24,5 × 11,5 × 2 cm.','Vaso: 10,03 × 10,03 × 16,34 cm.','Porta-vela: 6,90 × 6,88 × 4,2 cm.','Coração decorativo: 4,39 × 4,27 × 1 cm.']}
+      ],
+      note:'Escolha as cores da bandeja, do porta-vela e do vaso nos seletores. O coração decorativo acompanha o conjunto.'
     },
-    image:'assets/photos/products/Conjunto de Decoração Japandi -/71-qBepStpL._AC_SL1448_.jpg',
+    image:'assets/photos/products/conjunto japandi decoracao/71-qBepStpL._AC_SL1448_.jpg',
     imageAlt:'Conjunto Japandi bege com vaso canelado, bandeja oval, porta-vela esférico e coração decorativo',
     imageAlts:[
-      'Conjunto Japandi bege com vaso canelado, bandeja oval, porta-vela esférico e coração decorativo',
-      'Conjunto de decoração Japandi preto com vaso, bandeja e porta-vela canelados',
-      'Conjunto Japandi verde oliva com vaso, bandeja oval, porta-vela e coração decorativo',
-      'Conjunto Japandi bege com peças caneladas em uma mesa de madeira'
+      'Conjunto Japandi bege com vaso, bandeja, porta-vela e coração decorativo',
+      'Conjunto de decoração Japandi preto com vaso, bandeja e porta-vela',
+      'Conjunto Japandi verde oliva com vaso, bandeja, porta-vela e coração decorativo',
+      'Conjunto Japandi bege em uma mesa de madeira',
+      'Vaso Japandi canelado bege em ambiente decorado'
     ],
     images:[
-      'assets/photos/products/Conjunto de Decoração Japandi -/71-qBepStpL._AC_SL1448_.jpg',
-      'assets/photos/products/Conjunto de Decoração Japandi -/71NzrtYw+bL._AC_SL1448_.jpg',
-      'assets/photos/products/Conjunto de Decoração Japandi -/714Rf6hizoL._AC_SL1448_.jpg',
-      'assets/photos/products/Conjunto de Decoração Japandi -/dc37b7b1080e4c5d.webp'
+      'assets/photos/products/conjunto japandi decoracao/71-qBepStpL._AC_SL1448_.jpg',
+      'assets/photos/products/conjunto japandi decoracao/71NzrtYw+bL._AC_SL1448_.jpg',
+      'assets/photos/products/conjunto japandi decoracao/714Rf6hizoL._AC_SL1448_.jpg',
+      'assets/photos/products/conjunto japandi decoracao/dc37b7b1080e4c5d.webp',
+      'assets/photos/products/conjunto japandi decoracao/e6437438d4040e1d.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
+    colorChoices:[
+      {key:'trayColor',label:'Cor da bandeja',partLabel:'bandeja',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'candleHolderColor',label:'Cor do porta-vela',partLabel:'porta-vela',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'vaseColor',label:'Cor do vaso',partLabel:'vaso',options:['Preto','Branco','Areia','Verde oliva','Vermelho']}
+    ],
     hideVersionSelector:true, hidePrintFinishNote:true,
     featured:25
   }

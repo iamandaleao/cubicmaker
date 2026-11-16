@@ -477,6 +477,8 @@
     $('#categoryProductsView').hidden = true;
     $('#allProductsView').hidden = false;
     populateAllProductCategorySelects();
+    $('#allProductsSearch').value = '';
+    $('#allProductsCategory').value = '';
     renderAllProducts();
     window.scrollTo({top:0,behavior:'smooth'});
   }
@@ -1226,5 +1228,13 @@
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));
+  $$('a[href="catalogo.html#produtos"]').forEach(link=>link.addEventListener('click',event=>{
+    if (!isCatalogPage) return;
+    event.preventDefault();
+    if (location.hash !== '#produtos') history.pushState(null,'','#produtos');
+    showAllProducts();
+    $('#menuToggle').setAttribute('aria-expanded','false');
+    $('#mobileNav').classList.remove('is-open');
+  }));
   document.addEventListener('keydown', event => { if (event.key==='Escape' && cartPanel.classList.contains('is-open')) closeCart(); });
 })();
