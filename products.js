@@ -134,6 +134,64 @@ window.CUBIC_PRODUCTS = [
   { id:'letreiro-feliz-natal-floco-neve', name:'Letreiro Feliz Natal com Floco de Neve – 14 cm', category:'Natal', categories:['Natal'], price:27.00, description:'Letreiro Feliz Natal em impressão 3D com delicado detalhe de floco de neve. Altura aprox. 14 cm e largura aprox. 13 cm.', fullDescription:'Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve. Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.', detailContent:{paragraphs:['Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve.','Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.'],features:['Produzido por impressão 3D.','Design Feliz Natal com detalhe de floco de neve.','Peça leve e resistente.','Ideal para decoração de mesa e ambientes natalinos.'],sections:[{title:'Dimensões aproximadas',items:['Altura: 14 cm.','Largura: 13 cm.']}]}, image:'assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp', imageAlt:'Letreiro Feliz Natal vermelho com floco de neve, decoração impressa em 3D', imageAlts:['Letreiro Feliz Natal vermelho com floco de neve','Letreiro Feliz Natal vermelho em aparador decorado para o Natal','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal com indicação visual das medidas aproximadas'], images:['assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-aparador.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-verde.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-dourado.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-medidas.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:10 },
   { id:'arvore-natal-decorativa-3d-canelada', name:'Árvore de Natal Espiral Decorativa – 12,8 cm', cardTitleSingleLine:true, category:'Natal', categories:['Natal'], price:30.00, description:'Árvore de Natal espiral produzida em impressão 3D, com design minimalista. Altura aproximada de 12,8 cm sem estrela.', fullDescription:'Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D. Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes. Produzida por impressão 3D, tem design moderno, é leve e decorativa, ideal para decoração natalina e presentes criativos. Altura aproximada de 12,8 cm sem estrela. Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.', detailContent:{paragraphs:['Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D.','Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes.'],features:['Produzida por impressão 3D.','Design moderno com formato espiral.','Peça leve e decorativa.','Ideal para decoração natalina e presentes criativos.'],sections:[{title:'Dimensões',items:['Altura: aproximadamente 12,8 cm sem estrela.']}],note:'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.'}, image:'assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp', imageAlt:'Árvore de Natal canelada vermelha impressa em 3D com estrela dourada', imageAlts:['Árvore de Natal canelada vermelha com estrela dourada','Árvore de Natal canelada verde-oliva com estrela dourada','Árvore de Natal canelada branca com estrela dourada','Árvore de Natal canelada cor areia com estrela dourada'], images:['assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-verde-oliva-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-branca-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-areia-estrela-dourada.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:11 }
   ,{
+    id:'loop-natalino-cervo-pinheiro-estrela',
+    name:'Loop Natalino Cervo, Pinheiro e Estrela com Porta-Vela',
+    category:'Natal', categories:['Natal'],
+    price:40.00,
+    description:'Decoração natalina circular com cervo, pinheiro e estrela com laço pendente, além de porta-vela integrado para uma iluminação aconchegante.',
+    fullDescription:'Uma decoração natalina delicada e encantadora para trazer luz, aconchego e magia ao seu ambiente! Produzida em impressão 3D, possui design circular inspirado nas tradicionais guirlandas de Natal, com detalhes de cervo, pinheiro e estrela com laço pendente. O centro conta com um porta-vela integrado de acabamento canelado, criando um efeito de iluminação acolhedor e elegante.',
+    detailContent:{
+      paragraphs:['Uma decoração natalina delicada e encantadora para trazer luz, aconchego e magia ao seu ambiente!','Produzida em impressão 3D, possui design circular inspirado nas tradicionais guirlandas de Natal, com detalhes de cervo, pinheiro e estrela com laço pendente. O centro conta com um porta-vela integrado de acabamento canelado, criando um efeito de iluminação acolhedor e elegante.'],
+      features:['Design circular inspirado em guirlandas natalinas.','Detalhes de cervo, pinheiro e estrela com laço.','Porta-vela integrado com acabamento canelado.','Estilo minimalista e escandinavo.','Produzida em impressão 3D.'],
+      sections:[{title:'Ideal para',items:['Aparadores e cômodas.','Mesas de cabeceira.','Estantes e prateleiras.','Decoração de mesas natalinas.','Peitoris de janelas.']}],
+      note:'Recomendamos o uso de vela de LED para criar uma iluminação suave e aconchegante.'
+    },
+    image:'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Porta-vela natalino verde com cervo e pinheiro.png',
+    imageAlt:'Porta-vela natalino verde em formato circular com cervo e pinheiro',
+    imageAlts:['Porta-vela natalino verde em formato circular com cervo e pinheiro','Decoração natalina com porta-vela de cervo e pinheiro em ambiente acolhedor'],
+    images:[
+      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Porta-vela natalino verde com cervo e pinheiro.png',
+      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Luminária natalina em cenário acolhedor.png'
+    ],
+    dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho','Dourado'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho','Dourado'], hidePrintFinishNote:true, demonstrative:false
+  },
+  {
+    id:'podium-decorativo-home',
+    name:'Podium Decorativo HOME – Elegância Minimalista',
+    category:'Casa e Decoração', categories:['Vasos decorativos'],
+    price:50.00,
+    description:'Podium HOME minimalista de 20 cm para destacar vasos, esculturas, perfumes e outros objetos decorativos.',
+    fullDescription:'O Podium Decorativo HOME é perfeito para valorizar sua decoração com um toque moderno e sofisticado. Com design minimalista, é ideal para destacar vasos, esculturas, perfumes e outros objetos decorativos, trazendo personalidade e elegância ao ambiente.',
+    detailContent:{
+      paragraphs:['O Podium Decorativo HOME é perfeito para valorizar sua decoração com um toque moderno e sofisticado.','Com design minimalista, é ideal para destacar vasos, esculturas, perfumes e outros objetos decorativos, trazendo personalidade e elegância ao ambiente.'],
+      features:['Design moderno e minimalista.','Ideal para destacar objetos decorativos.','Peça versátil e elegante.','Combina com diferentes estilos de decoração.','Produzido em impressão 3D com plástico de alta resistência.'],
+      sections:[
+        {title:'Dimensões',items:['Altura: 20 cm.','Largura: 5 cm.']},
+        {title:'Indicações de uso',items:['Salas de estar.','Quartos.','Escritórios.','Lavabos.','Aparadores e estantes.','Exposição de vasos, esculturas e perfumes.']}
+      ]
+    },
+    image:'assets/photos/products/podium deko home/D_NQ_NP_2X_746940-MLB109508432644_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp',
+    imageAlt:'Podium HOME preto com vaso decorativo em uma sala de estar',
+    imageAlts:[
+      'Podium HOME preto com vaso decorativo em uma sala de estar',
+      'Podium HOME preto com vaso decorativo sobre uma bancada'
+    ],
+    images:[
+      'assets/photos/products/podium deko home/D_NQ_NP_2X_746940-MLB109508432644_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp',
+      'assets/photos/products/podium deko home/D_NQ_NP_2X_757591-MLB110379748733_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp'
+    ],
+    dimensions:null, material:'Plástico de alta resistência', hideVersionSelector:true,
+    colorFieldLabel:'Cores',
+    colorOptions:['Branco e Preto','Areia e Preto','Areia e Branco'],
+    colors:['Branco e Preto','Areia e Preto','Areia e Branco'],
+    colorSwatches:{
+      'Branco e Preto':'linear-gradient(90deg, #ffffff 0 50%, #272927 50%)',
+      'Areia e Preto':'linear-gradient(90deg, #cbb99a 0 50%, #272927 50%)',
+      'Areia e Branco':'linear-gradient(90deg, #cbb99a 0 50%, #ffffff 50%)'
+    },
+    hidePrintFinishNote:true, demonstrative:false
+  }
+  ,{
     id:'mini-jesus-sentado', name:'Mini Jesus Cristo para Monitor – 3,7 cm', whatsappName:'Mini Jesus Cristo para Monitor', category:'Religião', categories:['Religião'], price:17.00, cardPrice:17.00,
     description:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Compacta, é ideal para monitores, escrivaninhas e espaços de trabalho ou estudo.',
     fullDescription:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Com tamanho compacto, é ideal para decorar monitores, escrivaninhas e espaços de trabalho ou estudo. Produzido em impressão 3D com PLA, tem acabamento colorido com opção de personalização, altura aproximada de 3,7 cm e largura aproximada de 1,64 cm. Também disponível totalmente branco, sem pintura, para personalizar em casa, ou em outros tamanhos sob encomenda. Se desejar uma opção diferente, informe o tamanho ou acabamento desejado na caixa de observações abaixo.',
