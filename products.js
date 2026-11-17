@@ -7,6 +7,34 @@
 window.CUBIC_PRODUCTS = [
   { id:'kit-porta-foto-polaroid-coracao', name:'Kit Porta-Foto Polaroid Coração', cardTitleSingleLine:true, cardImageFitCover:true, cardImage:'assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png', category:'Presentes e Hobbies', categories:['Lembrancinhas'], price:15, description:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.', fullDescription:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração. Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.', detailContent:{paragraphs:['Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.','Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.'],features:['Design moderno e minimalista.','Ideal para fotos estilo Polaroid e Instax.','Base firme para manter a foto bem posicionada.','Peça compacta, leve e fácil de organizar.','Produzido em impressão 3D.','Ótima opção para presentear em datas especiais.','Combina com decorações modernas, românticas e criativas.'],sections:[{title:'Opções disponíveis',items:['Kit com 5 unidades: R$ 15,00','Kit com 10 unidades: R$ 22,00','Kit com 20 unidades: R$ 25,00']},{title:'Medidas aproximadas',items:['Altura: 2,5 cm.','Largura: 2,5 cm.','Profundidade: 1,5 cm.']},{title:'O que acompanha',items:['1 suporte porta-foto por unidade selecionada, na cor escolhida.','Fotos e itens decorativos não inclusos.']},{title:'Observações',items:['Produto pronto para uso.','Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.','As cores podem apresentar pequenas variações conforme a iluminação e a tela.']}],note:'Selecione a quantidade desejada para consultar o preço do kit.'}, image:'assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png', imageAlt:'Suporte porta-foto de coração com medidas aproximadas', imageAlts:['Suporte porta-foto de coração com medidas aproximadas','Kit de suportes porta-foto coração com foto de casamento'], images:['assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png','assets/photos/products/suporte-fotos-polaroid/2 - kit-suportes-porta-foto-coracao-casamento.png'], dimensions:null, variantLabel:'Quantidade', variantPriceBeforeColor:true, hideVariantColorSelector:false, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], variantPriceInline:false, variantOptions:[{value:'5',label:'5 unidades',price:15},{value:'10',label:'10 unidades',price:22},{value:'20',label:'20 unidades',price:25}], demonstrative:false },
   {
+    id:'moldura-kumo-japandi-porta-retrato-10x15',
+    name:'Moldura Kumo – Moldura de Foto Japandi 10x15 cm',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Porta-retratos'],
+    price:53.00,
+    description:'Moldura Kumo com design Japandi, textura canelada e montagem por encaixe para fotos de 10 × 15 cm.',
+    cardDescription:'Moldura Japandi canelada para destacar fotografias de 10 × 15 cm.',
+    fullDescription:'Transforme suas lembranças favoritas em parte da decoração da sua casa com a Moldura Kumo. Com design inspirado no estilo Japandi, ela combina minimalismo, elegância e uma textura canelada que traz personalidade e sofisticação ao ambiente. Seu acabamento com ranhuras verticais e linhas geométricas cria um visual moderno e acolhedor, ideal para destacar fotografias de família, viagens e momentos especiais. A montagem é feita por sistema de encaixe, sem necessidade de cola, parafusos ou ferramentas adicionais. Basta encaixar as peças, inserir sua foto de 10 × 15 cm e escolher o cantinho ideal para expor suas memórias.',
+    detailContent:{
+      paragraphs:['Transforme suas lembranças favoritas em parte da decoração da sua casa com a Moldura Kumo. Com design inspirado no estilo Japandi, ela combina minimalismo, elegância e uma textura canelada que traz personalidade e sofisticação ao ambiente.','Seu acabamento com ranhuras verticais e linhas geométricas cria um visual moderno e acolhedor, ideal para destacar fotografias de família, viagens e momentos especiais.','A montagem é feita por sistema de encaixe, sem necessidade de cola, parafusos ou ferramentas adicionais. Basta encaixar as peças, inserir sua foto de 10 × 15 cm e escolher o cantinho ideal para expor suas memórias.'],
+      features:['Design inspirado no estilo Japandi, com textura canelada.','Compatível com fotografias de 10 × 15 cm.','Montagem prática por sistema de encaixe.','Dispensa cola, parafusos e ferramentas adicionais.','Estrutura desenvolvida para impressão 3D.','Ideal para mesas, estantes, aparadores e escrivaninhas.','Uma opção especial para presentear familiares e amigos.'],
+      sections:[{title:'Uma lembrança que merece destaque',items:['Mais do que uma moldura, a Kumo é uma forma de manter perto os momentos e as pessoas que fazem parte da sua história.']}]
+    },
+    image:'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-japandi-familia-10x15.webp',
+    imageAlt:'Moldura Kumo Japandi canelada com fotografia de família em sala aconchegante',
+    imageAlts:[
+      'Moldura Kumo Japandi canelada com fotografia de família em sala aconchegante',
+      'Moldura Kumo canelada com foto de família e cachorro sobre aparador'
+    ],
+    images:[
+      'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-japandi-familia-10x15.webp',
+      'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-familia-pet-10x15.webp'
+    ],
+    dimensions:null,
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    demonstrative:false
+  },
+  {
     id:'kit-porta-foto-coracao-trico-3d',
     name:'Kit Porta-Foto Coração Tricô 3D',
     cardTitleSingleLine:true,
@@ -1039,6 +1067,43 @@ window.CUBIC_PRODUCTS = [
     demonstrative:false
   },
   {
+    id:'brinquedo-educativo-encaixe-formas-geometricas-com-tampas',
+    name:'Brinquedo Educativo de Encaixe com Formas Geométricas',
+    cardTitleSingleLine:true,
+    category:'Brinquedos educativos', categories:['Brinquedos educativos'],
+    price:130.00,
+    description:'Brinquedo educativo com base de encaixe, formas geométricas com pinos e furos e duas versões de tampa.',
+    cardDescription:'Base e peças geométricas para encaixar, combinar e aprender brincando.',
+    fullDescription:'Um brinquedo educativo que transforma o aprendizado em diversão! Desenvolvido para estimular a coordenação motora, a percepção visual e o raciocínio das crianças por meio de encaixes e combinações. A base possui cavidades para encaixar diferentes formas geométricas. As peças contam com pinos e furos correspondentes, permitindo explorar diferentes maneiras de encaixar e combinar as formas.',
+    detailContent:{
+      paragraphs:['Um brinquedo educativo que transforma o aprendizado em diversão! Desenvolvido para estimular a coordenação motora, a percepção visual e o raciocínio das crianças por meio de encaixes e combinações.','A base possui cavidades para encaixar diferentes formas geométricas. As peças contam com pinos e furos correspondentes, permitindo explorar diferentes maneiras de encaixar e combinar as formas.'],
+      features:['Base com cavidades para encaixe das formas.','Peças com pinos para encaixar nas cavidades.','Peças com furos para encaixar sobre os pinos correspondentes.','Acompanha duas versões de tampa.','Tampa com opção de encaixe firme para um fechamento seguro.'],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 16 cm.','Altura: 16 cm.','Profundidade: 1 cm.']},
+        {title:'Material',items:['PLA, produzido por impressão 3D.']}
+      ],
+      note:'A versão de tampa com encaixe mais firme pode exigir a abertura por um adulto. Recomenda-se abrir e fechar algumas vezes após a impressão para facilitar o encaixe.'
+    },
+    image:'assets/photos/products/Brinquedo de quebra-cabeça para bebês e crianças pequenas/1 - crianca-brincando-quebra-cabeca-formas.webp',
+    imageAlt:'Criança brincando com as bases do quebra-cabeça educativo de formas geométricas',
+    imageAlts:[
+      'Criança brincando com as bases do quebra-cabeça educativo de formas geométricas',
+      'Brinquedo educativo com duas bases de encaixe para formas geométricas',
+      'Peças geométricas com pinos e furos para encaixar na base',
+      'Tampa com encaixe firme para o brinquedo educativo de formas'
+    ],
+    images:[
+      'assets/photos/products/Brinquedo de quebra-cabeça para bebês e crianças pequenas/1 - crianca-brincando-quebra-cabeca-formas.webp',
+      'assets/photos/products/Brinquedo de quebra-cabeça para bebês e crianças pequenas/brinquedo-educativo-formas-geometricas-duas-bases.webp',
+      'assets/photos/products/Brinquedo de quebra-cabeça para bebês e crianças pequenas/pecas-formas-geometricas-pinos-e-furos.webp',
+      'assets/photos/products/Brinquedo de quebra-cabeça para bebês e crianças pequenas/tampa-brinquedo-encaixe-firme-formas.webp'
+    ],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    notePlaceholder:'Coloque aqui as cores que gostaria.',
+    demonstrative:false
+  },
+  {
     id:'kit-decorativo-japandi-coracao-vaso-bandeja-porta-vela',
     name:'Kit Decorativo Japandi – Vaso, Bandeja e Porta-Vela',
     cardTitleSingleLine:true,
@@ -1228,6 +1293,7 @@ window.CUBIC_CATEGORY_GROUPS = [
   ]},
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
     {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
+    {name:'Porta-retratos',slug:'porta-retratos',image:'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-japandi-familia-10x15.webp',alt:'Moldura Kumo Japandi canelada com fotografia de família',icon:'▣',illustrative:false},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/br-11134207-820lt-mtbngwn55t6ob0.webp',alt:'Mini Jesus sentado na borda de um monitor de computador',icon:'✝️',illustrative:false},
     {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
     {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp',alt:'Vaso espiral branco decorativo de 15 cm produzido em impressão 3D',icon:'♧',illustrative:false}
