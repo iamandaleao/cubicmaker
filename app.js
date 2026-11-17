@@ -152,7 +152,8 @@
     if (!content) return `<div class="dialog-description"><p>${escapeHTML(visibleContent)}</p>${printFinishNote}</div>`;
     const paragraphs = (content.paragraphs || []).map(text => `<p>${escapeHTML(text)}</p>`).join('');
     const features = content.features?.length ? `<section class="description-feature-block"><h3>Características</h3><ul>${content.features.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>` : '';
-    const renderSection = section => `<section class="description-feature-block"><h3>${escapeHTML(section.title || '')}</h3><ul>${(section.items || []).map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul></section>`;
+    const renderItems = items => items?.length ? `<ul>${items.map(text => `<li>${escapeHTML(text)}</li>`).join('')}</ul>` : '';
+    const renderSection = section => `<section class="description-feature-block"><h3>${escapeHTML(section.title || '')}</h3>${renderItems(section.items)}${(section.subsections || []).map(subsection => `<h4>${escapeHTML(subsection.title || '')}</h4>${renderItems(subsection.items)}`).join('')}${renderItems(section.footerItems)}</section>`;
     const sections = content.sections || [];
     const suggestions = `${content.note ? `<p class="description-suggestion">${escapeHTML(content.note)}</p>` : ''}${content.suggestion ? `<p class="description-suggestion"><strong>Sugestão de uso:</strong> ${escapeHTML(content.suggestion)}</p>` : ''}${printFinishNote}`;
     if (product.orderFieldsAfterSection) {

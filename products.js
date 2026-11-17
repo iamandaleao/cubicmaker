@@ -573,7 +573,10 @@ window.CUBIC_PRODUCTS = [
       paragraphs:['Com estética suave e formato orgânico, esta bandeja se destaca pela textura em relevo, que remete a elementos naturais e artesanais.','Seu design circular, composto por volumes repetidos, cria uma peça equilibrada, contemporânea e visualmente aconchegante.','Produzida por impressão 3D, combina precisão técnica com um visual orgânico, sendo ideal para valorizar diferentes ambientes. Sua aparência neutra e elegante harmoniza facilmente com decorações minimalistas, naturais ou modernas.','Uma peça que une forma, textura e funcionalidade, perfeita para quem busca uma decoração com personalidade e sutileza.'],
       features:['Design orgânico e texturizado.','Produzida em PLA por impressão 3D.','Visual clean e contemporâneo.','Peça decorativa versátil e atemporal.','Preenchimento interno em geometria giroide para contribuir com resistência e durabilidade.','Paredes externas com duas camadas de perímetro.'],
       sections:[
-        {title:'Informações técnicas',items:['Dimensões aproximadas: 28 cm de largura × 4,9 cm de altura × 27,9 cm de profundidade.','Peso aproximado: 377 g.','Material: PLA, bioplástico de origem vegetal.']},
+        {title:'Informações técnicas',subsections:[
+          {title:'Tamanho 28 cm',items:['Largura: 28 cm.','Altura: 4,9 cm.','Profundidade: 27,9 cm.','Peso aproximado: 377 g.']},
+          {title:'Tamanho 21 cm',items:['Largura: 21 cm.','Altura: 4,9 cm.','Profundidade: 21 cm.','Peso aproximado: 189 g.']}
+        ],footerItems:['Material: PLA (bioplástico de origem vegetal).']},
         {title:'Cuidados e conservação',items:['Evite quedas ou impactos, pois podem danificar o produto.','Não exponha a altas temperaturas ou à luz solar direta por períodos prolongados.','Não lave com produtos químicos ou abrasivos.','Para limpeza, utilize apenas um pano levemente umedecido.']}
       ]
     },
@@ -956,6 +959,45 @@ window.CUBIC_PRODUCTS = [
     colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'],
     hideVariantColorSelector:false, hideVersionSelector:true, hidePrintFinishNote:true,
     featured:23
+  },
+  {
+    id:'vaso-bubble-decorativo-cubo-textura-bolinhas',
+    name:'Vaso Bubble Decorativo – Design Moderno em Formato de Cubo',
+    cardTitleSingleLine:true,
+    category:'Casa e Decoração', categories:['Vasos decorativos'],
+    price:60.00,
+    description:'Vaso Bubble decorativo em formato de cubo com textura de bolhas arredondadas. Compacto e moderno, ideal para suculentas, cactos e mini plantas.',
+    cardDescription:'Vaso cúbico com textura bubble para pequenas plantas e decoração.',
+    fullDescription:'Adicione um toque moderno e delicado à sua decoração com o Vaso Bubble! Seu design em formato de cubo, com textura de bolhas arredondadas, traz personalidade e charme para qualquer ambiente. Uma peça versátil que combina com diferentes estilos de decoração, ideal para destacar pequenas plantas e deixar seu espaço ainda mais aconchegante.',
+    detailContent:{
+      paragraphs:['Adicione um toque moderno e delicado à sua decoração com o Vaso Bubble! Seu design em formato de cubo, com textura de bolhas arredondadas, traz personalidade e charme para qualquer ambiente.','Uma peça versátil que combina com diferentes estilos de decoração, ideal para destacar pequenas plantas e deixar seu espaço ainda mais aconchegante.'],
+      features:['Design moderno em formato de cubo.','Textura bubble com bolhas arredondadas.','Visual elegante e diferenciado.','Ideal para compor prateleiras, mesas, aparadores e parapeitos de janelas.','Combina com diferentes estilos de decoração.','Ótima opção para presentear.'],
+      sections:[
+        {title:'Ideal para',items:['Suculentas.','Pequenos cactos.','Mini plantas de interior.','Composições decorativas.']},
+        {title:'Informações técnicas',items:['Largura: 9,88 cm.','Altura: 9,96 cm.','Profundidade: 10,01 cm.','Peso aproximado: 134 g.','Material: PLA, produzido por impressão 3D.']},
+        {title:'Opções de compra',items:['1 unidade: R$ 60,00.','Kit com 3 unidades: R$ 170,00.']}
+      ],
+      note:'Uma peça compacta e cheia de personalidade para valorizar sua decoração!'
+    },
+    cardImage:'assets/photos/products/vaso-cubo-bolha/vaso-bubble-cubo-bolinhas-azul-branco-preto-jardim.webp',
+    image:'assets/photos/products/vaso-cubo-bolha/vaso-bubble-cubo-bolinhas-azul-branco-preto-jardim.webp',
+    imageAlt:'Vasos Bubble cúbicos com textura de bolhas em azul, branco e preto, decorados com plantas',
+    imageAlts:[
+      'Vasos Bubble cúbicos com textura de bolhas em azul, branco e preto, decorados com plantas',
+      'Vasos Bubble cúbicos com textura de bolhas em terracota, branco e verde oliva'
+    ],
+    images:[
+      'assets/photos/products/vaso-cubo-bolha/vaso-bubble-cubo-bolinhas-azul-branco-preto-jardim.webp',
+      'assets/photos/products/vaso-cubo-bolha/vaso-bubble-cubo-textura-bolinhas-decorativo.webp'
+    ],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true, hideVariantColorSelector:false, hidePrintFinishNote:true,
+    variantLabel:'Quantidade', variantPriceIsTotal:true, hideQuantitySelector:true,
+    variantOptions:[
+      {value:'1un',label:'1 unidade — R$ 60,00',price:60.00,quantity:1},
+      {value:'kit-3un',label:'Kit com 3 unidades — R$ 170,00',price:170.00,quantity:3}
+    ],
+    demonstrative:false
   },
   {
     id:'kit-decorativo-japandi-coracao-vaso-bandeja-porta-vela',

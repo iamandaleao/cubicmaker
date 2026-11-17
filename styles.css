@@ -245,6 +245,8 @@
 .dialog-description-structured>p{margin:0 0 11px}
 .description-feature-block{margin:13px 0;padding:12px 14px;background:#f2f3ed;border-left:2px solid var(--sage-dark)}
 .description-feature-block h3{margin:0 0 7px;font:600 10px var(--sans);color:var(--ink)}
+.description-feature-block h4{margin:9px 0 4px;font:600 10px var(--sans);color:var(--ink)}
+.description-feature-block h4:first-of-type{margin-top:0}
 .description-feature-block ul{margin:0;padding-left:17px}
 .description-feature-block li{padding:2px 0;color:#6d786e;font-size:10px;line-height:1.65}
 .description-suggestion{padding-top:2px}
