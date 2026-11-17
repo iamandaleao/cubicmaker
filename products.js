@@ -67,6 +67,58 @@ window.CUBIC_PRODUCTS = [
     demonstrative:false
   },
   {
+    id:'suporte-porta-controle-remoto-celular-parede',
+    name:'Suporte Porta Controle Remoto e Celular – Parede',
+    createdAt:'2026-11-17',
+    cardTitleSingleLine:true,
+    category:'Organização e Utilidades',
+    categories:['Organizadores'],
+    price:15.00,
+    description:'Suporte de parede para controles remotos, celulares e pequenos acessórios, com preço a partir de R$ 15,00.',
+    cardDescription:'Organize controles e celulares na parede. A partir de R$ 15,00.',
+    fullDescription:'Organize seus controles remotos, celulares e pequenos acessórios com praticidade e estilo! O suporte de parede possui design moderno e funcional, ideal para manter seus objetos sempre à mão e evitar que fiquem espalhados pela casa. Produzido em impressão 3D com PLA, possui formato ergonômico que facilita colocar e retirar os objetos. Pode ser fabricado com encaixe para fita dupla face ou furos para parafusos. As medidas internas podem ser personalizadas sob consulta.',
+    detailContent:{
+      paragraphs:['Organize seus controles remotos, celulares e pequenos acessórios com praticidade e estilo! O suporte de parede possui design moderno e funcional, ideal para manter seus objetos sempre à mão e evitar que fiquem espalhados pela casa.','Produzido em impressão 3D, possui formato ergonômico que facilita colocar e retirar os objetos, além de permitir diferentes opções de fixação.'],
+      features:['Produzido em impressão 3D com PLA.','Design moderno, minimalista e funcional.','Ideal para controles de TV, ar-condicionado, celulares e pequenos acessórios compatíveis.','Abertura ergonômica para facilitar a retirada dos objetos.','Pode ser fabricado com encaixe para fita dupla face ou furos para parafusos.','Possibilidade de personalização das medidas internas sob consulta.'],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 5,5 cm.','Profundidade: 3,17 cm.','Altura: 9,37 cm.']},
+        {title:'Valores por quantidade',items:['1 unidade: R$ 15,00.','2 unidades: R$ 20,00.','3 unidades: R$ 25,00.','4 unidades: R$ 30,00.']},
+        {title:'Opções de fixação',items:['Encaixe para fita dupla face ou furos para parafusos.']}
+      ],
+      note:'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.'
+    },
+    notePlaceholder:'Informe se prefere a versão com encaixe para fita dupla face ou furos para parafusos. Para medidas internas personalizadas, descreva seu pedido.',
+    image:'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-celular-parede-organizacao-principal.webp',
+    cardImage:'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-celular-parede-organizacao-principal.webp',
+    imageAlt:'Suportes de parede para controles remotos e controles de videogame em painel de madeira',
+    imageAlts:[
+      'Suportes brancos de parede organizando controles remotos e controles de videogame',
+      'Suporte de parede branco para controle remoto próximo à televisão',
+      'Suporte verde-oliva de parede para controle de ar-condicionado'
+    ],
+    images:[
+      'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-celular-parede-organizacao-principal.webp',
+      'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-parede-fixacao-fita.webp',
+      'assets/photos/products/suporte-parede-controle/suporte-porta-controle-ar-condicionado-parede-verde-oliva.webp'
+    ],
+    dimensions:null,
+    material:'PLA',
+    variantLabel:'Quantidade',
+    variantPriceIsTotal:true,
+    hideQuantitySelector:true,
+    hideVersionSelector:true,
+    hideVariantColorSelector:false,
+    variantOptions:[
+      {value:'1',label:'1 unidade — R$ 15,00',price:15.00,quantity:1},
+      {value:'2',label:'2 unidades — R$ 20,00',price:20.00,quantity:2},
+      {value:'3',label:'3 unidades — R$ 25,00',price:25.00,quantity:3},
+      {value:'4',label:'4 unidades — R$ 30,00',price:30.00,quantity:4}
+    ],
+    colorOptions:['Branco','Preto','Marrom','Bege','Verde-oliva'],
+    colorSwatches:{'Verde-oliva':'#7b8060'},
+    demonstrative:false
+  },
+  {
     id:'kit-safari-minimalista-infantil-3d-quatro-animais',
     name:'Kit Safari Minimalista Infantil 3D – 4 Animais',
     cardTitleSingleLine:true,
@@ -220,7 +272,7 @@ window.CUBIC_PRODUCTS = [
     hidePrintFinishNote:true, demonstrative:false
   }
   ,{
-    id:'mini-jesus-sentado', name:'Mini Jesus Cristo para Monitor – 3,7 cm', whatsappName:'Mini Jesus Cristo para Monitor', category:'Religião', categories:['Religião'], price:17.00, cardPrice:17.00,
+    id:'mini-jesus-sentado', name:'Mini Jesus Cristo para Monitor – 3,7 cm', whatsappName:'Mini Jesus Cristo para Monitor', category:'Religião', categories:['Religião'], price:20.00, cardPrice:20.00,
     description:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Compacta, é ideal para monitores, escrivaninhas e espaços de trabalho ou estudo.',
     fullDescription:'Leve um toque de fé e inspiração para sua rotina com esta delicada miniatura de Jesus Cristo. Com tamanho compacto, é ideal para decorar monitores, escrivaninhas e espaços de trabalho ou estudo. Produzido em impressão 3D com PLA, tem acabamento colorido com opção de personalização, altura aproximada de 3,7 cm e largura aproximada de 1,64 cm. Também disponível totalmente branco, sem pintura, para personalizar em casa, ou em outros tamanhos sob encomenda. Se desejar uma opção diferente, informe o tamanho ou acabamento desejado na caixa de observações abaixo.',
     detailContent:{
@@ -235,7 +287,7 @@ window.CUBIC_PRODUCTS = [
     images:['assets/photos/products/jesus/br-11134207-820lt-mtbngwn55t6ob0.webp','assets/photos/products/jesus/br-11134207-820ln-mtbngwn5e8lc68.webp','assets/photos/products/jesus/br-11134207-820mf-mtbngwn5fn5sae@resize_w450_nl.webp','assets/photos/products/jesus/mini-jesus-sentado-sem-pintura-impressao-3d.webp'],
     material:'Material de impressão 3D', demonstrative:false,
     hideVersionSelector:true, hideVariantColorSelector:true, variantLabel:'Quantidade', variantPriceIsTotal:true, hideQuantitySelector:true,
-    variantOptions:[{value:'1',label:'1 unidade — R$ 17,00',price:17,quantity:1},{value:'2',label:'2 unidades — R$ 22,00',price:22,quantity:2},{value:'3',label:'3 unidades — R$ 27,00',price:27,quantity:3},{value:'6',label:'6 unidades — R$ 37,00',price:37,quantity:6}],
+    variantOptions:[{value:'1',label:'1 unidade — R$ 20,00',price:20,quantity:1},{value:'2',label:'2 unidades — R$ 22,00',price:22,quantity:2},{value:'3',label:'3 unidades — R$ 27,00',price:27,quantity:3},{value:'6',label:'6 unidades — R$ 37,00',price:37,quantity:6}],
     featured:12
   },
   {
