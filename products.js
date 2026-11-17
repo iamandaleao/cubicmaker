@@ -334,6 +334,37 @@ window.CUBIC_PRODUCTS = [
     featured:14
   },
   {
+    id:'escultura-minimalista-natividade-sagrada-familia',
+    name:'Escultura Minimalista da Natividade – Sagrada Família',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:120.00,
+    description:'Escultura minimalista da Sagrada Família em três cores, produzida em PLA por impressão 3D. Uma peça delicada e moderna para a decoração de Natal.',
+    fullDescription:'Uma peça decorativa que representa a Sagrada Família em um design minimalista e moderno. Ideal para compor a decoração natalina, trazendo um toque de delicadeza, significado e elegância ao ambiente.',
+    detailContent:{
+      paragraphs:['Uma peça decorativa que representa a Sagrada Família em um design minimalista e moderno.','Ideal para compor a decoração natalina, trazendo um toque de delicadeza, significado e elegância ao ambiente.'],
+      features:['Representação da Natividade com a Sagrada Família.','Design minimalista e acabamento moderno.','Composição em três cores: branco, marrom e bege.','Produzida em PLA por impressão 3D.'],
+      sections:[{title:'Dimensões aproximadas',items:['Altura: 16,35 cm.','Largura: 14,24 cm.','Profundidade: 8,12 cm.']}],
+      note:'Uma peça especial para deixar sua decoração de Natal ainda mais significativa.'
+    },
+    image:'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-sagrada-familia-natal-3d-frontal.webp',
+    imageAlt:'Escultura minimalista da Sagrada Família em branco, marrom e bege',
+    imageAlts:[
+      'Escultura minimalista da Sagrada Família em branco, marrom e bege',
+      'Escultura da Natividade com dimensões aproximadas indicadas na imagem',
+      'Sagrada Família minimalista em cenário decorado para o Natal'
+    ],
+    images:[
+      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-sagrada-familia-natal-3d-frontal.webp',
+      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-natividade-sagrada-familia-dimensoes.png',
+      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/sagrada-familia-natividade-decoracao-natalina.webp'
+    ],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    colors:['Branco','Marrom','Bege'],
+    demonstrative:false
+  },
+  {
     id:'presepio-asa-anjo-iluminado-3d',
     name:'Presépio Asa Anjo Iluminado 3D - 10cm',
     cardTitleSingleLine:true,
@@ -922,6 +953,39 @@ window.CUBIC_PRODUCTS = [
     ],
     hideVersionSelector:true, hidePrintFinishNote:true,
     featured:25
+  },
+  {
+    id:'organizador-de-parede-modular-com-acessorios',
+    name:'Organizador de Parede Modular com Acessórios',
+    cardTitleSingleLine:true,
+    category:'Organizadores', categories:['Organizadores'],
+    price:180.00,
+    description:'Organizador de parede modular com painéis perfurados e conjunto completo de acessórios para manter objetos organizados e liberar espaço na mesa.',
+    fullDescription:'Organize seu ambiente com praticidade e estilo. O Organizador de Parede Modular aproveita melhor o espaço vertical e ajuda a manter pequenos objetos sempre à mão, deixando a mesa mais livre. Com design moderno e painéis perfurados, oferece diferentes possibilidades de organização e combina funcionalidade e decoração em um único produto.',
+    detailContent:{
+      paragraphs:['Organize seu ambiente com praticidade e estilo. O Organizador de Parede Modular aproveita melhor o espaço vertical e ajuda a manter pequenos objetos sempre à mão, deixando a mesa mais livre.','Com design moderno e painéis perfurados, oferece diferentes possibilidades de organização e combina funcionalidade e decoração em um único produto.','Ideal para quartos infantis e adolescentes, escritórios, home office, mesas de estudo, bancadas de trabalho, ateliês e espaços criativos.'],
+      features:['Design moderno e funcional.','Painéis modulares com perfurações para encaixe dos acessórios.','Ajuda a manter objetos organizados e acessíveis.','Combina organização e decoração.','Produzido em PLA por impressão 3D, com atenção aos detalhes e acabamento funcional.'],
+      sections:[
+        {title:'O conjunto completo inclui',items:['Painéis modulares perfurados.','Bandeja organizadora central.','Suportes para lápis e canetas.','Ganchos para pendurar objetos.','Suportes para pequenos acessórios.','Prateleira organizadora.','Todos os acessórios apresentados nas fotos estão inclusos, sem necessidade de compra separada.']},
+        {title:'Dimensões aproximadas',items:['Largura: 67,16 cm.','Altura: 42,19 cm.','Profundidade: 0,5 cm.']}
+      ],
+      note:'As cores podem ser personalizadas conforme a disponibilidade. Informe sua preferência nas observações do pedido.'
+    },
+    image:'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-acessorios-dimensoes-67-16-cm.webp',
+    imageAlt:'Organizador de parede modular com acessórios e dimensões de 67,16 cm de largura, 42,19 cm de altura e 0,5 cm de profundidade',
+    imageAlts:[
+      'Organizador de parede modular com acessórios e dimensões de 67,16 cm de largura, 42,19 cm de altura e 0,5 cm de profundidade',
+      'Organizador de parede modular azul com painéis perfurados, bandeja e suportes para lápis em quarto infantil',
+      'Organizador de parede modular rosa com acessórios em quarto pastel'
+    ],
+    images:[
+      'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-acessorios-dimensoes-67-16-cm.webp',
+      'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-azul-quarto-infantil.webp',
+      'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-rosa-quarto-pastel.webp'
+    ],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
+    demonstrative:false
   }
 ];
 
@@ -995,6 +1059,9 @@ window.CUBIC_CATEGORY_GROUPS = [
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/br-11134207-820lt-mtbngwn55t6ob0.webp',alt:'Mini Jesus sentado na borda de um monitor de computador',icon:'✝️',illustrative:false},
     {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
     {name:'Vasos decorativos',slug:'vasos-decorativos',image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp',alt:'Vaso espiral branco decorativo de 15 cm produzido em impressão 3D',icon:'♧',illustrative:false}
+  ]},
+  { title:'Organização e Utilidades', intro:'Soluções práticas para manter seus ambientes funcionais e organizados.', categories:[
+    {name:'Organizadores',slug:'organizadores',image:'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-azul-quarto-infantil.webp',alt:'Organizador de parede modular azul com painéis perfurados e acessórios',icon:'▦',illustrative:false}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
   //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
