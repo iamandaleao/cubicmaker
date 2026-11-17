@@ -561,6 +561,46 @@ window.CUBIC_PRODUCTS = [
     featured:18
   },
   {
+    id:'bandeja-moderna-bolinhas-textura-felpuda',
+    name:'Bandeja Moderna de Bolinhas com Textura Felpuda',
+    cardTitleSingleLine:true,
+    category:'Bandejas', categories:['Bandejas'],
+    price:99.90,
+    description:'Bandeja decorativa circular com volumes em relevo e textura felpuda. Produzida em PLA por impressão 3D, disponível em diferentes cores.',
+    cardDescription:'Bandeja circular orgânica com textura de bolinhas em relevo.',
+    fullDescription:'Com estética suave e formato orgânico, esta bandeja se destaca pela textura em relevo, que remete a elementos naturais e artesanais. Seu design circular, composto por volumes repetidos, cria uma peça equilibrada, contemporânea e visualmente aconchegante. Produzida por impressão 3D, combina precisão técnica com um visual orgânico, sendo ideal para valorizar diferentes ambientes. Sua aparência neutra e elegante harmoniza facilmente com decorações minimalistas, naturais ou modernas. Uma peça que une forma, textura e funcionalidade, perfeita para quem busca uma decoração com personalidade e sutileza.',
+    detailContent:{
+      paragraphs:['Com estética suave e formato orgânico, esta bandeja se destaca pela textura em relevo, que remete a elementos naturais e artesanais.','Seu design circular, composto por volumes repetidos, cria uma peça equilibrada, contemporânea e visualmente aconchegante.','Produzida por impressão 3D, combina precisão técnica com um visual orgânico, sendo ideal para valorizar diferentes ambientes. Sua aparência neutra e elegante harmoniza facilmente com decorações minimalistas, naturais ou modernas.','Uma peça que une forma, textura e funcionalidade, perfeita para quem busca uma decoração com personalidade e sutileza.'],
+      features:['Design orgânico e texturizado.','Produzida em PLA por impressão 3D.','Visual clean e contemporâneo.','Peça decorativa versátil e atemporal.','Preenchimento interno em geometria giroide para contribuir com resistência e durabilidade.','Paredes externas com duas camadas de perímetro.'],
+      sections:[
+        {title:'Informações técnicas',items:['Dimensões aproximadas: 28 cm de largura × 4,9 cm de altura × 27,9 cm de profundidade.','Peso aproximado: 377 g.','Material: PLA, bioplástico de origem vegetal.']},
+        {title:'Cuidados e conservação',items:['Evite quedas ou impactos, pois podem danificar o produto.','Não exponha a altas temperaturas ou à luz solar direta por períodos prolongados.','Não lave com produtos químicos ou abrasivos.','Para limpeza, utilize apenas um pano levemente umedecido.']}
+      ]
+    },
+    image:'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-bege.webp',
+    imageAlt:'Bandeja moderna bege com bolinhas em relevo e textura felpuda',
+    imageAlts:[
+      'Bandeja moderna bege com bolinhas em relevo e textura felpuda',
+      'Bandeja decorativa marrom com textura de bolinhas em relevo',
+      'Bandeja circular preta com textura felpuda de bolinhas',
+      'Bandeja decorativa vermelha com textura orgânica em relevo',
+      'Bandeja moderna azul com bolinhas em relevo'
+    ],
+    images:[
+      'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-bege.webp',
+      'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-marrom.webp',
+      'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-preta.webp',
+      'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-vermelha.webp',
+      'assets/photos/products/bandeja-bolha/bandeja-bolinha-textura-felpuda-azul.webp'
+    ],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true, hidePrintFinishNote:true,
+    colorOptions:['Branco','Preto','Azul','Rosa','Bege','Areia','Verde oliva','Verde militar','Marrom','Vermelho'],
+    colorSwatches:{'Branco':'#ffffff','Preto':'#202024','Azul':'#2763b7','Rosa':'#d989a8','Bege':'#d6c4a3','Areia':'#cbb99a','Verde oliva':'#78825b','Verde militar':'#4b5320','Marrom':'#a5592d','Vermelho':'#df202f'},
+    colors:['Branco','Preto','Azul','Rosa','Bege','Areia','Verde oliva','Verde militar','Marrom','Vermelho'],
+    demonstrative:false
+  },
+  {
     id:'letreiro-decorativo-ore-e-confie-moderno',
     name:'Letreiro Decorativo Ore e Confie Moderno',
     cardTitleSingleLine:true,
