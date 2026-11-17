@@ -106,7 +106,7 @@
       return product.price != null && product.colorChoices.every(choice => choice.options.includes(item?.colorSelections?.[choice.key])) ? Number(product.price) : null;
     }
     if (product?.variantOptions) {
-      if (!product.hideVariantColorSelector && !productColors(product).includes(item?.color)) return null;
+      if (variantColorIsRequired(product,item?.variant) && !productColors(product).includes(item?.color)) return null;
       return product.variantOptions.find(option => option.value === item?.variant)?.price ?? null;
     }
     const options = product?.orderOptions;
@@ -136,6 +136,12 @@
   }
   function productColors(product) {
     return Array.isArray(product?.colorOptions) ? product.colorOptions : PRODUCT_COLORS;
+  }
+  function variantColorIsRequired(product, variant) {
+    if (!product?.variantOptions || product.hideVariantColorSelector) return false;
+    return Array.isArray(product.colorRequiredVariants)
+      ? product.colorRequiredVariants.includes(variant)
+      : true;
   }
   function productDescriptionMarkup(product) {
     const content = product?.detailContent;
@@ -172,7 +178,7 @@
     const form=$('#detailForm');
     const selected=product.variantOptions.find(option => option.value === form?.querySelector('[name="variant"]')?.value);
     const color=form?.elements.color?.value || '';
-    const unitPrice=selected && (product.variantPriceBeforeColor || product.hideVariantColorSelector || productColors(product).includes(color)) ? Number(selected.price) : null;
+    const unitPrice=selected && (product.variantPriceBeforeColor || !variantColorIsRequired(product,selected.value) || productColors(product).includes(color)) ? Number(selected.price) : null;
     const output=$('#detailQuantityPrice');
     if (!output) return;
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) output.textContent='Informe de 1 a 99 unidades';
@@ -312,7 +318,7 @@
         let finish=String(item.finish || '');
         if (product.variantOptions) {
           if (!product.variantOptions.some(option => option.value === variant)) variant='';
-          if (!product.hideVariantColorSelector && !productColors(product).includes(color)) color='';
+          if (!variantColorIsRequired(product,variant) || color && !productColors(product).includes(color)) color='';
         }
         if (product.colorChoices) product.colorChoices.forEach(choice => {
           if (!choice.options.includes(colorSelections[choice.key])) colorSelections[choice.key]='';
@@ -645,7 +651,7 @@
         : product.variantOptions
         ? product.hideVariantColorSelector
           ? `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}" required><option value="" ${item.variant ? '' : 'selected'} hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label></div>`
-          : `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}"><option value="" ${item.variant ? '' : 'selected'} hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color,product)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
+          : `<div class="cart-options"><label>${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select data-field="variant" data-key="${escapeHTML(item.key)}" required><option value="" ${item.variant ? '' : 'selected'} hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}" ${item.variant === option.value ? 'selected' : ''}>${escapeHTML(option.label)}</option>`).join('')}</select></label><label data-variant-color-field ${variantColorIsRequired(product,item.variant) ? '' : 'hidden'}>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color,product)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}" ${variantColorIsRequired(product,item.variant) ? 'required' : ''}>${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
         : product.hideVersionSelector
         ? `<div class="cart-options"><label class="cart-color-label">${escapeHTML(product.colorFieldLabel || 'Cor')}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color,product)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}" required>${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`
         : `<div class="cart-options"><label>Versão<select data-field="version" data-key="${escapeHTML(item.key)}"><option value="economica" ${item.version !== 'reforcada' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${item.version === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label class="cart-color-label">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle(item.color,product)}"></span><select data-field="color" data-key="${escapeHTML(item.key)}">${optionList(productColors(product),item.color,'Selecione uma cor')}</select></span></label></div>`;
@@ -756,6 +762,8 @@
       : product.variantOptions
       ? product.hideVariantColorSelector
         ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione uma opção para continuar.</span></label></div>`
+        : Array.isArray(product.colorRequiredVariants)
+        ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione uma opção para continuar.</span></label><label class="detail-option-field" data-variant-color-field hidden>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle('',product)}"></span><select name="color" aria-label="Cor de ${escapeHTML(product.name)}" aria-describedby="colorError"><option value="" selected hidden>Selecione uma cor</option>${productColors(product).map(color => `<option value="${escapeHTML(color)}">${escapeHTML(color)}</option>`).join('')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor para continuar.</span></label></div>`
         : `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.variantLabel || 'Tamanho / kit')}<select name="variant" aria-label="${escapeHTML(product.variantLabel || 'Tamanho ou kit')} de ${escapeHTML(product.name)}" aria-describedby="variantError" required><option value="" selected hidden>Selecione uma opção</option>${product.variantOptions.map(option => `<option value="${escapeHTML(option.value)}">${escapeHTML(option.label)}</option>`).join('')}</select><span class="field-error" id="variantError" hidden>Selecione um tamanho ou kit.</span></label><label class="detail-option-field">Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle('',product)}"></span><select name="color" aria-label="Cor de ${escapeHTML(product.name)}" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor.</span></label></div>`
       : product.hideVersionSelector
       ? `<div class="dialog-fields"><label class="detail-option-field">${escapeHTML(product.colorFieldLabel || 'Cor')}<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle('',product)}"></span><select name="color" aria-label="${escapeHTML(product.colorFieldLabel || 'Cor do produto')}" aria-describedby="colorError" required>${optionList(productColors(product),'','Selecione uma cor')}</select></span><span class="field-error" id="colorError" hidden>Selecione uma cor para continuar.</span></label></div>`
@@ -814,7 +822,7 @@
       if (!product.hideOrderSelectors && product.variantOptions) {
         const option=product.variantOptions.find(entry => entry.value === item.variant);
         if (!product.variantPriceIsTotal) lines.push(`   ${product.variantLabel === 'Quantidade' ? 'Quantidade selecionada' : product.variantLabel || 'Tamanho / kit'}: ${option?.label || 'a definir'}`);
-        if (!product.hideVariantColorSelector) lines.push(`   Cor: ${item.color || 'a definir'}`);
+        if (variantColorIsRequired(product,item.variant)) lines.push(`   Cor: ${item.color || 'a definir'}`);
       }
       if (!product.hideOrderSelectors && !product.colorChoices && !product.orderOptions && !product.variantOptions) {
         if (product.hideVersionSelector) lines.push(`   ${product.colorFieldLabel || 'Cor'}: ${item.color || 'a definir'}`);
@@ -845,7 +853,7 @@
       const product = getProduct(item.productId);
       return product?.colorChoices && !colorChoicesComplete(product,item)
         || product?.orderOptions && (!product.orderOptions.sizeOptions?.includes(item.size) || !item.finish || ((item.finish === 'colorido' || product.orderOptions.alwaysShowColor) && !product.orderOptions.colors.includes(item.color)))
-        || product?.variantOptions && (!product.variantOptions.some(option => option.value === item.variant) || !product.hideVariantColorSelector && !productColors(product).includes(item.color))
+        || product?.variantOptions && (!product.variantOptions.some(option => option.value === item.variant) || variantColorIsRequired(product,item.variant) && !productColors(product).includes(item.color))
         || product?.hideVersionSelector && !product?.hideOrderSelectors && !product?.variantOptions && !product?.colorChoices && !product?.orderOptions && !productColors(product).includes(item.color);
     });
     if (incomplete) { showToast('Preencha as opções obrigatórias dos produtos antes de solicitar o orçamento.'); return; }
@@ -976,6 +984,7 @@
       item.colorSelections[input.dataset.choiceKey]=input.value;
     } else if (input.dataset.field==='quantity') item.quantity=Math.min(99,Math.max(1,Number.parseInt(input.value,10)||1));
     else item[input.dataset.field]=input.value;
+    if (itemProduct?.variantOptions && input.dataset.field==='variant' && !variantColorIsRequired(itemProduct,item.variant)) item.color='';
     if (itemProduct?.orderOptions && input.dataset.field === 'finish' && item.finish !== 'colorido' && !itemProduct.orderOptions.alwaysShowColor) item.color='';
     item.key=itemProduct?.colorChoices ? colorChoicesKey(itemProduct,item) : itemProduct?.orderOptions ? `${item.productId}::${item.version || 'economica'}::${item.size || ''}::${item.color}::${item.finish || ''}` : itemProduct?.variantOptions ? `${item.productId}::variant::${item.variant || ''}::${item.color}` : `${item.productId}::${item.version || 'economica'}::${item.color}`;
     const duplicate=cart.find(entry=>entry!==item&&entry.key===item.key);
@@ -1067,6 +1076,19 @@
       const error=$(`#${errorId}`);
       if (error) error.hidden=true;
       event.target.removeAttribute('aria-invalid');
+      if (event.target.name === 'variant' && Array.isArray(product.colorRequiredVariants)) {
+        const showColor=variantColorIsRequired(product,event.target.value);
+        const colorField=$('[data-variant-color-field]');
+        const colorSelect=$('#detailForm [name="color"]');
+        if (colorField) colorField.hidden=!showColor;
+        if (colorSelect) {
+          colorSelect.required=showColor;
+          if (!showColor) colorSelect.value='';
+        }
+        const colorError=$('#colorError');
+        if (colorError) colorError.hidden=true;
+        colorSelect?.removeAttribute('aria-invalid');
+      }
       if (event.target.name === 'color') {
         const swatch=$('[data-color-swatch]',event.target.parentElement);
         if (swatch) swatch.style.setProperty('--swatch-color',colorSwatchValue(event.target.value,product));
@@ -1199,7 +1221,7 @@
       setError(variantSelect,'variantError',`Selecione ${product.variantLabel === 'Quantidade' ? 'uma quantidade' : 'uma opção'} para continuar.`);
       return;
     }
-    if (product.variantOptions && !product.hideVariantColorSelector && !productColors(product).includes(color)) {
+    if (product.variantOptions && variantColorIsRequired(product,variant) && !productColors(product).includes(color)) {
       setError(colorSelect,'colorError','Selecione uma cor para continuar.');
       return;
     }

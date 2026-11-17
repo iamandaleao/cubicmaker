@@ -595,6 +595,12 @@ window.CUBIC_PRODUCTS = [
     ],
     dimensions:null, material:'PLA',
     hideVersionSelector:true, hidePrintFinishNote:true,
+    variantLabel:'Tamanho',
+    variantOptions:[
+      {value:'28cm',label:'28 cm — R$ 99,90',price:99.90},
+      {value:'21cm',label:'21 cm — R$ 60,00',price:60.00}
+    ],
+    colorRequiredVariants:['21cm','28cm'],
     colorOptions:['Branco','Preto','Azul','Rosa','Bege','Areia','Verde oliva','Verde militar','Marrom','Vermelho'],
     colorSwatches:{'Branco':'#ffffff','Preto':'#202024','Azul':'#2763b7','Rosa':'#d989a8','Bege':'#d6c4a3','Areia':'#cbb99a','Verde oliva':'#78825b','Verde militar':'#4b5320','Marrom':'#a5592d','Vermelho':'#df202f'},
     colors:['Branco','Preto','Azul','Rosa','Bege','Areia','Verde oliva','Verde militar','Marrom','Vermelho'],
