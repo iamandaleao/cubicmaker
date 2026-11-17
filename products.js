@@ -561,6 +561,51 @@ window.CUBIC_PRODUCTS = [
     featured:18
   },
   {
+    id:'letreiro-decorativo-ore-e-confie-moderno',
+    name:'Letreiro Decorativo Ore e Confie Moderno',
+    cardTitleSingleLine:true,
+    category:'Religião', categories:['Religião'],
+    price:30.00,
+    description:'Letreiro decorativo “Ore e Confie” produzido em PLA por impressão 3D. Uma peça delicada para trazer fé e tranquilidade ao ambiente.',
+    cardDescription:'Letreiro decorativo “Ore e Confie” com 18 cm, feito em impressão 3D.',
+    fullDescription:'Um enfeite delicado e cheio de significado para decorar sua casa, escritório ou presentear alguém especial. A frase “Ore e Confie” traz um lembrete diário de fé e tranquilidade para o seu ambiente.',
+    detailContent:{
+      paragraphs:['Um enfeite delicado e cheio de significado para decorar sua casa, escritório ou presentear alguém especial.','A frase “Ore e Confie” traz um lembrete diário de fé e tranquilidade para o seu ambiente.'],
+      features:['Produzido em PLA Premium atóxico e de alta durabilidade, por impressão 3D.','Peça única feita sob encomenda.','Pode apresentar pequenas variações de textura típicas da impressão 3D.'],
+      sections:[
+        {title:'Ideal para',items:['Decoração de mesa, estante ou cabeceira.','Presente para batizado, crisma, aniversário ou datas religiosas.','Amigo secreto, Dia das Mães, Dia dos Pais e formatura.','Consultórios, igrejas e espaços de oração.']},
+        {title:'Características',items:['Dimensões aproximadas: 18 cm de largura × 9 cm de altura × 2 cm de profundidade.','Peso aproximado: 59 g.']},
+        {title:'Cuidados',items:['Limpar com pano seco ou levemente úmido.','Evitar exposição direta e prolongada ao sol e a altas temperaturas, que podem deformar o PLA.','Não lavar em água corrente nem submergir.']},
+        {title:'O que está incluso',items:['1 letreiro decorativo “Ore e Confie”.']}
+      ]
+    },
+    image:'assets/photos/products/ore-e-confie/letreiro-ore-e-confie-sala-acolhedora.webp',
+    imageAlt:'Letreiro decorativo Ore e Confie em uma sala aconchegante',
+    imageAlts:[
+      'Letreiro decorativo Ore e Confie em uma sala aconchegante',
+      'Colagem do letreiro Ore e Confie em diferentes cores e ambientes',
+      'Letreiro Ore e Confie com dimensões de 18 por 9 por 2 centímetros',
+      'Letreiro Ore e Confie branco com textura de impressão 3D',
+      'Letreiro Ore e Confie branco com letras douradas'
+    ],
+    images:[
+      'assets/photos/products/ore-e-confie/letreiro-ore-e-confie-sala-acolhedora.webp',
+      'assets/photos/products/ore-e-confie/letreiro-decorativo-ore-e-confie-cores-colagem.webp',
+      'assets/photos/products/ore-e-confie/letreiro-decorativo-ore-e-confie-medidas-18x9x2cm.webp',
+      'assets/photos/products/ore-e-confie/letreiro-ore-e-confie-branco-textura-3d.webp',
+      'assets/photos/products/ore-e-confie/letreiro-ore-e-confie-branco-letras-douradas.webp'
+    ],
+    dimensions:null, material:'PLA Premium',
+    colorChoices:[
+      {key:'oreColor',label:'Cor de “Ore”',partLabel:'palavra “Ore”',options:['Branco','Preto','Dourado','Verde oliva','Verde militar','Bege','Areia','Rosa']},
+      {key:'confieColor',label:'Cor de “e Confie”',partLabel:'frase “e Confie”',options:['Branco','Preto','Dourado','Verde oliva','Verde militar','Bege','Areia','Rosa']}
+    ],
+    colorSwatches:{'Verde militar':'#4b5320'},
+    notePlaceholder:'Se não achou sua cor, descreva aqui',
+    hideVersionSelector:true, hidePrintFinishNote:true,
+    demonstrative:false
+  },
+  {
     id:'tigela-arvore-de-natal-decorativa-3d-17-cm',
     name:'Tigela Árvore de Natal Decorativa 3D – 17 cm',
     cardTitleSingleLine:true,
@@ -959,7 +1004,7 @@ window.CUBIC_PRODUCTS = [
     name:'Organizador de Parede Modular com Acessórios',
     cardTitleSingleLine:true,
     category:'Organizadores', categories:['Organizadores'],
-    price:180.00,
+    price:229.90,
     description:'Organizador de parede modular com painéis perfurados e conjunto completo de acessórios para manter objetos organizados e liberar espaço na mesa.',
     fullDescription:'Organize seu ambiente com praticidade e estilo. O Organizador de Parede Modular aproveita melhor o espaço vertical e ajuda a manter pequenos objetos sempre à mão, deixando a mesa mais livre. Com design moderno e painéis perfurados, oferece diferentes possibilidades de organização e combina funcionalidade e decoração em um único produto.',
     detailContent:{

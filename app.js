@@ -762,7 +762,7 @@
       : `<div class="dialog-fields"><label>Versão<select name="version"><option value="economica" ${selectedVersion === 'economica' ? 'selected' : ''}>Econômica</option><option value="reforcada" ${selectedVersion === 'reforcada' ? 'selected' : ''}>Reforçada</option></select></label><label>Cor<span class="color-select-wrap"><span class="color-swatch" data-color-swatch aria-hidden="true" style="${colorSwatchStyle('',product)}"></span><select name="color">${optionList(productColors(product),'','Selecione uma cor')}</select></span></label></div><p class="detail-version-description" data-detail-version-description ${product.price != null && !versionDescription(selectedVersion) ? 'hidden' : ''}>${product.price == null ? 'Valor a consultar conforme a versão escolhida.' : versionDescription(selectedVersion)}</p><a class="version-help-link" href="materiais-e-versoes.html#versoes">Qual é a diferença entre as versões?</a>`;
     const initialSubtotal = product.orderOptions || product.variantOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `Valor: ${money(productSubtotal(product,1,selectedVersion))}`;
     const noteLabel = product.orderOptions ? 'Observações para cotação' : 'Observações ou personalização';
-    const notePlaceholder = 'Opcional: informe personalizações ou detalhes do pedido.';
+    const notePlaceholder = escapeHTML(product.notePlaceholder || 'Opcional: informe personalizações ou detalhes do pedido.');
     $('#dialogContent').innerHTML = `<div class="dialog-layout">
       ${galleryMarkup(product)}
       <div class="dialog-info">
