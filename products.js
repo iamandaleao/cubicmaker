@@ -1000,6 +1000,45 @@ window.CUBIC_PRODUCTS = [
     demonstrative:false
   },
   {
+    id:'brinquedo-educativo-2-em-1-alfabeto-formas-geometricas',
+    name:'Brinquedo Educativo 2 em 1 – Alfabeto e Formas Geométricas',
+    cardTitleSingleLine:true,
+    category:'Brinquedos educativos', categories:['Brinquedos educativos'],
+    price:55.00,
+    description:'Brinquedo educativo de dupla face: alfabeto de um lado e quebra-cabeça de formas geométricas do outro, com peças e pinos para encaixe.',
+    cardDescription:'Alfabeto e formas geométricas em um brinquedo educativo de dupla face.',
+    fullDescription:'Uma maneira divertida de aprender brincando! Este brinquedo educativo 2 em 1 reúne duas atividades em um único produto: de um lado, as letras do alfabeto para estimular o reconhecimento das letras e, do outro, um quebra-cabeça de formas para desenvolver a percepção visual e a coordenação motora. As peças possuem pequenos pinos que facilitam o encaixe e ajudam a praticar a coordenação motora fina e a precisão dos movimentos.',
+    detailContent:{
+      paragraphs:['Uma maneira divertida de aprender brincando! Este brinquedo educativo 2 em 1 reúne duas atividades em um único produto: de um lado, as letras do alfabeto para estimular o reconhecimento das letras e, do outro, um quebra-cabeça de formas para desenvolver a percepção visual e a coordenação motora.','As peças possuem pequenos pinos que facilitam o encaixe e ajudam a praticar a coordenação motora fina e a precisão dos movimentos.'],
+      features:['Dupla função: alfabeto de um lado e formas geométricas do outro.','Estimula o aprendizado de forma lúdica.','Auxilia no desenvolvimento da coordenação motora.','Peças com pinos para facilitar o manuseio.','Ideal para momentos de aprendizado e diversão.'],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 13,24 cm.','Altura: 16,12 cm.','Profundidade: 1,39 cm.']},
+        {title:'Material',items:['PLA, produzido por impressão 3D.']}
+      ]
+    },
+    image:'assets/photos/products/quebra-cabeça/brinquedo-educativo-alfabeto-formas-geometricas-placa-pinos.webp',
+    imageAlt:'Brinquedo educativo com quebra-cabeça de formas geométricas e peças com pinos',
+    imageAlts:[
+      'Brinquedo educativo com tabuleiro de formas geométricas e peças com pinos',
+      'Tabuleiro do alfabeto com letras e peças de formas geométricas com pinos',
+      'Peças com pinos do quebra-cabeça de formas geométricas',
+      'Tabuleiro educativo de formas geométricas com peças de encaixe'
+    ],
+    images:[
+      'assets/photos/products/quebra-cabeça/brinquedo-educativo-alfabeto-formas-geometricas-placa-pinos.webp',
+      'assets/photos/products/quebra-cabeça/brinquedo-educativo-alfabeto-letras-tabuleiro-formas-pecas.webp',
+      'assets/photos/products/quebra-cabeça/quebra-cabeca-formas-geometricas-pecas-com-pinos.webp',
+      'assets/photos/products/quebra-cabeça/tabuleiro-educativo-formas-geometricas-pecas-pinos.webp'
+    ],
+    dimensions:null, material:'PLA',
+    colorChoices:[
+      {key:'boardColor',label:'Cor da placa',partLabel:'placa do brinquedo',options:['Preto','Branco','Areia','Verde oliva','Vermelho']},
+      {key:'pinColor',label:'Cor dos pinos',partLabel:'pinos',options:['Preto','Branco','Areia','Verde oliva','Vermelho']}
+    ],
+    hideVersionSelector:true, hidePrintFinishNote:true,
+    demonstrative:false
+  },
+  {
     id:'kit-decorativo-japandi-coracao-vaso-bandeja-porta-vela',
     name:'Kit Decorativo Japandi – Vaso, Bandeja e Porta-Vela',
     cardTitleSingleLine:true,
@@ -1195,6 +1234,9 @@ window.CUBIC_CATEGORY_GROUPS = [
   ]},
   { title:'Organização e Utilidades', intro:'Soluções práticas para manter seus ambientes funcionais e organizados.', categories:[
     {name:'Organizadores',slug:'organizadores',image:'assets/photos/products/organizador-de-parede-modular-com-acessorios/organizador-de-parede-modular-azul-quarto-infantil.webp',alt:'Organizador de parede modular azul com painéis perfurados e acessórios',icon:'▦',illustrative:false}
+  ]},
+  { title:'Brinquedos e aprendizado', intro:'Brinquedos educativos para aprender brincando e explorar novas habilidades.', categories:[
+    {name:'Brinquedos educativos',slug:'brinquedos-educativos',image:'assets/photos/products/quebra-cabeça/brinquedo-educativo-alfabeto-formas-geometricas-placa-pinos.webp',alt:'Brinquedo educativo com tabuleiro de formas geométricas e peças com pinos',icon:'🧩',illustrative:false}
   ]},
   //  { title:'Presentes e hobbies', intro:'Peças criativas para presentear e aproveitar seus interesses.', categories:[
   //    {name:'Presentes criativos',slug:'presentes-criativos',image:'assets/photos/categories/presentes-criativos.webp',alt:'Foto ilustrativa de presente decorativo criativo',icon:'🎁'},
