@@ -201,6 +201,66 @@ window.CUBIC_PRODUCTS = [
     hideVersionSelector:true,
     demonstrative:false
   },
+  {
+    id:'mini-enfeites-croche-3d-natal',
+    name:'Mini Enfeites de Crochê 3D – 8 Modelos',
+    createdAt:'2026-11-17',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:21.00,
+    description:'Mini enfeites de Natal 3D com acabamento inspirado no crochê artesanal. Disponíveis em 8 modelos, a partir de R$ 21,00.',
+    cardDescription:'Mini enfeites natalinos inspirados no crochê, a partir de R$ 21,00. Escolha entre 8 modelos.',
+    fullDescription:'Deixe sua decoração de Natal ainda mais charmosa e acolhedora com os Mini Enfeites de Crochê 3D. São peças com detalhes delicados e acabamento inspirado no crochê artesanal, ideais para trazer um toque especial à decoração natalina. Disponíveis em oito modelos diferentes, inspirados em personagens e símbolos tradicionais do Natal.',
+    detailContent:{
+      paragraphs:['Deixe sua decoração de Natal ainda mais charmosa e acolhedora com os Mini Enfeites de Crochê 3D. Peças com detalhes delicados e acabamento inspirado no crochê artesanal, ideais para trazer um toque especial à decoração natalina.','Disponíveis em 8 modelos diferentes, inspirados em personagens e símbolos tradicionais do Natal.'],
+      features:['Design 3D com detalhes delicados.','Ideal para decoração natalina.','Pode ser utilizado em árvores, mesas, aparadores, prateleiras e outros ambientes.','Disponível em diferentes modelos.','Material: PLA (impressão 3D).'],
+      sections:[
+        {title:'Modelos e valores',items:['Papai Noel: R$ 27,00.','Árvore de Natal: R$ 23,00.','Pinguim: R$ 26,00.','Gnomo: R$ 25,00.','Rena: R$ 24,00.','Urso: R$ 21,00.','Boneco de Neve: R$ 31,00.','Biscoito: R$ 25,00.']},
+        {title:'Tamanho aproximado',items:['Aproximadamente 6 cm.','As medidas podem apresentar pequenas variações de acordo com o modelo.']},
+        {title:'Modelos disponíveis',items:['Papai Noel, Árvore, Pinguim, Gnomo, Rena, Urso, Boneco de Neve e Biscoito.']}
+      ],
+      note:'Selecione o modelo desejado no campo de opções para consultar o valor correspondente. Para escolher modelos diferentes, adicione cada modelo à lista separadamente e informe a quantidade desejada.'
+    },
+    notePlaceholder:'Se quiser uma cor diferente ou tiver outra especificação, descreva aqui.',
+    image:'assets/photos/products/mini croche/mini-enfeites-natal-croche-3d-oito-modelos.webp',
+    cardImage:'assets/photos/products/mini croche/mini-enfeites-natal-croche-3d-oito-modelos.webp',
+    imageAlt:'Oito mini enfeites de Natal 3D com textura inspirada em crochê: Papai Noel, árvore, pinguim, gnomo, rena, urso, boneco de neve e biscoito',
+    imageAlts:[
+      'Oito modelos de mini enfeites natalinos 3D com acabamento inspirado no crochê',
+      'Mini enfeite de Natal boneco de neve em crochê 3D',
+      'Mini enfeite de Natal Papai Noel em crochê 3D',
+      'Mini enfeite de Natal árvore verde em crochê 3D',
+      'Mini enfeite de Natal urso com gorro em crochê 3D',
+      'Mini enfeite de Natal biscoito decorado em crochê 3D',
+      'Mini enfeite de Natal pinguim com gorro em crochê 3D',
+      'Mini enfeite de Natal rena em crochê 3D'
+    ],
+    images:[
+      'assets/photos/products/mini croche/mini-enfeites-natal-croche-3d-oito-modelos.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-boneco-de-neve-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-papai-noel-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-arvore-natal-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-urso-natalino-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-biscoito-natal-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-pinguim-6cm.webp',
+      'assets/photos/products/mini croche/mini-enfeite-croche-3d-rena-natalina-6cm.webp'
+    ],
+    dimensions:null,
+    material:'PLA',
+    variantLabel:'Modelo',
+    hideVariantColorSelector:true,
+    variantOptions:[
+      {value:'papai-noel',label:'Papai Noel',price:27.00},
+      {value:'arvore-natal',label:'Árvore de Natal',price:23.00},
+      {value:'pinguim',label:'Pinguim',price:26.00},
+      {value:'gnomo',label:'Gnomo',price:25.00},
+      {value:'rena',label:'Rena',price:24.00},
+      {value:'urso',label:'Urso',price:21.00},
+      {value:'boneco-neve',label:'Boneco de Neve',price:31.00},
+      {value:'biscoito',label:'Biscoito',price:25.00}
+    ],
+    demonstrative:false
+  },
   // Temporariamente pausados; remova os comentários para reativar os produtos.
   //  { id:'demo-01', name:'Vaso modular', category:'Decoração', categories:['Vasos decorativos','Decoração'], price:39.90, description:'Um volume geométrico para dar destaque a pequenos arranjos e composições.', fullDescription:'Exemplo demonstrativo de peça decorativa. A forma modular cria um ponto de interesse em estantes, mesas e aparadores. As dimensões, o material e as opções de acabamento devem ser confirmados antes do cadastro como produto real.', image:'assets/photos/categories/vasos-decorativos.webp', dimensions:{height:120,width:90,depth:90}, material:'PLA (exemplo)', colors:['Areia','Terracota','Preto'],  leadTime:'Consulte disponibilidade', featured:1 },
   //  { id:'demo-02', name:'Organizador de mesa', category:'Organização', categories:['Organização da casa','Escritórios','Identificação e organização profissional'], price:34.90, description:'Compartimentos práticos para deixar seus pequenos itens sempre à mão.', fullDescription:'Exemplo demonstrativo para organização de mesa. Uma peça com divisórias que pode ser adaptada às necessidades do espaço. Medidas e configuração final devem ser avaliadas antes da produção.', image:'assets/photos/categories/organizacao-da-casa.webp', dimensions:{height:45,width:180,depth:100}, material:'PLA (exemplo)', colors:['Branco','Cinza','Verde oliva'],  leadTime:'Consulte disponibilidade', featured:2 },
