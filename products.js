@@ -5,7 +5,7 @@
  * A propriedade `sizes` não gera seletor; opções especiais de tamanho devem ser configuradas explicitamente em `variantOptions`.
  */
 window.CUBIC_PRODUCTS = [
-  { id:'kit-porta-foto-polaroid-coracao', name:'Kit Porta-Foto Polaroid Coração', cardTitleSingleLine:true, cardImageFitCover:true, cardImage:'assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png', category:'Presentes e Hobbies', categories:['Lembrancinhas'], price:15, description:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.', fullDescription:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração. Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.', detailContent:{paragraphs:['Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.','Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.'],features:['Design moderno e minimalista.','Ideal para fotos estilo Polaroid e Instax.','Base firme para manter a foto bem posicionada.','Peça compacta, leve e fácil de organizar.','Produzido em impressão 3D.','Ótima opção para presentear em datas especiais.','Combina com decorações modernas, românticas e criativas.'],sections:[{title:'Opções disponíveis',items:['Kit com 5 unidades: R$ 15,00','Kit com 10 unidades: R$ 22,00','Kit com 20 unidades: R$ 25,00']},{title:'Medidas aproximadas',items:['Altura: 2,5 cm.','Largura: 2,5 cm.','Profundidade: 1,5 cm.']},{title:'O que acompanha',items:['1 suporte porta-foto por unidade selecionada, na cor escolhida.','Fotos e itens decorativos não inclusos.']},{title:'Observações',items:['Produto pronto para uso.','Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.','As cores podem apresentar pequenas variações conforme a iluminação e a tela.']}],note:'Selecione a quantidade desejada para consultar o preço do kit.'}, image:'assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png', imageAlt:'Suporte porta-foto de coração com medidas aproximadas', imageAlts:['Suporte porta-foto de coração com medidas aproximadas','Kit de suportes porta-foto coração com foto de casamento'], images:['assets/photos/products/suporte-fotos-polaroid/1 - suporte-porta-foto-coracao-medidas.png','assets/photos/products/suporte-fotos-polaroid/2 - kit-suportes-porta-foto-coracao-casamento.png'], dimensions:null, variantLabel:'Quantidade', variantPriceBeforeColor:true, hideVariantColorSelector:false, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], variantPriceInline:false, variantOptions:[{value:'5',label:'5 unidades',price:15},{value:'10',label:'10 unidades',price:22},{value:'20',label:'20 unidades',price:25}], demonstrative:false },
+  { id:'kit-porta-foto-polaroid-coracao', name:'Kit Porta-Foto Polaroid Coração', cardTitleSingleLine:true, cardImageFitCover:true, cardImage:'assets/photos/products/suporte-fotos-polaroid/kit-porta-foto-polaroid-coracao-medidas.webp', category:'Presentes e Hobbies', categories:['Lembrancinhas'], price:15, description:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.', fullDescription:'Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração. Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.', detailContent:{paragraphs:['Dê destaque às suas melhores lembranças com o Porta-Foto Polaroid 3D! Com design moderno e minimalista, é uma peça compacta e elegante que valoriza suas fotos e combina com diferentes estilos de decoração.','Ideal para expor fotos instantâneas e criar composições especiais em mesas, escrivaninhas, quartos, aparadores e estantes.'],features:['Design moderno e minimalista.','Ideal para fotos estilo Polaroid e Instax.','Base firme para manter a foto bem posicionada.','Peça compacta, leve e fácil de organizar.','Produzido em impressão 3D.','Ótima opção para presentear em datas especiais.','Combina com decorações modernas, românticas e criativas.'],sections:[{title:'Opções disponíveis',items:['Kit com 5 unidades: R$ 15,00','Kit com 10 unidades: R$ 22,00','Kit com 20 unidades: R$ 25,00']},{title:'Medidas aproximadas',items:['Altura: 2,5 cm.','Largura: 2,5 cm.','Profundidade: 1,5 cm.']},{title:'O que acompanha',items:['1 suporte porta-foto por unidade selecionada, na cor escolhida.','Fotos e itens decorativos não inclusos.']},{title:'Observações',items:['Produto pronto para uso.','Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.','As cores podem apresentar pequenas variações conforme a iluminação e a tela.']}],note:'Selecione a quantidade desejada para consultar o preço do kit.'}, image:'assets/photos/products/suporte-fotos-polaroid/kit-porta-foto-polaroid-coracao-medidas.webp', imageAlt:'Suporte porta-foto de coração com medidas aproximadas', imageAlts:['Suporte porta-foto de coração com medidas aproximadas','Kit de suportes porta-foto coração com foto de casamento'], images:['assets/photos/products/suporte-fotos-polaroid/kit-porta-foto-polaroid-coracao-medidas.webp','assets/photos/products/suporte-fotos-polaroid/kit-porta-foto-polaroid-coracao-casamento.webp'], dimensions:null, variantLabel:'Quantidade', variantPriceBeforeColor:true, hideVariantColorSelector:false, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], variantPriceInline:false, variantOptions:[{value:'5',label:'5 unidades',price:15},{value:'10',label:'10 unidades',price:22},{value:'20',label:'20 unidades',price:25}], demonstrative:false },
   {
     id:'moldura-kumo-japandi-porta-retrato-10x15',
     name:'Moldura Kumo – Moldura de Foto Japandi 10x15 cm',
@@ -28,7 +28,7 @@ window.CUBIC_PRODUCTS = [
     ],
     images:[
       'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-japandi-familia-10x15.webp',
-      'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-familia-pet-10x15.webp'
+      'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-familia-e-pet.webp'
     ],
     dimensions:null,
     hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
@@ -57,7 +57,7 @@ window.CUBIC_PRODUCTS = [
     image:'assets/photos/products/coracao-trico/kit-porta-foto-coracao-trico-3d-foto-referencia.webp',
     imageAlt:'Porta-foto em formato de coração com textura visual de tricô segurando uma foto de referência',
     imageAlts:['Porta-foto coração com textura visual de tricô e foto de referência 7 por 9 centímetros','Porta-fotos coração tricô 3D em cenário aconchegante com fotos instantâneas e várias cores'],
-    images:['assets/photos/products/coracao-trico/kit-porta-foto-coracao-trico-3d-foto-referencia.webp','assets/photos/products/coracao-trico/kit-porta-foto-coracao-trico-3d-cenario-com-fotos.png'],
+    images:['assets/photos/products/coracao-trico/kit-porta-foto-coracao-trico-3d-foto-referencia.webp','assets/photos/products/coracao-trico/kit-porta-foto-coracao-trico-3d-cenario-com-fotos.webp'],
     variantLabel:'Quantidade',
     variantOptions:[{value:'5',label:'5 unidades',price:25},{value:'10',label:'10 unidades',price:40},{value:'15',label:'15 unidades',price:55}],
     colorOptions:['Branco','Preto','Vermelho','Azul','Cinza','Rosa','Verde-oliva','Marrom'],
@@ -137,17 +137,15 @@ window.CUBIC_PRODUCTS = [
         {title:'Opções de kit',items:['1 kit com 4 animais: R$ 27,50.','5 kits com 20 animais: R$ 102,80 no total (R$ 20,56 por kit).']}
       ]
     },
-    image:'assets/photos/products/kit-animais/kit-safari-minimalista-infantil-3d-quatro-animais.png',
-    imageAlt:'Kit safari minimalista infantil com macaco, girafa, elefante e leão em decoração de quarto',
+    image:'assets/photos/products/kit-animais/kit-safari-infantil-animais-coloridos.webp',
+    imageAlt:'Animais decorativos safari infantil em cores variadas',
     imageAlts:[
-      'Kit safari minimalista infantil com macaco, girafa, elefante e leão em decoração de quarto',
       'Animais decorativos safari infantil em cores variadas',
       'Kit de quatro animais safari minimalistas em madeira sobre móvel de quarto infantil',
       'Decoração de quarto infantil com quatro animais tema safari na parede',
       'Animais decorativos safari minimalistas em cor rosa no quarto infantil'
     ],
     images:[
-      'assets/photos/products/kit-animais/kit-safari-minimalista-infantil-3d-quatro-animais.png',
       'assets/photos/products/kit-animais/kit-safari-infantil-animais-coloridos.webp',
       'assets/photos/products/kit-animais/kit-safari-infantil-quatro-animais-madeira.webp',
       'assets/photos/products/kit-animais/kit-safari-infantil-decoracao-quarto.webp',
@@ -182,13 +180,13 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Por ser produzida em impressão 3D, a peça pode apresentar pequenas marcas características do processo. As cores podem variar levemente conforme a iluminação e a tela.'
     },
-    image:'assets/photos/products/balao-nascimento/1.webp',
+    image:'assets/photos/products/balao-nascimento/enfeite-balao-personalizado-nascimento-cores-pastel.webp',
     imageAlt:'Enfeites de balão personalizados com dados de nascimento em várias cores pastel',
     images:[
-      'assets/photos/products/balao-nascimento/1.webp',
-      'assets/photos/products/balao-nascimento/br-11134207-820lu-moacd0jjaqklc8.webp',
-      'assets/photos/products/balao-nascimento/br-11134207-820ln-mqmdeowgohs138.webp',
-      'assets/photos/products/balao-nascimento/br-11134201-820ll-mto8jfkhjf2a84.webp'
+      'assets/photos/products/balao-nascimento/enfeite-balao-personalizado-nascimento-cores-pastel.webp',
+      'assets/photos/products/balao-nascimento/enfeite-balao-nascimento-azul-medidas-17x14cm.webp',
+      'assets/photos/products/balao-nascimento/enfeite-balao-nascimento-tons-neutros-rosa.webp',
+      'assets/photos/products/balao-nascimento/enfeite-balao-nascimento-tons-neutros-azul.webp'
     ],
     imageAlts:[
       'Enfeites de balão personalizados com dados de nascimento em várias cores pastel',
@@ -326,12 +324,12 @@ window.CUBIC_PRODUCTS = [
       sections:[{title:'Ideal para',items:['Aparadores e cômodas.','Mesas de cabeceira.','Estantes e prateleiras.','Decoração de mesas natalinas.','Peitoris de janelas.']}],
       note:'Recomendamos o uso de vela de LED para criar uma iluminação suave e aconchegante.'
     },
-    image:'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Porta-vela natalino verde com cervo e pinheiro.png',
-    imageAlt:'Porta-vela natalino verde em formato circular com cervo e pinheiro',
-    imageAlts:['Porta-vela natalino verde em formato circular com cervo e pinheiro','Decoração natalina com porta-vela de cervo e pinheiro em ambiente acolhedor'],
+    image:'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/luminaria-natalina-loop-cervo-pinheiro-porta-vela.webp',
+    imageAlt:'Luminária natalina circular com cervo, pinheiro e vela em cenário acolhedor',
+    imageAlts:['Luminária natalina circular com cervo, pinheiro e vela em cenário acolhedor','Porta-vela natalino verde em formato circular com cervo e pinheiro'],
     images:[
-      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Porta-vela natalino verde com cervo e pinheiro.png',
-      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/Luminária natalina em cenário acolhedor.png'
+      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/luminaria-natalina-loop-cervo-pinheiro-porta-vela.webp',
+      'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/porta-vela-natalino-cervo-pinheiro-verde.webp'
     ],
     dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho','Dourado'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho','Dourado'], hidePrintFinishNote:true, demonstrative:false
   },
@@ -350,15 +348,15 @@ window.CUBIC_PRODUCTS = [
         {title:'Indicações de uso',items:['Salas de estar.','Quartos.','Escritórios.','Lavabos.','Aparadores e estantes.','Exposição de vasos, esculturas e perfumes.']}
       ]
     },
-    image:'assets/photos/products/podium deko home/D_NQ_NP_2X_746940-MLB109508432644_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp',
+    image:'assets/photos/products/podium deko home/podium-decorativo-home-vaso-preto-sala.webp',
     imageAlt:'Podium HOME preto com vaso decorativo em uma sala de estar',
     imageAlts:[
       'Podium HOME preto com vaso decorativo em uma sala de estar',
       'Podium HOME preto com vaso decorativo sobre uma bancada'
     ],
     images:[
-      'assets/photos/products/podium deko home/D_NQ_NP_2X_746940-MLB109508432644_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp',
-      'assets/photos/products/podium deko home/D_NQ_NP_2X_757591-MLB110379748733_042026-F-podium-decoracao-home-elegancia-minimalista-p-sua-decoracao.webp'
+      'assets/photos/products/podium deko home/podium-decorativo-home-vaso-preto-sala.webp',
+      'assets/photos/products/podium deko home/podium-decorativo-home-vaso-preto-bancada.webp'
     ],
     dimensions:null, material:'Plástico de alta resistência', hideVersionSelector:true,
     colorFieldLabel:'Cores',
@@ -491,7 +489,7 @@ window.CUBIC_PRODUCTS = [
       sections:[{title:'Tamanhos disponíveis',items:['Pequeno: 15 cm.','Grande: 20 cm.']}],
       note:'Importante: Por ser produzido em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação. Evite exposição a altas temperaturas.'
     },
-    image:'assets/photos/products/presepio-de-natal/branco.webp',
+    image:'assets/photos/products/presepio-de-natal/presepio-sagrada-familia-branco-15cm.webp',
     imageAlt:'Presépio de Natal decorativo branco com Sagrada Família, Reis Magos e animais',
     imageAlts:[
       'Presépio de Natal branco com a Sagrada Família, Reis Magos e animais',
@@ -499,9 +497,9 @@ window.CUBIC_PRODUCTS = [
       'Presépio de Natal bege com estrela no topo do arco'
     ],
     images:[
-      'assets/photos/products/presepio-de-natal/branco.webp',
-      'assets/photos/products/presepio-de-natal/verde-oliva.webp',
-      'assets/photos/products/presepio-de-natal/bege.webp'
+      'assets/photos/products/presepio-de-natal/presepio-sagrada-familia-branco-15cm.webp',
+      'assets/photos/products/presepio-de-natal/presepio-sagrada-familia-verde-oliva-15cm.webp',
+      'assets/photos/products/presepio-de-natal/presepio-sagrada-familia-bege-15cm.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     variantLabel:'Tamanho', variantOptions:[
@@ -595,7 +593,10 @@ window.CUBIC_PRODUCTS = [
     dimensions:null,
     material:'PLA',
     hideVersionSelector:true,
-    hideOrderSelectors:true,
+    colorFieldLabel:'Cor',
+    colorOptions:['Branco','Dourado'],
+    colors:['Branco','Dourado'],
+    colorSwatches:{'Branco':'#f5f4ef','Dourado':'#c5a157'},
     hidePrintFinishNote:true,
     demonstrative:false
   },
@@ -654,9 +655,9 @@ window.CUBIC_PRODUCTS = [
       features:['Produzido em PLA por impressão 3D.','Cores vermelho e branco.','Altura aproximada de 16 cm.','Possui espaço interno para pequenos objetos.','Acompanha 1 unidade.'],
       note:'Importante: Produto fabricado por impressão 3D, podendo apresentar pequenas marcas naturais do processo. Não é indicado para contato direto com alimentos. Evite exposição ao sol intenso e a temperaturas elevadas.'
     },
-    image:'assets/photos/products/Chapéu de Natal Tigela & Decoração/br-11134207-820m3-muu1cpgb60oy16@resize_w450_nl.webp',
+    image:'assets/photos/products/Chapéu de Natal Tigela & Decoração/centro-de-mesa-chapeu-papai-noel-impressao-3d.webp',
     imageAlt:'Centro de mesa em formato de chapéu de Papai Noel vermelho e branco com espaço interno',
-    images:['assets/photos/products/Chapéu de Natal Tigela & Decoração/br-11134207-820m3-muu1cpgb60oy16@resize_w450_nl.webp'],
+    images:['assets/photos/products/Chapéu de Natal Tigela & Decoração/centro-de-mesa-chapeu-papai-noel-impressao-3d.webp'],
     dimensions:null, material:'PLA', demonstrative:false,
     hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
     colors:['Vermelho','Branco'],
@@ -768,7 +769,7 @@ window.CUBIC_PRODUCTS = [
       sections:[{title:'Dimensões aproximadas',items:['Comprimento: 22 cm.','Largura: 22,11 cm.','Altura: 2 cm.']}],
       note:'Não encontrou a cor desejada? Informe no campo de observações qual cor gostaria de encomendar. Vamos consultar a disponibilidade.'
     },
-    image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',
+    image:'assets/photos/products/bandeja-ore-e-confie/bandeja-ore-e-confie-canelada-com-pezinhos.webp',
     imageAlt:'Bandeja decorativa Ore e Confie canelada com pezinhos',
     imageAlts:[
       'Bandeja decorativa Ore e Confie canelada com pezinhos em ambiente de casa',
@@ -776,9 +777,9 @@ window.CUBIC_PRODUCTS = [
       'Bandeja Ore e Confie canelada vista de lado'
     ],
     images:[
-      'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',
-      'assets/photos/products/bandeja-ore-e-confie/2.webp',
-      'assets/photos/products/bandeja-ore-e-confie/3.webp'
+      'assets/photos/products/bandeja-ore-e-confie/bandeja-ore-e-confie-canelada-com-pezinhos.webp',
+      'assets/photos/products/bandeja-ore-e-confie/bandeja-ore-e-confie-branca-vista-superior.webp',
+      'assets/photos/products/bandeja-ore-e-confie/bandeja-ore-e-confie-canelada-vista-lateral.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     colorChoices:[
@@ -794,7 +795,7 @@ window.CUBIC_PRODUCTS = [
     name:'Bandeja Moderna de Bolinhas com Textura Felpuda',
     cardTitleSingleLine:true,
     category:'Bandejas', categories:['Bandejas'],
-    price:99.90,
+    price:99.90, cardPrice:60.00,
     description:'Bandeja decorativa circular com volumes em relevo e textura felpuda. Produzida em PLA por impressão 3D, disponível em diferentes cores.',
     cardDescription:'Bandeja circular orgânica com textura de bolinhas em relevo.',
     fullDescription:'Com estética suave e formato orgânico, esta bandeja se destaca pela textura em relevo, que remete a elementos naturais e artesanais. Seu design circular, composto por volumes repetidos, cria uma peça equilibrada, contemporânea e visualmente aconchegante. Produzida por impressão 3D, combina precisão técnica com um visual orgânico, sendo ideal para valorizar diferentes ambientes. Sua aparência neutra e elegante harmoniza facilmente com decorações minimalistas, naturais ou modernas. Uma peça que une forma, textura e funcionalidade, perfeita para quem busca uma decoração com personalidade e sutileza.',
@@ -955,15 +956,15 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Panetone, chocotone, laços, doces e demais itens decorativos não acompanham o produto. As medidas são aproximadas e podem apresentar pequenas variações.'
     },
-    image:'assets/photos/products/cesto-panetone/1.webp',
+    image:'assets/photos/products/cesto-panetone/cesto-noel-encantado-panetone-decorado.webp',
     imageAlt:'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone',
     imageAlts:[
       'Cesto Noel Encantado vermelho e branco com fivela dourada e panetone',
       'Cesto porta-panetone natalino sem conteúdo, com acabamento texturizado'
     ],
     images:[
-      'assets/photos/products/cesto-panetone/1.webp',
-      'assets/photos/products/cesto-panetone/2.webp'
+      'assets/photos/products/cesto-panetone/cesto-noel-encantado-panetone-decorado.webp',
+      'assets/photos/products/cesto-panetone/cesto-noel-encantado-vermelho-branco.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
@@ -1165,7 +1166,7 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Indicado para decoração com flores, folhagens e plantas naturais ou artificiais. Produzido por impressão 3D; pequenas variações de acabamento são características do processo de fabricação.'
     },
-    image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.png',
+    image:'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.webp',
     imageAlt:'Vasos espirais decorativos em ambiente elegante',
     imageAlts:[
       'Vasos espirais decorativos em ambiente elegante',
@@ -1173,7 +1174,7 @@ window.CUBIC_PRODUCTS = [
       'Vaso espiral decorativo branco de 15 cm produzido em impressão 3D'
     ],
     images:[
-      'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.png',
+      'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-3d-15cm-01-ambiente-elegante.webp',
       'assets/photos/products/vaso-espiral/vasos-espirais-decorativos-3d-02-preto.webp',
       'assets/photos/products/vaso-espiral/vaso-espiral-decorativo-15cm-03-branco-impressao-3d.webp'
     ],
@@ -1326,15 +1327,15 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Kit produzido sob demanda e destinado à decoração. A vela e os itens decorativos das fotos não acompanham o produto. Pequenas variações de tonalidade e acabamento são características da impressão 3D.'
     },
-    image:'assets/photos/products/kit-vaso-3peças/IMG_0558.PNG',
+    image:'assets/photos/products/kit-vaso-3peças/kit-decorativo-japandi-vaso-bandeja-porta-vela-tons-naturais.webp',
     imageAlt:'Kit decorativo Japandi em tons areia e verde oliva com vaso, bandeja e porta-vela',
     imageAlts:[
       'Kit decorativo Japandi em tons areia e verde oliva com vaso, bandeja e porta-vela',
       'Kit decorativo Japandi preto com vaso, bandeja e porta-vela'
     ],
     images:[
-      'assets/photos/products/kit-vaso-3peças/IMG_0558.PNG',
-      'assets/photos/products/kit-vaso-3peças/IMG_0560.PNG'
+      'assets/photos/products/kit-vaso-3peças/kit-decorativo-japandi-vaso-bandeja-porta-vela-tons-naturais.webp',
+      'assets/photos/products/kit-vaso-3peças/kit-decorativo-japandi-vaso-bandeja-porta-vela-preto.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     colorChoices:[
@@ -1367,7 +1368,7 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Escolha as cores da bandeja, do porta-vela e do vaso nos seletores. O coração decorativo acompanha o conjunto.'
     },
-    image:'assets/photos/products/conjunto japandi decoracao/71-qBepStpL._AC_SL1448_.jpg',
+    image:'assets/photos/products/conjunto japandi decoracao/conjunto-japandi-bege-vaso-bandeja-porta-vela-coracao.webp',
     imageAlt:'Conjunto Japandi bege com vaso canelado, bandeja oval, porta-vela esférico e coração decorativo',
     imageAlts:[
       'Conjunto Japandi bege com vaso, bandeja, porta-vela e coração decorativo',
@@ -1377,11 +1378,11 @@ window.CUBIC_PRODUCTS = [
       'Vaso Japandi canelado bege em ambiente decorado'
     ],
     images:[
-      'assets/photos/products/conjunto japandi decoracao/71-qBepStpL._AC_SL1448_.jpg',
-      'assets/photos/products/conjunto japandi decoracao/71NzrtYw+bL._AC_SL1448_.jpg',
-      'assets/photos/products/conjunto japandi decoracao/714Rf6hizoL._AC_SL1448_.jpg',
-      'assets/photos/products/conjunto japandi decoracao/dc37b7b1080e4c5d.webp',
-      'assets/photos/products/conjunto japandi decoracao/e6437438d4040e1d.webp'
+      'assets/photos/products/conjunto japandi decoracao/conjunto-japandi-bege-vaso-bandeja-porta-vela-coracao.webp',
+      'assets/photos/products/conjunto japandi decoracao/conjunto-japandi-preto-vaso-bandeja-porta-vela.webp',
+      'assets/photos/products/conjunto japandi decoracao/conjunto-japandi-verde-oliva-vaso-bandeja-porta-vela.webp',
+      'assets/photos/products/conjunto japandi decoracao/conjunto-japandi-bege-mesa-decorada.webp',
+      'assets/photos/products/conjunto japandi decoracao/vaso-japandi-canelado-bege-ambiente-decorado.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
     colorChoices:[
@@ -1493,7 +1494,7 @@ window.CUBIC_CATEGORY_GROUPS = [
     {name:'Lembrancinhas',slug:'lembrancinhas',image:'assets/photos/categories/lembrancinhas.webp',alt:'Lembrancinhas personalizadas para festas e eventos',icon:'🎀',illustrative:false}
   ]},
   { title:'Casa e decoração', intro:'Peças funcionais e detalhes para os ambientes.', categories:[
-    {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/Bandeja Ore e Confie com Essenciais.png',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
+    {name:'Bandejas',slug:'bandejas',image:'assets/photos/products/bandeja-ore-e-confie/bandeja-ore-e-confie-canelada-com-pezinhos.webp',alt:'Bandeja decorativa Ore e Confie canelada com pezinhos',icon:'▱',illustrative:false},
     {name:'Porta-retratos',slug:'porta-retratos',image:'assets/photos/products/porta-retrato-family/moldura-kumo-porta-retrato-japandi-familia-10x15.webp',alt:'Moldura Kumo Japandi canelada com fotografia de família',icon:'▣',illustrative:false},
     {name:'Religião',slug:'religiao',image:'assets/photos/products/jesus/br-11134207-820lt-mtbngwn55t6ob0.webp',alt:'Mini Jesus sentado na borda de um monitor de computador',icon:'✝️',illustrative:false},
     {name:'Kits',slug:'kits',image:'assets/photos/products/conjunto-decoração/kit-decoracao-wabi-sabi-japones-vaso-porta-velas-bandeja-05-kit-bege.webp',alt:'Conjunto decorativo com vaso, porta-velas e bandeja',icon:'▤',illustrative:false},
