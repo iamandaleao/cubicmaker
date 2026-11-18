@@ -186,8 +186,8 @@
     else output.textContent=unitPrice == null ? '' : `${quantity > 1 ? 'Total' : 'Valor'}: ${money(product.variantPriceIsTotal ? unitPrice : unitPrice * quantity)}`;
   }
   function productPriceMarkup(product, version = 'economica') {
+    if (product.cardPrice != null && Number.isFinite(Number(product.cardPrice))) return money(product.cardPrice);
     if (product.orderOptions) {
-      if (Number.isFinite(Number(product.cardPrice))) return money(product.cardPrice);
       const prices = product.orderOptions.finishes.map(finish => Number(finish.price)).filter(Number.isFinite);
       if (!prices.length) return '';
       const min = Math.min(...prices);

@@ -513,6 +513,7 @@ window.CUBIC_PRODUCTS = [
     cardTitleSingleLine:true,
     category:'Natal', categories:['Natal'],
     price:33.00,
+    cardPrice:80.00,
     description:'Peças natalinas minimalistas em impressão 3D, disponíveis avulsas ou em kit completo, a partir de R$ 33,00.',
     cardDescription:'Peças natalinas minimalistas para compor mesas, aparadores e cantinhos especiais.',
     fullDescription:'Encante sua decoração natalina com este conjunto de peças decorativas com design minimalista e moderno. Ideal para mesas, aparadores, estantes, altares e cantinhos de oração, trazendo delicadeza e significado ao ambiente. O conjunto é composto por escultura da Sagrada Família de 10 cm, pinheiro decorativo de 13 cm e bandeja decorativa de 20 cm. Produzidas em impressão 3D, as peças possuem visual delicado e versátil, combinando com diferentes estilos de decoração. Também são uma ótima opção de presente religioso.',
