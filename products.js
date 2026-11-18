@@ -514,34 +514,89 @@ window.CUBIC_PRODUCTS = [
     featured:14
   },
   {
-    id:'escultura-minimalista-natividade-sagrada-familia',
-    name:'Escultura Minimalista da Natividade – Sagrada Família',
+    id:'cena-natividade-minimalista-sagrada-familia-10cm',
+    name:'Cena de Natividade Minimalista – Sagrada Família | Decoração de Natal',
     cardTitleSingleLine:true,
     category:'Natal', categories:['Natal'],
-    price:120.00,
-    description:'Escultura minimalista da Sagrada Família em três cores, produzida em PLA por impressão 3D. Uma peça delicada e moderna para a decoração de Natal.',
-    fullDescription:'Uma peça decorativa que representa a Sagrada Família em um design minimalista e moderno. Ideal para compor a decoração natalina, trazendo um toque de delicadeza, significado e elegância ao ambiente.',
+    price:28.00,
+    description:'Cena de Natividade minimalista da Sagrada Família em PLA, com cores de filamento à escolha. R$ 28,00.',
+    cardDescription:'Sagrada Família minimalista em PLA. Escolha entre quatro cores sugeridas.',
+    fullDescription:'Traga o verdadeiro espírito do Natal para sua casa com esta delicada representação da Sagrada Família! A escultura apresenta Maria segurando o Menino Jesus e José com seu cajado, em um design minimalista que combina simplicidade, elegância e significado. Com formas suaves, arredondadas e figuras sem rosto, é uma peça decorativa que transmite tranquilidade e fé, ideal para compor sua decoração natalina.',
     detailContent:{
-      paragraphs:['Uma peça decorativa que representa a Sagrada Família em um design minimalista e moderno.','Ideal para compor a decoração natalina, trazendo um toque de delicadeza, significado e elegância ao ambiente.'],
-      features:['Representação da Natividade com a Sagrada Família.','Design minimalista e acabamento moderno.','Composição em três cores: branco, marrom e bege.','Produzida em PLA por impressão 3D.'],
-      sections:[{title:'Dimensões aproximadas',items:['Altura: 16,35 cm.','Largura: 14,24 cm.','Profundidade: 8,12 cm.']}],
-      note:'Uma peça especial para deixar sua decoração de Natal ainda mais significativa.'
+      paragraphs:[
+        'Traga o verdadeiro espírito do Natal para sua casa com esta delicada representação da Sagrada Família!',
+        'A escultura apresenta Maria segurando o Menino Jesus e José com seu cajado, em um design minimalista que combina simplicidade, elegância e significado. Com formas suaves, arredondadas e figuras sem rosto, transmite tranquilidade e fé.'
+      ],
+      features:[
+        'Design minimalista e elegante.',
+        'Representação de Maria com o Menino Jesus e José com seu cajado.',
+        'Formas suaves e acabamento delicado.',
+        'Produzida por impressão 3D em PLA.',
+        'Ideal para mesas, estantes e aparadores.',
+        'Uma opção especial para presentear.'
+      ],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 9,99 cm.','Profundidade: 7,13 cm.','Altura: 10,95 cm.']},
+        {title:'Cores de filamento sugeridas',items:['Marfim.','Branco.','Bege.','Madeira.']}
+      ]
     },
-    image:'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-sagrada-familia-natal-3d-frontal.webp',
-    imageAlt:'Escultura minimalista da Sagrada Família em branco, marrom e bege',
+    image:'assets/photos/products/sagrada-familia-2/cena-natividade-minimalista-sagrada-familia-decoracao-natal.webp',
+    cardImage:'assets/photos/products/sagrada-familia-2/cena-natividade-minimalista-sagrada-familia-decoracao-natal.webp',
+    imageAlt:'Escultura minimalista em PLA de Maria com o Menino Jesus e José com seu cajado',
+    images:['assets/photos/products/sagrada-familia-2/cena-natividade-minimalista-sagrada-familia-decoracao-natal.webp'],
+    dimensions:null, material:'PLA',
+    hideVersionSelector:true,
+    colorFieldLabel:'Cores sugeridas',
+    colorOptions:['Marfim','Branco','Bege','Madeira'],
+    colorSwatches:{'Marfim':'#f2e6cc','Branco':'#f5f4ef','Bege':'#d7c6a5','Madeira':'#a77b4d'},
+    colors:['Marfim','Branco','Bege','Madeira'],
+    hidePrintFinishNote:true,
+    demonstrative:false
+  },
+  {
+    id:'presepio-natal-sagrada-familia-com-estrela',
+    name:'Presépio de Natal Sagrada Família com Estrela',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:30.00,
+    description:'Presépio minimalista da Sagrada Família com estábulo e estrela decorativa. Produzido em PLA por impressão 3D. R$ 30,00.',
+    cardDescription:'Sagrada Família em estábulo minimalista com estrela no topo. R$ 30,00.',
+    fullDescription:'Leve o verdadeiro significado do Natal para sua decoração com este delicado presépio da Sagrada Família! A peça representa José, Maria e o Menino Jesus, acompanhados pela estrutura de um estábulo e uma estrela no topo. Seu design minimalista e elegante combina tradição e modernidade, criando uma decoração especial e cheia de significado.',
+    detailContent:{
+      paragraphs:[
+        'Leve o verdadeiro significado do Natal para sua decoração com este delicado presépio da Sagrada Família!',
+        'A peça representa José, Maria e o Menino Jesus, acompanhados pela estrutura de um estábulo e uma estrela no topo. Seu design minimalista e elegante combina tradição e modernidade, criando uma decoração especial e cheia de significado.'
+      ],
+      features:[
+        'Representação da Sagrada Família.',
+        'Estábulo com estrela decorativa no topo.',
+        'Design minimalista e delicado.',
+        'Produzido por impressão 3D em PLA.',
+        'Ideal para mesas, aparadores, estantes e prateleiras.',
+        'Uma ótima opção para presentear no Natal.'
+      ],
+      sections:[
+        {title:'Dimensões aproximadas',items:['Largura: 11,25 cm.','Profundidade: 3,21 cm.','Altura: 11,94 cm.']}
+      ]
+    },
+    image:'assets/photos/products/presepio com estrela/presepio-natal-sagrada-familia-com-estrela.webp',
+    cardImage:'assets/photos/products/presepio com estrela/presepio-natal-sagrada-familia-com-estrela.webp',
+    imageAlt:'Presépio minimalista em branco da Sagrada Família em um estábulo com estrela no topo',
     imageAlts:[
-      'Escultura minimalista da Sagrada Família em branco, marrom e bege',
-      'Escultura da Natividade com dimensões aproximadas indicadas na imagem',
-      'Sagrada Família minimalista em cenário decorado para o Natal'
+      'Presépio da Sagrada Família em estábulo branco com estrela no topo',
+      'Presépio de Natal da Sagrada Família disponível em branco e dourado',
+      'Presépios da Sagrada Família com estábulo e estrela em cores diferentes'
     ],
     images:[
-      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-sagrada-familia-natal-3d-frontal.webp',
-      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/escultura-minimalista-natividade-sagrada-familia-dimensoes.png',
-      'assets/photos/products/escultura-minimalista-natividade-sagrada-familia/sagrada-familia-natividade-decoracao-natalina.webp'
+      'assets/photos/products/presepio com estrela/presepio-natal-sagrada-familia-com-estrela.webp',
+      'assets/photos/products/presepio com estrela/presepio-natal-sagrada-familia-branco-dourado.webp',
+      'assets/photos/products/presepio com estrela/presepio-sagrada-familia-estrela-cores.webp'
     ],
-    dimensions:null, material:'PLA',
-    hideVersionSelector:true, hideOrderSelectors:true, hidePrintFinishNote:true,
-    colors:['Branco','Marrom','Bege'],
+    dimensions:null,
+    material:'PLA',
+    hideVersionSelector:true,
+    hideOrderSelectors:true,
+    hidePrintFinishNote:true,
     demonstrative:false
   },
   {
@@ -612,10 +667,9 @@ window.CUBIC_PRODUCTS = [
     name:'Kit Presépio Sagrada Família, Árvore de Natal e Bandeja Decorativa',
     cardTitleSingleLine:true,
     category:'Natal', categories:['Natal'],
-    price:33.00,
-    cardPrice:80.00,
-    description:'Peças natalinas minimalistas em impressão 3D, disponíveis avulsas ou em kit completo, a partir de R$ 33,00.',
-    cardDescription:'Peças natalinas minimalistas para compor mesas, aparadores e cantinhos especiais.',
+    price:80.00,
+    description:'Kit natalino com Sagrada Família, pinheiro decorativo e bandeja, produzido em impressão 3D. R$ 80,00.',
+    cardDescription:'Conjunto completo com Sagrada Família, pinheiro e bandeja decorativa.',
     fullDescription:'Encante sua decoração natalina com este conjunto de peças decorativas com design minimalista e moderno. Ideal para mesas, aparadores, estantes, altares e cantinhos de oração, trazendo delicadeza e significado ao ambiente. O conjunto é composto por escultura da Sagrada Família de 10 cm, pinheiro decorativo de 13 cm e bandeja decorativa de 20 cm. Produzidas em impressão 3D, as peças possuem visual delicado e versátil, combinando com diferentes estilos de decoração. Também são uma ótima opção de presente religioso.',
     detailContent:{
       paragraphs:['Encante sua decoração natalina com este conjunto de peças decorativas com design minimalista e moderno. Ideal para mesas, aparadores, estantes, altares e cantinhos de oração, trazendo delicadeza e significado ao ambiente.','Produzidas em impressão 3D, as peças possuem visual delicado e versátil, combinando com diferentes estilos de decoração. Também são uma ótima opção de presente religioso.'],
@@ -637,13 +691,7 @@ window.CUBIC_PRODUCTS = [
       'assets/photos/products/sagrada-familia/3-kit-sagrada-familia-arvore-bandeja-natal-impressao-3d.webp'
     ],
     dimensions:null, material:'PLA', demonstrative:false,
-    variantLabel:'Escolha sua opção', hideVariantColorSelector:true,
-    variantOptions:[
-      {value:'pinheiro',label:'Pinheiro',price:38.00},
-      {value:'bandeja',label:'Bandeja',price:38.00},
-      {value:'escultura-sagrada-familia',label:'Escultura Sagrada Família',price:33.00},
-      {value:'kit-completo',label:'Kit completo',price:80.00}
-    ],
+    hideOrderSelectors:true, hideVersionSelector:true,
     featured:16
   },
   {
