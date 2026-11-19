@@ -214,19 +214,51 @@
   }
   function getProduct(id) { return products.find(product => product.id === id); }
   function productRoute(id) { return `/catalogo/${encodeURIComponent(id)}`; }
+  function allProductsRoute() { return '/catalogo/nossos-produtos'; }
+  function categoryRoute(slug) { return `${allProductsRoute()}/${encodeURIComponent(slug)}`; }
   function catalogReturnUrl() { return location.protocol === 'file:' ? `${location.href.split('#')[0]}#catalogo` : '/catalogo'; }
   function siteOrigin() { return location.protocol === 'file:' || location.origin === 'null' ? 'https://cubicmaker.com' : location.origin; }
   function productUrl(id) { return `${siteOrigin()}${productRoute(id)}`; }
+  function pushHashRoute(target) {
+    if (location.hash === target) return;
+    if (location.protocol === 'file:') location.hash = target;
+    else history.pushState(null, '', `${location.pathname}${location.search}${target}`);
+  }
+  function pushCatalogRoute(route, localHash) {
+    if (location.protocol === 'file:') { pushHashRoute(localHash); return; }
+    if (location.pathname !== route || location.search || location.hash) history.pushState(null, '', route);
+  }
   function productFromPath() {
-    const pathMatch = location.pathname.match(/^\/(?:catalogo|produtos)\/([^/]+)\/?$/);
+    const pathMatch = location.pathname.match(/(?:^|\/)(?:catalogo|produtos)\/([^/]+)(?:\/index\.html)?\/?$/);
     const hashMatch = location.hash.match(/^#produto\/([^/]+)\/?$/);
     const match = pathMatch || hashMatch;
     if (!match) return null;
     try { return getProduct(decodeURIComponent(match[1])); } catch { return null; }
   }
+  function categoryFromPath() {
+    const match = location.pathname.match(/(?:^|\/)catalogo\/nossos-produtos\/([^/]+)(?:\/index\.html)?\/?$/);
+    if (!match) return null;
+    try { return decodeURIComponent(match[1]); } catch { return null; }
+  }
+  function allProductsPath() { return /(?:^|\/)catalogo\/nossos-produtos(?:\/index\.html)?\/?$/.test(location.pathname); }
   function setMeta(selector, value, attribute = 'content') {
     const element = $(selector);
     if (element) element.setAttribute(attribute, value);
+  }
+  function setCatalogRouteMetadata(route, title, description, imagePath) {
+    document.title = title;
+    setMeta('meta[name="description"]', description);
+    const canonical = $('link[rel="canonical"]');
+    if (canonical) canonical.href = `${siteOrigin()}${route}`;
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', description);
+    setMeta('meta[property="og:url"]', `${siteOrigin()}${route}`);
+    const image = imagePath ? new URL(imagePath, `${siteOrigin()}/`).href : `${siteOrigin()}/ogimage/cubic-maker-compartilhamento.webp`;
+    setMeta('meta[property="og:image"]', image);
+    setMeta('meta[property="og:image:secure_url"]', image);
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', description);
+    setMeta('meta[name="twitter:image"]', image);
   }
   function setProductMetadata(product) {
     if (!product) {
@@ -444,7 +476,7 @@
   }
   function renderCategoryGroups() {
     if (!isCatalogPage) return;
-    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="#catalogo/${escapeHTML(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"></span><span class="category-card-name"><span class="category-card-label">${escapeHTML(category.name)}</span><span class="category-card-arrow" aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
+    $('#categoryGroups').innerHTML = categoryGroups.map(group => { const visibleCategories = group.categories.filter(category => !category.hidden); return `<section class="category-group" aria-labelledby="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}"><div class="category-group-heading"><div><p class="section-kicker">CATEGORIAS / ${escapeHTML(group.title.toLocaleUpperCase('pt-BR'))}</p><h2 id="group-${escapeHTML(visibleCategories[0]?.slug || 'catalogo')}">${escapeHTML(group.title)}</h2></div><p>${escapeHTML(group.intro)}</p></div><div class="category-card-grid">${visibleCategories.map(category => `<a class="category-card" href="${categoryRoute(category.slug)}" data-open-category="${escapeHTML(category.slug)}"><span class="category-card-image"><img src="${escapeHTML(category.image)}" alt="${escapeHTML(category.alt)}" loading="lazy" width="480" height="360"></span><span class="category-card-name"><span class="category-card-label">${escapeHTML(category.name)}</span><span class="category-card-arrow" aria-hidden="true">↗</span></span></a>`).join('')}</div></section>`; }).join('');
   }
   function renderCategories() {
     if (!isCatalogPage) return;
@@ -463,7 +495,7 @@
   function renderCatalogLanding() {
     if (!isCatalogPage) return;
     currentCategory = null;
-    document.title = 'Catálogo de produtos em impressão 3D | Cubic Maker';
+    setCatalogRouteMetadata('/catalogo', catalogBaseTitle, catalogBaseDescription);
     document.body.classList.add('catalog-mode');
     document.body.classList.remove('catalog-products-view');
     $('#catalogLanding').hidden = false;
@@ -504,7 +536,7 @@
     const term = String(query || '').trim();
     if (!term) { showToast('Digite um produto ou uma ideia para buscar.'); $('#catalogQuickSearchInput').focus(); return; }
     const target = `#buscar/${encodeURIComponent(term)}`;
-    if (location.hash !== target) history.pushState(null,'',target);
+    pushHashRoute(target);
     showSearchResults(term);
   }
   function updateCategoryPageHeading(category) {
@@ -520,29 +552,35 @@
     if (!isCatalogPage) return;
     const category = categoryBySlug.get(slug);
     if (!category) { renderCatalogLanding(); return; }
-    document.title = `${category.name} — Catálogo | Cubic Maker`;
+    const description = `${category.groupIntro || `Explore produtos da categoria ${category.name}`} Descubra opções em impressão 3D da Cubic Maker.`.replace(/\s+/g, ' ').trim().slice(0, 300);
+    setCatalogRouteMetadata(categoryRoute(slug), `${category.name} — Catálogo | Cubic Maker`, description, category.image);
     currentCategory = slug;
     document.body.classList.add('catalog-mode');
-    document.body.classList.remove('catalog-products-view');
+    document.body.classList.add('catalog-products-view');
     $('#catalogLanding').hidden = true;
-    $('#allProductsView').hidden = false;
-    $('#categoryProductsView').hidden = true;
-    renderAllProducts();
+    $('#allProductsView').hidden = true;
+    $('#categoryProductsView').hidden = false;
+    updateCategoryPageHeading(category);
+    renderCategories();
+    renderProducts();
     window.scrollTo({top:0,behavior:'smooth'});
   }
   function openCategory(slug) {
-    const target = `#catalogo/${slug}`;
-    if (location.hash !== target) history.pushState(null,'',target);
+    pushCatalogRoute(categoryRoute(slug), `#catalogo/${slug}`);
     showCategory(slug);
   }
   function openCatalog() {
-    if (location.hash !== '#catalogo') history.pushState(null,'','#catalogo');
+    pushCatalogRoute('/catalogo', '#catalogo');
     renderCatalogLanding();
+  }
+  function openAllProducts() {
+    pushCatalogRoute(allProductsRoute(), '#produtos');
+    showAllProducts();
   }
   function showAllProducts() {
     if (!isCatalogPage || !$('#allProductsView')) return;
     currentCategory = null;
-    document.title = 'Nossos Produtos | Cubic Maker';
+    setCatalogRouteMetadata(allProductsRoute(), 'Nossos Produtos | Cubic Maker', 'Conheça as peças impressas em 3D da Cubic Maker. Explore produtos para decorar, organizar e presentear.');
     document.body.classList.add('catalog-mode');
     document.body.classList.remove('catalog-products-view');
     $('#catalogLanding').hidden = true;
@@ -555,15 +593,44 @@
   function routeFromHash() {
     if (!isCatalogPage) return;
     if (productFromPath()) { syncProductRoute(); return; }
-    if (location.protocol !== 'file:' && location.pathname === '/catalogo.html') {
-      history.replaceState(history.state, '', `/catalogo${location.hash}`);
-    } else if (location.protocol !== 'file:' && location.pathname === '/catalogo/') {
+    const categoryPath = categoryFromPath();
+    if (categoryPath) {
+      const canonical = categoryRoute(categoryPath);
+      if (!categoryBySlug.has(categoryPath)) {
+        if (location.protocol !== 'file:') history.replaceState(history.state, '', '/catalogo');
+        renderCatalogLanding();
+        return;
+      }
+      if (location.protocol !== 'file:' && location.pathname !== canonical) history.replaceState(history.state, '', canonical);
+      showCategory(categoryPath);
+      return;
+    }
+    if (allProductsPath()) {
+      if (location.protocol !== 'file:' && location.pathname !== allProductsRoute()) history.replaceState(history.state, '', allProductsRoute());
+      showAllProducts();
+      return;
+    }
+    if (location.protocol !== 'file:' && (location.pathname === '/catalogo.html' || location.pathname === '/catalogo/')) {
       history.replaceState(history.state, '', `/catalogo${location.hash}`);
     }
     const hash = location.hash.slice(1);
-    if (hash === 'catalogo' || !hash) { renderCatalogLanding(); return; }
-    if (hash === 'produtos') { showAllProducts(); return; }
-    if (hash.startsWith('catalogo/')) { showCategory(hash.slice('catalogo/'.length)); return; }
+    if (hash === 'catalogo' || !hash) {
+      if (location.protocol !== 'file:' && hash === 'catalogo') history.replaceState(history.state, '', '/catalogo');
+      renderCatalogLanding(); return;
+    }
+    if (hash === 'produtos') {
+      if (location.protocol !== 'file:') history.replaceState(history.state, '', allProductsRoute());
+      showAllProducts(); return;
+    }
+    if (hash.startsWith('catalogo/')) {
+      const slug = hash.slice('catalogo/'.length);
+      if (categoryBySlug.has(slug)) {
+        if (location.protocol !== 'file:') history.replaceState(history.state, '', categoryRoute(slug));
+        showCategory(slug); return;
+      }
+      if (location.protocol !== 'file:') history.replaceState(history.state, '', '/catalogo');
+      renderCatalogLanding(); return;
+    }
     if (hash.startsWith('buscar/')) {
       let query = '';
       try { query = decodeURIComponent(hash.slice('buscar/'.length)); } catch { query = hash.slice('buscar/'.length); }
@@ -1038,6 +1105,7 @@
     }
     if (wasDialogOpen || productHistoryReturnPending) {
       productHistoryReturnPending = false;
+      routeFromHash();
       return;
     }
     routeFromHash();
@@ -1377,11 +1445,10 @@
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));
-  $$('a[href="catalogo.html#produtos"]').forEach(link=>link.addEventListener('click',event=>{
+  $$('a[href="catalogo/nossos-produtos/"]').forEach(link=>link.addEventListener('click',event=>{
     if (!isCatalogPage) return;
     event.preventDefault();
-    if (location.hash !== '#produtos') history.pushState(null,'','#produtos');
-    showAllProducts();
+    openAllProducts();
     $('#menuToggle').setAttribute('aria-expanded','false');
     $('#mobileNav').classList.remove('is-open');
   }));
