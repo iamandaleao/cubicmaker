@@ -509,7 +509,8 @@
         : productCategories.includes(selected.name));
       return inCategory && matchesSearch(product, search);
     });
-    if (sort === 'asc' || sort === 'desc') visible.sort((a,b) => {
+    if (sort === 'recent') visible.sort((a,b) => (Date.parse(b.createdAt || '') || 0) - (Date.parse(a.createdAt || '') || 0));
+    else if (sort === 'asc' || sort === 'desc') visible.sort((a,b) => {
       if (a.price == null) return 1;
       if (b.price == null) return -1;
       return sort === 'asc' ? a.price - b.price : b.price - a.price;
@@ -875,7 +876,7 @@
     const optionValue = option => option.getAttribute(optionAttribute) || '';
     const sync = () => {
       const selected = options.find(option => optionValue(option) === select.value);
-      label.textContent = selected?.textContent.trim() || 'Mais relevantes';
+      label.textContent = selected?.textContent.trim() || 'Mais recentes';
       options.forEach(option => {
         const isSelected = option === selected;
         option.classList.toggle('is-selected',isSelected);
