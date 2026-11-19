@@ -1,17 +1,25 @@
 # URLs individuais de produtos
 
-Cada produto tem uma página estática em `/produtos/{id}/`. O identificador já usado no cadastro (`products.js`) é o slug da URL. O gerador valida formato e duplicidade antes de criar as páginas.
+As URLs canônicas usam `/catalogo/{id}` sem `.html` nem fragmento. O identificador é o slug cadastrado em `products.js`.
 
-As páginas são cópias do catálogo com metadados individuais e a base dos recursos apontando para a raiz do site. Assim, hospedagens estáticas como GitHub Pages servem `/produtos/{id}/` pelo `index.html` daquela pasta, sem regra de fallback ou configuração adicional de servidor. Ao abrir `catalogo.html` localmente, o modal usa `#produto/{id}` porque navegadores bloqueiam `pushState` em `file://`; no site publicado, usa `/produtos/{id}/`. Para testar as rotas públicas e atualizar uma URL de produto sem fallback, sirva a pasta por HTTP.
+## Hospedagem
 
-O catálogo continua abrindo o modal existente. Ao abrir um produto, o histórico recebe a URL individual; fechar ou usar voltar restaura a URL anterior, e avançar abre o produto novamente. Em acesso direto, o modal abre automaticamente; fechá-lo leva ao catálogo. O modal também oferece “Copiar link do produto”.
+O repositório aponta para GitHub (`origin`), contém `CNAME` para `cubicmaker.com` e não contém regras de Apache, Nginx, Netlify ou Vercel. A consulta pública ao domínio mostrou respostas do GitHub Pages por trás de Cloudflare. Por isso, as rotas são publicadas como arquivos estáticos: `catalogo/index.html` atende `/catalogo` e `catalogo/{id}/index.html` atende cada produto. Não é necessário fallback SPA nem regra de rewrite.
+
+O Pages pode normalizar uma URL de diretório para incluir `/` no primeiro acesso. O JavaScript troca a barra final pela URL canônica sem recarregar a página. A página `/catalogo.html` permanece disponível para links antigos e é normalizada para `/catalogo` no navegador.
+
+## Compatibilidade
+
+Links antigos no formato `/catalogo.html#produto/{id}` são reconhecidos e substituídos pela rota nova ao abrir. As páginas estáticas antigas `/produtos/{id}/` também permanecem geradas e migram para `/catalogo/{id}` no navegador. Ambas usam canonical novo.
+
+Ao abrir o catálogo diretamente como arquivo local (`file://`), o modal ainda funciona, mas a URL não muda: navegadores bloqueiam a History API para rotas diferentes nesse modo. Para testar as rotas limpas, histórico e atualização direta, sirva os arquivos por HTTP.
 
 ## Atualizar as páginas
 
-Depois de alterar os produtos ou seus metadados, rode na raiz do projeto:
+Depois de alterar os produtos ou seus metadados, execute na raiz do projeto:
 
 ```sh
 node scripts/generate-product-pages.js
 ```
 
-O comando atualiza as páginas estáticas e inclui todas as URLs no sitemap. Publique as pastas `produtos/` junto com os demais arquivos do site. Não é necessário configurar rewrite no servidor.
+O comando gera o índice do catálogo, as páginas canônicas e os aliases legados, além de atualizar o sitemap. Publique `catalogo/`, `produtos/`, `catalogo.html` e os arquivos atualizados do site no branch/origem do GitHub Pages.

@@ -29,14 +29,13 @@ function productPage(product) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(product.id)) throw new Error(`ID inválido para URL: ${product.id}`);
   if (ids.has(product.id)) throw new Error(`ID duplicado: ${product.id}`);
   ids.add(product.id);
-  const url = `${domain}/produtos/${product.id}/`;
+  const url = `${domain}/catalogo/${product.id}`;
   const title = `${product.name} | Cubic Maker`;
   const description = String(product.fullDescription || product.description || product.name).replace(/\s+/g, ' ').trim().slice(0, 300);
   const imagePath = product.images?.[0] || product.image || product.cardImage;
   const image = imagePath ? new URL(imagePath, `${domain}/`).href : `${domain}/ogimage/cubic-maker-compartilhamento.webp`;
   let html = pageTemplate;
-  // A base relativa permite abrir o catálogo em file:// e mantém os recursos na raiz
-  // nas páginas estáticas /produtos/{id}/, inclusive em hospedagens sem rewrite.
+  // Cada página estática em /catalogo/{id}/index.html aponta recursos para a raiz.
   html = html.replace(/<base href="[^"]*">/i, '<base href="../../">');
   html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHTML(title)}</title>`);
   html = replaceMeta(html, 'name="description"', description);
@@ -61,15 +60,25 @@ function productPage(product) {
 
 const sitemapPath = path.join(root, 'sitemap.xml');
 let sitemap = fs.readFileSync(sitemapPath, 'utf8');
-sitemap = sitemap.replace(/\s*<url>\s*<loc>https:\/\/cubicmaker\.com\/produtos\/[^<]+<\/loc>[\s\S]*?<\/url>/g, '');
+sitemap = sitemap.replace(/\s*<url>\s*<loc>https:\/\/cubicmaker\.com\/(?:produtos|catalogo)\/[^<]+<\/loc>[\s\S]*?<\/url>/g, '');
+sitemap = sitemap.replace('https://cubicmaker.com/catalogo.html', 'https://cubicmaker.com/catalogo');
+const catalogUrl = `${domain}/catalogo`;
+let catalogIndex = pageTemplate.replace(/<base href="[^"]*">/i, '<base href="../">');
+catalogIndex = catalogIndex.replace(/<link rel="canonical" href="[^"]*">/i, `<link rel="canonical" href="${catalogUrl}">`);
+catalogIndex = replaceMeta(catalogIndex, 'property="og:url"', catalogUrl);
+const catalogOutput = path.join(root, 'catalogo', 'index.html');
+fs.mkdirSync(path.dirname(catalogOutput), { recursive:true });
+fs.writeFileSync(catalogOutput, catalogIndex);
 const entries = [];
 for (const product of products) {
   const { html, url } = productPage(product);
-  const output = path.join(root, 'produtos', product.id, 'index.html');
-  fs.mkdirSync(path.dirname(output), { recursive:true });
-  fs.writeFileSync(output, html);
+  for (const routeFolder of ['catalogo', 'produtos']) {
+    const output = path.join(root, routeFolder, product.id, 'index.html');
+    fs.mkdirSync(path.dirname(output), { recursive:true });
+    fs.writeFileSync(output, html);
+  }
   entries.push(`  <url><loc>${url}</loc></url>`);
 }
 sitemap = sitemap.replace('</urlset>', `${entries.join('\n')}\n</urlset>`);
 fs.writeFileSync(sitemapPath, sitemap);
-console.log(`Geradas ${products.length} páginas de produto e atualizados sitemap.xml.`);
+console.log(`Gerada a página /catalogo, ${products.length} rotas canônicas, ${products.length} páginas legadas e sitemap.xml.`);

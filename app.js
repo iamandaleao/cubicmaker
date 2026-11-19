@@ -40,6 +40,7 @@
   let trendingTimer = null;
   let trendingOpenerId = null;
   let syncingProductHistory = false;
+  let productHistoryReturnPending = false;
   const catalogBaseTitle = 'Catálogo de produtos em impressão 3D | Cubic Maker';
   const catalogBaseDescription = 'Explore o catálogo Cubic Maker por datas especiais, casa, presentes, hobbies e soluções para empresas. Descubra possibilidades em impressão 3D.';
   const addConfirmationToast = document.createElement('div');
@@ -212,14 +213,13 @@
     return terms.every(term => haystack.includes(term) || (aliases[term] || []).some(alias => haystack.includes(alias)));
   }
   function getProduct(id) { return products.find(product => product.id === id); }
-  function productRoute(id) { return `/produtos/${encodeURIComponent(id)}/`; }
-  function productHistoryRoute(id) { return location.protocol === 'file:' ? `#produto/${encodeURIComponent(id)}` : productRoute(id); }
-  function catalogReturnUrl() { return location.protocol === 'file:' ? `${location.href.split('#')[0]}#catalogo` : '/catalogo.html#catalogo'; }
+  function productRoute(id) { return `/catalogo/${encodeURIComponent(id)}`; }
+  function catalogReturnUrl() { return location.protocol === 'file:' ? `${location.href.split('#')[0]}#catalogo` : '/catalogo'; }
   function siteOrigin() { return location.protocol === 'file:' || location.origin === 'null' ? 'https://cubicmaker.com' : location.origin; }
   function productUrl(id) { return `${siteOrigin()}${productRoute(id)}`; }
   function productFromPath() {
-    const pathMatch = location.pathname.match(/^\/produtos\/([^/]+)\/?$/);
-    const hashMatch = location.protocol === 'file:' ? location.hash.match(/^#produto\/([^/]+)\/?$/) : null;
+    const pathMatch = location.pathname.match(/^\/(?:catalogo|produtos)\/([^/]+)\/?$/);
+    const hashMatch = location.hash.match(/^#produto\/([^/]+)\/?$/);
     const match = pathMatch || hashMatch;
     if (!match) return null;
     try { return getProduct(decodeURIComponent(match[1])); } catch { return null; }
@@ -233,10 +233,10 @@
       document.title = catalogBaseTitle;
       setMeta('meta[name="description"]', catalogBaseDescription);
       const canonical = $('link[rel="canonical"]');
-      if (canonical) canonical.href = `${siteOrigin()}/catalogo.html`;
+      if (canonical) canonical.href = `${siteOrigin()}/catalogo`;
       setMeta('meta[property="og:title"]', catalogBaseTitle);
       setMeta('meta[property="og:description"]', catalogBaseDescription);
-      setMeta('meta[property="og:url"]', `${siteOrigin()}/catalogo.html`);
+      setMeta('meta[property="og:url"]', `${siteOrigin()}/catalogo`);
       setMeta('meta[property="og:image"]', 'https://cubicmaker.com/ogimage/cubic-maker-compartilhamento.webp');
       setMeta('meta[name="twitter:title"]', catalogBaseTitle);
       setMeta('meta[name="twitter:description"]', catalogBaseDescription);
@@ -265,7 +265,12 @@
   function syncProductRoute() {
     const product = productFromPath();
     if (!product || !isCatalogPage) return false;
-    if (!history.state?.cubicProductModal && !history.state?.cubicProductDirect) {
+    const canonicalRoute = productRoute(product.id);
+    const isCanonicalProductPath = location.pathname === canonicalRoute;
+    const shouldMigrateLegacyUrl = location.protocol !== 'file:' && !isCanonicalProductPath;
+    if (shouldMigrateLegacyUrl) {
+      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl:catalogReturnUrl() }, '', canonicalRoute);
+    } else if (!history.state?.cubicProductModal && !history.state?.cubicProductDirect) {
       history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl:catalogReturnUrl() }, '', location.href);
     }
     setProductMetadata(product);
@@ -550,6 +555,11 @@
   function routeFromHash() {
     if (!isCatalogPage) return;
     if (productFromPath()) { syncProductRoute(); return; }
+    if (location.protocol !== 'file:' && location.pathname === '/catalogo.html') {
+      history.replaceState(history.state, '', `/catalogo${location.hash}`);
+    } else if (location.protocol !== 'file:' && location.pathname === '/catalogo/') {
+      history.replaceState(history.state, '', `/catalogo${location.hash}`);
+    }
     const hash = location.hash.slice(1);
     if (hash === 'catalogo' || !hash) { renderCatalogLanding(); return; }
     if (hash === 'produtos') { showAllProducts(); return; }
@@ -805,21 +815,13 @@
   }
   function openDetails(id, selectedVersion = 'economica', { updateHistory = true } = {}) {
     const product = getProduct(id); if (!product) return;
-    if (updateHistory) {
-      const route = productHistoryRoute(product.id);
-      const alreadyAtProductRoute = location.protocol === 'file:' ? location.hash === route : location.pathname === route;
+    if (updateHistory && location.protocol !== 'file:') {
+      const route = productRoute(product.id);
+      const alreadyAtProductRoute = location.pathname === route;
       if (!alreadyAtProductRoute) {
-        const returnUrl = location.href;
-        const state = { cubicProductModal:true, productId:product.id, returnUrl };
-        if (location.protocol === 'file:') {
-          // No modo file:// o Chrome bloqueia pushState por causa da origem opaca.
-          // A navegação por fragmento mantém a URL única e cria uma entrada de histórico.
-          location.hash = route.slice(1);
-          try { history.replaceState(state, '', location.href); } catch { /* O modal continua disponível mesmo sem estado salvo. */ }
-        } else {
-          try { history.pushState(state, '', route); }
-          catch { /* Se a hospedagem bloquear a rota, o modal ainda deve abrir. */ }
-        }
+        const returnUrl = `${location.pathname}${location.search}${location.hash}`;
+        try { history.pushState({ cubicProductModal:true, productId:product.id, returnUrl }, '', route); }
+        catch { /* file:// não aceita rotas History API; o modal continua abrindo na prévia local. */ }
       }
     }
     setProductMetadata(product);
@@ -1023,14 +1025,20 @@
   window.addEventListener('popstate', () => {
     const routeProduct = productFromPath();
     if (routeProduct) {
+      productHistoryReturnPending = false;
       setProductMetadata(routeProduct);
       if (!dialog.open || $('#detailForm')?.dataset.product !== routeProduct.id) openDetails(routeProduct.id, 'economica', { updateHistory:false });
       return;
     }
     setProductMetadata(null);
+    const wasDialogOpen = dialog.open;
     if (dialog.open) {
       syncingProductHistory = true;
       dialog.close();
+    }
+    if (wasDialogOpen || productHistoryReturnPending) {
+      productHistoryReturnPending = false;
+      return;
     }
     routeFromHash();
   });
@@ -1267,15 +1275,15 @@
   dialog.addEventListener('close', () => {
     if (syncingProductHistory) syncingProductHistory = false;
     else if (productFromPath()) {
-      if (history.state?.cubicProductModal) history.back();
+      if (history.state?.cubicProductModal) {
+        productHistoryReturnPending = true;
+        history.back();
+      }
       else {
         const returnUrl = history.state?.returnUrl || catalogReturnUrl();
         setProductMetadata(null);
         if (location.protocol === 'file:') location.replace(returnUrl);
-        else {
-          history.replaceState(null, '', returnUrl);
-          routeFromHash();
-        }
+        else history.replaceState(null, '', returnUrl);
       }
     } else if (!productFromPath()) setProductMetadata(null);
     renderTrendingCarousel();
