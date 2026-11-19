@@ -971,6 +971,49 @@ window.CUBIC_PRODUCTS = [
     featured:20
   },
   {
+    id:'bandeja-natalina-decorativa-natal-3d',
+    name:'Bandeja Natalina Decorativa – Decoração de Natal 3D',
+    cardTitleSingleLine:true,
+    category:'Natal', categories:['Natal'],
+    price:36.00,
+    description:'Bandeja decorativa de Natal em vermelho e verde, com detalhe frontal do Papai Noel. Produzida em PLA por impressão 3D. R$ 36,00.',
+    cardDescription:'Bandeja natalina vermelha e verde com detalhe do Papai Noel. R$ 36,00.',
+    fullDescription:'Deixe sua decoração de Natal ainda mais encantadora com esta linda bandeja natalina! Com detalhes nas cores tradicionais do Natal, vermelho e verde, a peça possui um design festivo e delicado, com detalhes decorativos que remetem aos símbolos natalinos. Ideal para compor mesas, aparadores e estantes, pode ser utilizada para organizar pequenos enfeites, montar cenários natalinos ou deixar sua decoração ainda mais especial.',
+    detailContent:{
+      paragraphs:[
+        'Deixe sua decoração de Natal ainda mais encantadora com esta linda bandeja natalina!',
+        'Com detalhes nas cores tradicionais do Natal, vermelho e verde, a peça possui um design festivo e delicado, com detalhe decorativo do Papai Noel na parte frontal. Ideal para compor mesas, aparadores e estantes, pode ser utilizada para organizar pequenos enfeites, montar cenários natalinos ou deixar sua decoração ainda mais especial.'
+      ],
+      features:[
+        'Design inspirado no Natal.',
+        'Combinação de cores vermelho e verde.',
+        'Detalhe decorativo do Papai Noel na parte frontal.',
+        'Ideal para montar composições e cenários natalinos.',
+        'Produzida por impressão 3D em PLA.'
+      ],
+      sections:[
+        {title:'Informações técnicas',items:['Material: PLA (filamento para impressão 3D).','Largura: 20,00 cm.','Profundidade: 11,08 cm.','Altura: 2,25 cm.']}
+      ]
+    },
+    image:'assets/photos/products/bandeja-de-natal/bandeja-natalina-decorativa-vermelha-verde-papai-noel.webp',
+    cardImage:'assets/photos/products/bandeja-de-natal/bandeja-natalina-decorativa-vermelha-verde-papai-noel.webp',
+    imageAlt:'Bandeja natalina verde e vermelha com detalhe do Papai Noel e enfeites de Natal',
+    imageAlts:[
+      'Bandeja natalina verde e vermelha com detalhe frontal do Papai Noel em uma composição de Natal',
+      'Bandeja natalina com detalhe do Papai Noel e medidas de 20 por 11,08 por 2,25 centímetros'
+    ],
+    images:[
+      'assets/photos/products/bandeja-de-natal/bandeja-natalina-decorativa-vermelha-verde-papai-noel.webp',
+      'assets/photos/products/bandeja-de-natal/bandeja-natalina-vermelha-verde-medidas-20cm.webp'
+    ],
+    dimensions:null,
+    material:'PLA',
+    hideVersionSelector:true,
+    hideOrderSelectors:true,
+    hidePrintFinishNote:true,
+    demonstrative:false
+  },
+  {
     id:'rena-puxando-treno-natalino-3d-18cm',
     name:'Rena Puxando Trenó Natalino 3D – 18 cm',
     cardTitleSingleLine:true,
