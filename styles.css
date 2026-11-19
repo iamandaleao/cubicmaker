@@ -251,6 +251,8 @@
 .description-feature-block li{padding:2px 0;color:#6d786e;font-size:10px;line-height:1.65}
 .description-suggestion{padding-top:2px}
 .dialog-add-row{flex-wrap:wrap;gap:10px}
+.product-share-link{display:inline-flex;align-items:center;margin:-8px 0 16px;padding:7px 10px;border:1px solid #dfe2da;background:transparent;color:#59675b;font:500 10px var(--sans);cursor:pointer}
+.product-share-link:hover,.product-share-link:focus-visible{background:#edf0e9;color:var(--ink)}
 .dialog-add-row .button{flex:0 0 auto;min-width:112px;justify-content:center;white-space:nowrap;padding:12px 18px;font-size:10px}
 .cart-item .quantity-field{display:flex;flex-direction:column;align-items:flex-start;gap:4px}
 .quantity-stepper{display:flex;align-items:center;height:30px;border:1px solid #dfe2da;background:#fff}

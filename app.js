@@ -39,6 +39,9 @@
   let sharedTrendingCounts = null;
   let trendingTimer = null;
   let trendingOpenerId = null;
+  let syncingProductHistory = false;
+  const catalogBaseTitle = 'Catálogo de produtos em impressão 3D | Cubic Maker';
+  const catalogBaseDescription = 'Explore o catálogo Cubic Maker por datas especiais, casa, presentes, hobbies e soluções para empresas. Descubra possibilidades em impressão 3D.';
   const addConfirmationToast = document.createElement('div');
   addConfirmationToast.className = 'add-cart-toast';
   addConfirmationToast.setAttribute('role','status');
@@ -209,6 +212,66 @@
     return terms.every(term => haystack.includes(term) || (aliases[term] || []).some(alias => haystack.includes(alias)));
   }
   function getProduct(id) { return products.find(product => product.id === id); }
+  function productRoute(id) { return `/produtos/${encodeURIComponent(id)}/`; }
+  function productHistoryRoute(id) { return location.protocol === 'file:' ? `#produto/${encodeURIComponent(id)}` : productRoute(id); }
+  function catalogReturnUrl() { return location.protocol === 'file:' ? `${location.href.split('#')[0]}#catalogo` : '/catalogo.html#catalogo'; }
+  function siteOrigin() { return location.protocol === 'file:' || location.origin === 'null' ? 'https://cubicmaker.com' : location.origin; }
+  function productUrl(id) { return `${siteOrigin()}${productRoute(id)}`; }
+  function productFromPath() {
+    const pathMatch = location.pathname.match(/^\/produtos\/([^/]+)\/?$/);
+    const hashMatch = location.protocol === 'file:' ? location.hash.match(/^#produto\/([^/]+)\/?$/) : null;
+    const match = pathMatch || hashMatch;
+    if (!match) return null;
+    try { return getProduct(decodeURIComponent(match[1])); } catch { return null; }
+  }
+  function setMeta(selector, value, attribute = 'content') {
+    const element = $(selector);
+    if (element) element.setAttribute(attribute, value);
+  }
+  function setProductMetadata(product) {
+    if (!product) {
+      document.title = catalogBaseTitle;
+      setMeta('meta[name="description"]', catalogBaseDescription);
+      const canonical = $('link[rel="canonical"]');
+      if (canonical) canonical.href = `${siteOrigin()}/catalogo.html`;
+      setMeta('meta[property="og:title"]', catalogBaseTitle);
+      setMeta('meta[property="og:description"]', catalogBaseDescription);
+      setMeta('meta[property="og:url"]', `${siteOrigin()}/catalogo.html`);
+      setMeta('meta[property="og:image"]', 'https://cubicmaker.com/ogimage/cubic-maker-compartilhamento.webp');
+      setMeta('meta[name="twitter:title"]', catalogBaseTitle);
+      setMeta('meta[name="twitter:description"]', catalogBaseDescription);
+      setMeta('meta[name="twitter:image"]', 'https://cubicmaker.com/ogimage/cubic-maker-compartilhamento.webp');
+      return;
+    }
+    const title = `${product.name} | Cubic Maker`;
+    const description = String(product.fullDescription || product.description || product.name).replace(/\s+/g, ' ').trim().slice(0, 300);
+    const canonicalUrl = productUrl(product.id);
+    const image = productImages(product)[0];
+    const imageUrl = image ? new URL(image, `${siteOrigin()}/`).href : 'https://cubicmaker.com/ogimage/cubic-maker-compartilhamento.webp';
+    document.title = title;
+    setMeta('meta[name="description"]', description);
+    const canonical = $('link[rel="canonical"]');
+    if (canonical) canonical.href = canonicalUrl;
+    setMeta('meta[property="og:title"]', title);
+    setMeta('meta[property="og:description"]', description);
+    setMeta('meta[property="og:url"]', canonicalUrl);
+    setMeta('meta[property="og:image"]', imageUrl);
+    setMeta('meta[property="og:image:secure_url"]', imageUrl);
+    setMeta('meta[property="og:image:alt"]', product.imageAlt || product.name);
+    setMeta('meta[name="twitter:title"]', title);
+    setMeta('meta[name="twitter:description"]', description);
+    setMeta('meta[name="twitter:image"]', imageUrl);
+  }
+  function syncProductRoute() {
+    const product = productFromPath();
+    if (!product || !isCatalogPage) return false;
+    if (!history.state?.cubicProductModal && !history.state?.cubicProductDirect) {
+      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl:catalogReturnUrl() }, '', location.href);
+    }
+    setProductMetadata(product);
+    if (!dialog.open || $('#detailForm')?.dataset.product !== product.id) openDetails(product.id, 'economica', { updateHistory:false });
+    return true;
+  }
   function loadProductClickCounts() {
     try {
       const stored = JSON.parse(localStorage.getItem(TRENDING_STORAGE_KEY) || '{}');
@@ -486,6 +549,7 @@
   }
   function routeFromHash() {
     if (!isCatalogPage) return;
+    if (productFromPath()) { syncProductRoute(); return; }
     const hash = location.hash.slice(1);
     if (hash === 'catalogo' || !hash) { renderCatalogLanding(); return; }
     if (hash === 'produtos') { showAllProducts(); return; }
@@ -739,8 +803,26 @@
     const navigation = hasGallery ? `<div class="gallery-navigation"><span data-gallery-position aria-live="polite">1/${images.length}</span><button class="gallery-arrow gallery-arrow-prev" type="button" data-gallery-step="-1" aria-label="Imagem anterior">‹</button><button class="gallery-arrow gallery-arrow-next" type="button" data-gallery-step="1" aria-label="Próxima imagem">›</button></div>` : '';
     return `<div class="product-gallery${hasGallery ? ' has-thumbnails' : ''}">${thumbnails}<div class="dialog-image"><img id="dialogMainImage" src="${escapeHTML(images[0])}" alt="${escapeHTML(product.imageAlts?.[0] || product.imageAlt || product.name)}" width="640" height="480"></div>${navigation}</div>`;
   }
-  function openDetails(id, selectedVersion = 'economica') {
+  function openDetails(id, selectedVersion = 'economica', { updateHistory = true } = {}) {
     const product = getProduct(id); if (!product) return;
+    if (updateHistory) {
+      const route = productHistoryRoute(product.id);
+      const alreadyAtProductRoute = location.protocol === 'file:' ? location.hash === route : location.pathname === route;
+      if (!alreadyAtProductRoute) {
+        const returnUrl = location.href;
+        const state = { cubicProductModal:true, productId:product.id, returnUrl };
+        if (location.protocol === 'file:') {
+          // No modo file:// o Chrome bloqueia pushState por causa da origem opaca.
+          // A navegação por fragmento mantém a URL única e cria uma entrada de histórico.
+          location.hash = route.slice(1);
+          try { history.replaceState(state, '', location.href); } catch { /* O modal continua disponível mesmo sem estado salvo. */ }
+        } else {
+          try { history.pushState(state, '', route); }
+          catch { /* Se a hospedagem bloquear a rota, o modal ainda deve abrir. */ }
+        }
+      }
+    }
+    setProductMetadata(product);
     selectedVersion = !product.hideVersionSelector && selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
@@ -773,7 +855,7 @@
     $('#dialogContent').innerHTML = `<div class="dialog-layout">
       ${galleryMarkup(product)}
       <div class="dialog-info">
-        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2>
+        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2><button class="product-share-link" type="button" data-copy-product-link>Copiar link do produto</button>
         <div class="dialog-price">${priceDetails}</div>
         ${descriptionBeforeFields}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
         <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
@@ -938,6 +1020,20 @@
   if ($('#backToCategories')) $('#backToCategories').addEventListener('click', openCatalog);
   if ($('#emptyCategoryRequest')) $('#emptyCategoryRequest').addEventListener('click', () => { const category = categoryBySlug.get(currentCategory); sendCategoryWhatsApp(category?.name || 'Outras ideias'); });
   window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('popstate', () => {
+    const routeProduct = productFromPath();
+    if (routeProduct) {
+      setProductMetadata(routeProduct);
+      if (!dialog.open || $('#detailForm')?.dataset.product !== routeProduct.id) openDetails(routeProduct.id, 'economica', { updateHistory:false });
+      return;
+    }
+    setProductMetadata(null);
+    if (dialog.open) {
+      syncingProductHistory = true;
+      dialog.close();
+    }
+    routeFromHash();
+  });
   window.addEventListener('resize',() => {
     if (isCatalogPage && !$('#catalogLanding').hidden) {
       const mobileLayout = matchMedia('(max-width: 700px)').matches;
@@ -987,6 +1083,28 @@
   }
   $('#requestQuote').addEventListener('click', sendWhatsApp); $('#floatingWhatsApp').addEventListener('click', openCart);
   $('#closeDialog').addEventListener('click', () => dialog.close());
+  $('#dialogContent').addEventListener('click', async event => {
+    const button = event.target.closest('[data-copy-product-link]');
+    if (!button) return;
+    const product = getProduct($('#detailForm')?.dataset.product);
+    if (!product) return;
+    const link = productUrl(product.id);
+    let copied = false;
+    try {
+      if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(link); copied = true; }
+    } catch { /* Tenta a cópia compatível com navegadores sem permissão de clipboard. */ }
+    if (!copied) {
+      const field = document.createElement('textarea');
+      field.value = link; field.setAttribute('readonly',''); field.style.position = 'fixed'; field.style.opacity = '0';
+      document.body.append(field); field.select();
+      copied = document.execCommand('copy'); field.remove();
+    }
+    try {
+      if (!copied) throw new Error('clipboard unavailable');
+      button.textContent = 'Link copiado!';
+      setTimeout(() => { if (button.isConnected) button.textContent = 'Copiar link do produto'; }, 1800);
+    } catch { showToast('Não foi possível copiar o link neste navegador.'); }
+  });
   $('#dialogContent').addEventListener('click', event => {
     const thumb = event.target.closest('[data-gallery-image]');
     const arrow = event.target.closest('[data-gallery-step]');
@@ -1147,6 +1265,19 @@
   });
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   dialog.addEventListener('close', () => {
+    if (syncingProductHistory) syncingProductHistory = false;
+    else if (productFromPath()) {
+      if (history.state?.cubicProductModal) history.back();
+      else {
+        const returnUrl = history.state?.returnUrl || catalogReturnUrl();
+        setProductMetadata(null);
+        if (location.protocol === 'file:') location.replace(returnUrl);
+        else {
+          history.replaceState(null, '', returnUrl);
+          routeFromHash();
+        }
+      }
+    } else if (!productFromPath()) setProductMetadata(null);
     renderTrendingCarousel();
     if (trendingOpenerId) trendingTrack?.querySelector(`[data-details="${trendingOpenerId}"]`)?.focus();
     trendingOpenerId = null;
