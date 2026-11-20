@@ -954,7 +954,10 @@
     $('#requestQuote').disabled = false;
   }
   function showToast(message) {
-    const toast = $('#toast'); toast.textContent = message; toast.classList.add('is-visible');
+    const toast = $('#toast');
+    if (dialog.open && toast.parentElement !== dialog) dialog.append(toast);
+    else if (!dialog.open && toast.parentElement !== document.body) document.body.append(toast);
+    toast.textContent = message; toast.classList.add('is-visible');
     clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2800);
   }
   function openInfo(type) {
@@ -1469,6 +1472,8 @@
   });
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   dialog.addEventListener('close', () => {
+    const toast = $('#toast');
+    if (toast.parentElement !== document.body) document.body.append(toast);
     const closedProduct = getProduct($('#detailForm')?.dataset.product);
     if (closedProduct) clearProductReturn(closedProduct.id);
     if (syncingProductHistory) syncingProductHistory = false;
