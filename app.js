@@ -597,7 +597,10 @@
   }
   function saveCart() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ items:cart, customRequest })); }
-    catch { showToast('Não foi possível salvar a cotação neste navegador. Tente novamente.'); return false; }
+    catch {
+      // A lista continua utilizável na sessão atual quando o navegador bloqueia o armazenamento local.
+      return true;
+    }
     return true;
   }
   function optionList(options, selected = '', placeholder = 'Consulte disponibilidade') {
@@ -1491,6 +1494,15 @@
   $$('[data-info]').forEach(button => button.addEventListener('click', () => openInfo(button.dataset.info)));
   $('#closeInfoDialog').addEventListener('click', () => infoDialog.close());
   infoDialog.addEventListener('click', event => { if (event.target === infoDialog) infoDialog.close(); });
+  $('#dialogContent').addEventListener('click', event => {
+    const button = event.target.closest('[data-add-to-quote]');
+    if (!button) return;
+    event.preventDefault();
+    const form = button.form || button.closest('form');
+    if (!form) { showToast('Não foi possível identificar o formulário deste produto.'); return; }
+    if (typeof form.requestSubmit === 'function') form.requestSubmit(button);
+    else form.dispatchEvent(new Event('submit',{ bubbles:true, cancelable:true }));
+  });
   $('#dialogContent').addEventListener('submit', async event => {
     const form = event.target;
     if (form.id !== 'detailForm') return;
