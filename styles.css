@@ -710,3 +710,6 @@ html{scrollbar-gutter:stable}
   .category-products-view .catalog-tools .sort-field{grid-column:1;grid-row:2}
   .category-products-view .catalog-tools .results-line{grid-column:2;grid-row:2;justify-content:flex-end;margin:0;white-space:nowrap}
 }
+
+/* Mantém o fechamento acessível enquanto o conteúdo do modal é rolado. */
+.product-dialog>.dialog-close{position:sticky;top:12px;right:auto;z-index:50;margin:12px 17px -48px auto}
