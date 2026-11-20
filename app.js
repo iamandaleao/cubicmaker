@@ -1034,7 +1034,6 @@
     selectedVersion = !product.hideVersionSelector && selectedVersion === 'reforcada' ? 'reforcada' : 'economica';
     trendingOpenerId = trendingTrack?.contains(document.activeElement) ? product.id : null;
     recordProductClick(product.id);
-    const priceDetails = product.orderOptions || product.variantOptions ? '' : product.price == null ? 'Consulte disponibilidade' : `<strong data-detail-unit-price>${money(versionPrice(product,selectedVersion))}</strong>`;
     const categoryLabel = escapeHTML(product.category);
     const dimensionTexts = [...(product.detailContent?.paragraphs || []), ...(product.detailContent?.features || [])];
     const dimensionInDescription = dimensionTexts.some(text => normalizeSearch(text).includes('dimensoes'));
@@ -1063,8 +1062,7 @@
     $('#dialogContent').innerHTML = `<div class="dialog-layout">
       ${galleryMarkup(product)}
       <div class="dialog-info">
-        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2><button class="product-share-link" type="button" data-copy-product-link>Copiar link do produto</button>
-        <div class="dialog-price">${priceDetails}</div>
+        <p class="section-kicker">${categoryLabel}</p><h2 id="dialogName" class="dialog-title-responsive">${escapeHTML(product.name)}</h2>
         ${descriptionBeforeFields}${specs ? `<div class="detail-specs">${specs}</div>` : ''}
         <form id="detailForm" data-product="${escapeHTML(product.id)}" novalidate>
           ${orderFields}
@@ -1308,28 +1306,6 @@
   }
   $('#requestQuote').addEventListener('click', sendWhatsApp); $('#floatingWhatsApp').addEventListener('click', openCart);
   $('#closeDialog').addEventListener('click', () => dialog.close());
-  $('#dialogContent').addEventListener('click', async event => {
-    const button = event.target.closest('[data-copy-product-link]');
-    if (!button) return;
-    const product = getProduct($('#detailForm')?.dataset.product);
-    if (!product) return;
-    const link = productUrl(product.id);
-    let copied = false;
-    try {
-      if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(link); copied = true; }
-    } catch { /* Tenta a cópia compatível com navegadores sem permissão de clipboard. */ }
-    if (!copied) {
-      const field = document.createElement('textarea');
-      field.value = link; field.setAttribute('readonly',''); field.style.position = 'fixed'; field.style.opacity = '0';
-      document.body.append(field); field.select();
-      copied = document.execCommand('copy'); field.remove();
-    }
-    try {
-      if (!copied) throw new Error('clipboard unavailable');
-      button.textContent = 'Link copiado!';
-      setTimeout(() => { if (button.isConnected) button.textContent = 'Copiar link do produto'; }, 1800);
-    } catch { showToast('Não foi possível copiar o link neste navegador.'); }
-  });
   $('#dialogContent').addEventListener('click', event => {
     const thumb = event.target.closest('[data-gallery-image]');
     const arrow = event.target.closest('[data-gallery-step]');

@@ -8,7 +8,7 @@ O site usa rotas limpas para catálogo, listagem, categorias e produtos:
 - `/catalogo/{slug-da-categoria}` abre uma categoria, por exemplo `/catalogo/natal`.
 - `/catalogo/{slug-da-categoria}/{slug-do-produto}` abre o modal preservando a categoria. Exemplo: `/catalogo/lembrancinhas/{produto}`.
 
-Os slugs de produtos e categorias vêm dos dados existentes em `products.js`. Ao abrir um produto numa categoria, a URL mantém a categoria e acrescenta o slug do produto. Na lista geral e em áreas sem categoria ativa, usa a categoria principal cadastrada para o produto. A navegação usa History API; fechar o modal retorna ao caminho anterior e voltar/avançar restaura o modal quando aplicável. Se uma atualização fizer o servidor normalizar a URL e perder o estado da History API, o caminho anterior fica temporariamente salvo na sessão. O botão “Copiar link do produto” copia a URL individual atual.
+Os slugs de produtos e categorias vêm dos dados existentes em `products.js`. Ao abrir um produto numa categoria, a URL mantém a categoria e acrescenta o slug do produto. Na lista geral e em áreas sem categoria ativa, usa a categoria principal cadastrada para o produto. A navegação usa History API; fechar o modal retorna ao caminho anterior e voltar/avançar restaura o modal quando aplicável. Se uma atualização fizer o servidor normalizar a URL e perder o estado da History API, o caminho anterior fica temporariamente salvo na sessão.
 
 ## Hospedagem
 
