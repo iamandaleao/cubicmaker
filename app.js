@@ -1575,6 +1575,12 @@
   if ($('#customForm')) $('#customForm').addEventListener('submit', event => { event.preventDefault(); const idea=$('#customIdea').value.trim(); const dimensions=$('#customDimensions').value.trim(); const color=$('#customColor').value.trim(); if (!idea && !dimensions && !color) { $('#customFeedback').textContent='Preencha pelo menos um campo para incluir sua ideia.'; $('#customFeedback').classList.add('form-error'); $('#customIdea').focus(); return; } customRequest={idea,dimensions,color}; saveCart(); renderCart(); $('#customFeedback').textContent='Ideia incluída na sua lista de interesse. Abra a lista para revisar e solicitar orçamento.'; $('#customFeedback').classList.remove('form-error'); showToast('Ideia personalizada adicionada à sua lista.'); $('#openCart').focus(); });
   $('#menuToggle').addEventListener('click', () => { const open=$('#menuToggle').getAttribute('aria-expanded')==='true'; $('#menuToggle').setAttribute('aria-expanded',String(!open)); $('#mobileNav').classList.toggle('is-open',!open); });
   $$('#mobileNav a').forEach(link=>link.addEventListener('click',()=>{ $('#menuToggle').setAttribute('aria-expanded','false'); $('#mobileNav').classList.remove('is-open'); }));
+  $$('a[href^="/#"]').forEach(link=>link.addEventListener('click',event=>{
+    if (location.protocol !== 'file:') return;
+    event.preventDefault();
+    const target = new URL(`index.html${link.getAttribute('href').slice(1)}`, document.baseURI);
+    location.href = target.href;
+  }));
   $$('a[href="catalogo/nossos-produtos/"]').forEach(link=>link.addEventListener('click',event=>{
     if (!isCatalogPage) return;
     event.preventDefault();
