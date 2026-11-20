@@ -1082,8 +1082,17 @@
         </form>
       </div>
     </div>`;
-    $('#dialogContent').scrollTop = 0;
+    const resetDialogScroll = () => {
+      const content = $('#dialogContent');
+      content.scrollTop = 0;
+      content.scrollLeft = 0;
+      dialog.scrollTop = 0;
+      dialog.scrollLeft = 0;
+    };
+    resetDialogScroll();
     if (!dialog.open) dialog.showModal();
+    resetDialogScroll();
+    requestAnimationFrame(resetDialogScroll);
     document.documentElement.removeAttribute('data-product-route-pending');
     $('#closeDialog').focus({preventScroll:true});
   }
