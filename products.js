@@ -272,6 +272,49 @@ window.CUBIC_PRODUCTS = [
   { id:'letreiro-feliz-natal-floco-neve', name:'Letreiro Feliz Natal com Floco de Neve – 14 cm', category:'Natal', categories:['Natal'], price:27.00, description:'Letreiro Feliz Natal em impressão 3D com delicado detalhe de floco de neve. Altura aprox. 14 cm e largura aprox. 13 cm.', fullDescription:'Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve. Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.', detailContent:{paragraphs:['Deixe sua decoração natalina ainda mais especial com este letreiro decorativo Feliz Natal, produzido em impressão 3D e com delicado detalhe de floco de neve.','Com design moderno e minimalista, é ideal para decorar mesas, estantes, aparadores, prateleiras, escritórios e vitrines, trazendo um toque festivo e acolhedor ao ambiente.'],features:['Produzido por impressão 3D.','Design Feliz Natal com detalhe de floco de neve.','Peça leve e resistente.','Ideal para decoração de mesa e ambientes natalinos.'],sections:[{title:'Dimensões aproximadas',items:['Altura: 14 cm.','Largura: 13 cm.']}]}, image:'assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp', imageAlt:'Letreiro Feliz Natal vermelho com floco de neve, decoração impressa em 3D', imageAlts:['Letreiro Feliz Natal vermelho com floco de neve','Letreiro Feliz Natal vermelho em aparador decorado para o Natal','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal em outra cor, foto ilustrativa da peça','Letreiro Feliz Natal com indicação visual das medidas aproximadas'], images:['assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-frontal.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-vermelho-aparador.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-verde.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-dourado.webp','assets/photos/products/letreiro-feliz-natal-floco-neve/letreiro-feliz-natal-floco-neve-medidas.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:10 },
   { id:'arvore-natal-decorativa-3d-canelada', name:'Árvore de Natal Espiral Decorativa – 12,8 cm', cardTitleSingleLine:true, category:'Natal', categories:['Natal'], price:30.00, description:'Árvore de Natal espiral produzida em impressão 3D, com design minimalista. Altura aproximada de 12,8 cm sem estrela.', fullDescription:'Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D. Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes. Produzida por impressão 3D, tem design moderno, é leve e decorativa, ideal para decoração natalina e presentes criativos. Altura aproximada de 12,8 cm sem estrela. Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.', detailContent:{paragraphs:['Adicione um toque moderno e elegante à sua decoração natalina com esta árvore de Natal espiral, produzida em impressão 3D.','Seu design minimalista com formato espiral cria um efeito visual delicado, ideal para decorar mesas, estantes, aparadores e outros ambientes.'],features:['Produzida por impressão 3D.','Design moderno com formato espiral.','Peça leve e decorativa.','Ideal para decoração natalina e presentes criativos.'],sections:[{title:'Dimensões',items:['Altura: aproximadamente 12,8 cm sem estrela.']}],note:'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.'}, image:'assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp', imageAlt:'Árvore de Natal canelada vermelha impressa em 3D com estrela dourada', imageAlts:['Árvore de Natal canelada vermelha com estrela dourada','Árvore de Natal canelada verde-oliva com estrela dourada','Árvore de Natal canelada branca com estrela dourada','Árvore de Natal canelada cor areia com estrela dourada'], images:['assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-vermelha-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-verde-oliva-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-branca-estrela-dourada.webp','assets/photos/products/arvore-natal-decorativa-3d-canelada/arvore-natal-canelada-areia-estrela-dourada.webp'], dimensions:null, hideVersionSelector:true, colorOptions:['Preto','Branco','Areia','Verde oliva','Vermelho'], colors:['Preto','Branco','Areia','Verde oliva','Vermelho'],  demonstrative:false, featured:11 },
   {
+    id:'arvore-de-natal-tricotada-3d',
+    name:'Árvore de Natal Tricotada 3D',
+    cardTitleSingleLine:true,
+    category:'Natal',
+    categories:['Natal'],
+    price:48.00,
+    description:'Árvore de Natal Tricotada 3D com três camadas, textura em relevo e estrela no topo. Disponível em verde, vermelho e branco.',
+    cardDescription:'Árvore natalina com textura inspirada em tricô. Disponível em verde, vermelho e branco.',
+    fullDescription:'Deixe sua decoração natalina ainda mais charmosa e aconchegante com a Árvore de Natal Tricotada! Com design em três camadas e textura em relevo que imita pontos de tricô, a peça traz um toque artesanal e delicado para seus ambientes. O detalhe de estrela no topo completa o visual, tornando-a perfeita para decorar mesas, prateleiras, aparadores e outros cantinhos especiais.',
+    detailContent:{
+      paragraphs:[
+        'Deixe sua decoração natalina ainda mais charmosa e aconchegante com a Árvore de Natal Tricotada! Com design em três camadas e textura em relevo que imita pontos de tricô, a peça traz um toque artesanal e delicado para seus ambientes.',
+        'O detalhe de estrela no topo completa o visual, tornando-a perfeita para decorar mesas, prateleiras, aparadores e outros cantinhos especiais.'
+      ],
+      features:[
+        'Design com três camadas e estrela no topo.',
+        'Textura em relevo que imita pontos de tricô.',
+        'Ideal para decoração natalina.',
+        'Linda individualmente ou em conjuntos de cores diferentes.',
+        'Ótima opção para presentear.'
+      ],
+      sections:[{title:'Sugestões de uso',items:['Perfeita para decorar mesas, aparadores, estantes e prateleiras, trazendo um toque especial ao Natal.']}]
+    },
+    image:'assets/photos/products/arvore-de-natal-tricotada/82acd6e3684a629f.webp',
+    cardImage:'assets/photos/products/arvore-de-natal-tricotada/82acd6e3684a629f.webp',
+    imageAlt:'Árvores de Natal tricotadas 3D nas cores verde, vermelho e branco, com três camadas e estrela no topo',
+    imageAlts:[
+      'Árvores de Natal tricotadas 3D nas cores verde, vermelho e branco',
+      'Árvore de Natal tricotada 3D branca com três camadas e estrela no topo'
+    ],
+    images:[
+      'assets/photos/products/arvore-de-natal-tricotada/82acd6e3684a629f.webp',
+      'assets/photos/products/arvore-de-natal-tricotada/74b00630c1538837.webp'
+    ],
+    dimensions:{height:140,width:93.3,depth:93.9},
+    colorOptions:['Verde','Vermelho','Branco'],
+    colors:['Verde','Vermelho','Branco'],
+    colorSwatches:{'Verde':'#40583d','Vermelho':'#ad4038','Branco':'#ffffff'},
+    hideVersionSelector:true,
+    demonstrative:false,
+    featured:12
+  },
+  {
     id:'arvore-de-natal-personalizada-significados',
     name:'Árvore de Natal Personalizada – Significados',
     cardTitleSingleLine:true,
