@@ -367,7 +367,13 @@ window.CUBIC_PRODUCTS = [
     detailContent:{
       paragraphs:['Uma decoração natalina delicada e encantadora para trazer luz, aconchego e magia ao seu ambiente!','Produzida em impressão 3D, possui design circular inspirado nas tradicionais guirlandas de Natal, com detalhes de cervo, pinheiro e estrela com laço pendente. O centro conta com um porta-vela integrado de acabamento canelado, criando um efeito de iluminação acolhedor e elegante.'],
       features:['Design circular inspirado em guirlandas natalinas.','Detalhes de cervo, pinheiro e estrela com laço.','Porta-vela integrado com acabamento canelado.','Estilo minimalista e escandinavo.','Produzida em impressão 3D.'],
-      sections:[{title:'Ideal para',items:['Aparadores e cômodas.','Mesas de cabeceira.','Estantes e prateleiras.','Decoração de mesas natalinas.','Peitoris de janelas.']}],
+      sections:[
+        {title:'Dimensões aproximadas',subsections:[
+          {title:'Enfeite circular',items:['Largura: 20 cm.','Profundidade: 21,58 cm.','Espessura: 0,3 cm.']},
+          {title:'Copo para vela',items:['Largura: 7,30 cm.','Profundidade: 7,31 cm.','Altura: 5,60 cm.']}
+        ]},
+        {title:'Ideal para',items:['Aparadores e cômodas.','Mesas de cabeceira.','Estantes e prateleiras.','Decoração de mesas natalinas.','Peitoris de janelas.']}
+      ],
       note:'Recomendamos o uso de vela de LED para criar uma iluminação suave e aconchegante.'
     },
     image:'assets/photos/products/Loop Cervo Pinheiro Estrela em pé -Luz de Natal/luminaria-natalina-loop-cervo-pinheiro-porta-vela.webp',
