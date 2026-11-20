@@ -17,6 +17,11 @@
       try { decodedOldSlug = decodeURIComponent(oldProductSlug); } catch { /* rota inválida será tratada pelo app */ }
       const legacyProductRoute = singleCatalogRoute && decodedOldSlug !== 'nossos-produtos' && !categorySlugs.includes(decodedOldSlug);
       const productsAliasRoute = /^\/produtos\/[^/]+(?:\/index\.html)?\/?$/.test(path);
+      const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+      if (/^\/catalogo(?:\/|$)/.test(path) && navigationType === 'reload' || productsAliasRoute && navigationType === 'reload') {
+        // A rolagem será restaurada pela aplicação para controlar o momento da volta.
+        try { history.scrollRestoration = 'manual'; } catch { /* Pode não estar disponível em navegadores antigos. */ }
+      }
       if (categoryProductRoute || legacyCategoryProductRoute || listProductRoute && !categorySlugs.includes(listSlug) || legacyProductRoute || productsAliasRoute) {
         document.documentElement.dataset.productRoutePending = 'true';
       }
@@ -63,7 +68,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32.png">
   <link rel="stylesheet" href="styles.css?v=modal-refresh-20261119">
   <script src="products.js?v=bandeja-natalina-decorativa-20261118" defer></script>
-  <script src="app.js?v=modal-refresh-20261119" defer></script>
+  <script src="app.js?v=reload-position-20261120" defer></script>
 </head>
 <body class="catalog-mode">
   <a class="skip-link" href="#categoryGroups">Pular para as categorias</a>

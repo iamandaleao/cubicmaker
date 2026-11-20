@@ -32,6 +32,8 @@
   let customRequest = loadCustomRequest();
   let currentCategory = null;
   let catalogLandingFilterActive = false;
+  let catalogScrollSaveTimer = null;
+  let catalogScrollRestoringUntil = 0;
   let toastTimer;
   let lastFocus = null;
   let quoteSubmitPending = false;
@@ -264,7 +266,10 @@
   function productUrl(id) { return `${siteOrigin()}${productRoute(id)}`; }
   function productReturnStorageKey(id) { return `cubic-product-return:${id}`; }
   function rememberProductReturn(id, returnUrl) {
-    try { sessionStorage.setItem(productReturnStorageKey(id), JSON.stringify({ productId:id, returnUrl, scrollY:window.scrollY, savedAt:Date.now() })); }
+    try {
+      sessionStorage.setItem(productReturnStorageKey(id), JSON.stringify({ productId:id, returnUrl, scrollY:window.scrollY, savedAt:Date.now() }));
+      sessionStorage.setItem(catalogScrollStorageKey(), String(window.scrollY));
+    }
     catch { /* O modal continua funcionando sem persistência de sessão. */ }
   }
   function recalledProductReturn(id) {
@@ -279,8 +284,50 @@
       return saved;
     } catch { return null; }
   }
+  function restoreProductBackgroundScroll(scrollY) {
+    if (!Number.isFinite(scrollY)) return;
+    const root = document.documentElement;
+    const previousValue = root.style.getPropertyValue('scroll-behavior');
+    const previousPriority = root.style.getPropertyPriority('scroll-behavior');
+    root.style.setProperty('scroll-behavior', 'auto', 'important');
+    window.scrollTo(0, Math.max(0, scrollY));
+    if (previousValue) root.style.setProperty('scroll-behavior', previousValue, previousPriority);
+    else root.style.removeProperty('scroll-behavior');
+  }
   function clearProductReturn(id) {
     try { sessionStorage.removeItem(productReturnStorageKey(id)); } catch { /* Armazenamento de sessão opcional. */ }
+  }
+  function catalogScrollStorageKey() {
+    const pathname = location.pathname.replace(/\/index\.html$/i, '').replace(/\/+$/, '') || '/';
+    return `cubic-catalog-scroll:${pathname}${location.search}${location.hash}`;
+  }
+  function saveCatalogScrollPosition() {
+    if (!isCatalogPage || productFromPath() || Date.now() < catalogScrollRestoringUntil) return;
+    try { sessionStorage.setItem(catalogScrollStorageKey(), String(window.scrollY)); } catch { /* Armazenamento de sessão opcional. */ }
+  }
+  function scheduleCatalogScrollSave() {
+    if (!isCatalogPage || productFromPath() || Date.now() < catalogScrollRestoringUntil) return;
+    window.clearTimeout(catalogScrollSaveTimer);
+    catalogScrollSaveTimer = window.setTimeout(saveCatalogScrollPosition, 120);
+  }
+  function restoreCatalogScrollOnReload() {
+    if (performance.getEntriesByType('navigation')[0]?.type !== 'reload' || productFromPath()) return;
+    let savedPosition = null;
+    try {
+      const saved = sessionStorage.getItem(catalogScrollStorageKey());
+      if (saved != null && Number.isFinite(Number(saved))) savedPosition = Math.max(0, Number(saved));
+    } catch { /* Armazenamento de sessão opcional. */ }
+    if (savedPosition == null || savedPosition === 0) {
+      try { history.scrollRestoration = 'auto'; } catch { /* Navegadores antigos. */ }
+      return;
+    }
+    catalogScrollRestoringUntil = Date.now() + 2200;
+    requestAnimationFrame(() => window.scrollTo({ top:savedPosition, behavior:'smooth' }));
+    window.setTimeout(() => {
+      catalogScrollRestoringUntil = 0;
+      saveCatalogScrollPosition();
+      try { history.scrollRestoration = 'auto'; } catch { /* Navegadores antigos. */ }
+    }, 2300);
   }
   function pushHashRoute(target) {
     if (location.hash === target) return;
@@ -377,11 +424,19 @@
     if (pathCategory) {
       // Ao recarregar um produto, primeiro restaura a categoria que fica atrás do modal.
       showCategory(pathCategory, { scroll:false });
-      if (recalled?.scrollY != null) requestAnimationFrame(() => window.scrollTo({ top:recalled.scrollY, behavior:'auto' }));
+      if (recalled?.scrollY != null) restoreProductBackgroundScroll(recalled.scrollY);
     } else if (inAllProducts) {
       // Restaura a listagem completa atrás do modal em URLs /nossos-produtos/{produto}.
       showAllProducts({ scroll:false });
-      if (recalled?.scrollY != null) requestAnimationFrame(() => window.scrollTo({ top:recalled.scrollY, behavior:'auto' }));
+      if (recalled?.scrollY != null) restoreProductBackgroundScroll(recalled.scrollY);
+    }
+    if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+      // Atualizar com o modal aberto volta à página e à posição de onde o produto foi aberto.
+      if (location.protocol !== 'file:') history.replaceState(null, '', returnUrl);
+      clearProductReturn(product.id);
+      if (!pathCategory && !inAllProducts) routeFromHash();
+      try { history.scrollRestoration = 'auto'; } catch { /* Navegadores antigos. */ }
+      return true;
     }
     if (shouldMigrateLegacyUrl) {
       history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl }, '', canonicalRoute);
@@ -1097,11 +1152,15 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
+  const initialDocumentWasProductRoute = isCatalogPage && Boolean(productFromPath());
   if (isCatalogPage) {
     renderCategoryGroups();
     routeFromHash();
     // Se a rota não identificar um produto válido, nunca deixar o catálogo oculto.
     if (!dialog.open) document.documentElement.removeAttribute('data-product-route-pending');
+    window.addEventListener('scroll', scheduleCatalogScrollSave, { passive:true });
+    window.addEventListener('pagehide', saveCatalogScrollPosition);
+    if (!initialDocumentWasProductRoute) restoreCatalogScrollOnReload();
   }
   renderCart();
   initTrendingCarousel();
