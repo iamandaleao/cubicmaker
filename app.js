@@ -213,12 +213,75 @@
     return terms.every(term => haystack.includes(term) || (aliases[term] || []).some(alias => haystack.includes(alias)));
   }
   function getProduct(id) { return products.find(product => product.id === id); }
-  function productRoute(id) { return `/catalogo/${encodeURIComponent(id)}`; }
+  function productCategorySlugs(product) {
+    if (!product) return [];
+    const names = new Set(product.categories || [product.category]);
+    return [...categoryBySlug.values()].filter(category => category.memberNames
+      ? [...names].some(name => category.memberNames.includes(name))
+      : names.has(category.name)).map(category => category.slug);
+  }
+  function productPathCategory(id) {
+    const match = location.pathname.match(/(?:^|\/)catalogo\/(?:nossos-produtos\/)?([^/]+)\/([^/]+)(?:\/index\.html)?\/?$/);
+    if (match) {
+      try {
+        const categorySlug = decodeURIComponent(match[1]);
+        const productId = decodeURIComponent(match[2]);
+        if (productId === id && categoryBySlug.has(categorySlug)) return categorySlug;
+      }
+      catch { return null; }
+    }
+    return null;
+  }
+  function allProductsProductPath(id) {
+    const match = location.pathname.match(/(?:^|\/)catalogo\/nossos-produtos\/([^/]+)(?:\/index\.html)?\/?$/);
+    if (!match) return false;
+    try { return decodeURIComponent(match[1]) === id; } catch { return false; }
+  }
+  function allProductsContext() {
+    return allProductsPath() || Boolean($('#allProductsView') && !$('#allProductsView').hidden);
+  }
+  function productRouteCategory(id) {
+    if (allProductsProductPath(id) || allProductsContext()) return null;
+    const pathCategory = productPathCategory(id);
+    if (pathCategory) return pathCategory;
+    if (currentCategory && categoryBySlug.has(currentCategory)) return currentCategory;
+    return productCategorySlugs(getProduct(id))[0] || null;
+  }
+  function productRoute(id, categorySlug = productRouteCategory(id)) {
+    const productPath = encodeURIComponent(id);
+    if (!categorySlug && (allProductsProductPath(id) || allProductsContext())) return `${allProductsRoute()}/${productPath}`;
+    return categorySlug ? `${categoryRoute(categorySlug)}/${productPath}` : `/catalogo/${productPath}`;
+  }
   function allProductsRoute() { return '/catalogo/nossos-produtos'; }
-  function categoryRoute(slug) { return `${allProductsRoute()}/${encodeURIComponent(slug)}`; }
+  function categoryRoute(slug) { return `/catalogo/${encodeURIComponent(slug)}`; }
   function catalogReturnUrl() { return location.protocol === 'file:' ? `${location.href.split('#')[0]}#catalogo` : '/catalogo'; }
+  function productReturnUrl(id) {
+    if (allProductsProductPath(id) || allProductsContext()) return allProductsRoute();
+    const categorySlug = productPathCategory(id) || currentCategory;
+    return categorySlug && categoryBySlug.has(categorySlug) ? categoryRoute(categorySlug) : catalogReturnUrl();
+  }
   function siteOrigin() { return location.protocol === 'file:' || location.origin === 'null' ? 'https://cubicmaker.com' : location.origin; }
   function productUrl(id) { return `${siteOrigin()}${productRoute(id)}`; }
+  function productReturnStorageKey(id) { return `cubic-product-return:${id}`; }
+  function rememberProductReturn(id, returnUrl) {
+    try { sessionStorage.setItem(productReturnStorageKey(id), JSON.stringify({ productId:id, returnUrl, scrollY:window.scrollY, savedAt:Date.now() })); }
+    catch { /* O modal continua funcionando sem persistência de sessão. */ }
+  }
+  function recalledProductReturn(id) {
+    const navigationType = performance.getEntriesByType('navigation')[0]?.type;
+    try {
+      const key = productReturnStorageKey(id);
+      const saved = JSON.parse(sessionStorage.getItem(key) || 'null');
+      if (navigationType !== 'reload' || saved?.productId !== id || !saved.returnUrl || Date.now() - saved.savedAt > 30 * 60 * 1000) {
+        sessionStorage.removeItem(key);
+        return null;
+      }
+      return saved;
+    } catch { return null; }
+  }
+  function clearProductReturn(id) {
+    try { sessionStorage.removeItem(productReturnStorageKey(id)); } catch { /* Armazenamento de sessão opcional. */ }
+  }
   function pushHashRoute(target) {
     if (location.hash === target) return;
     if (location.protocol === 'file:') location.hash = target;
@@ -229,16 +292,23 @@
     if (location.pathname !== route || location.search || location.hash) history.pushState(null, '', route);
   }
   function productFromPath() {
-    const pathMatch = location.pathname.match(/(?:^|\/)(?:catalogo|produtos)\/([^/]+)(?:\/index\.html)?\/?$/);
+    const categoryProductMatch = location.pathname.match(/(?:^|\/)catalogo\/(?!nossos-produtos\/)([^/]+)\/([^/]+)(?:\/index\.html)?\/?$/);
+    const legacyCategoryProductMatch = location.pathname.match(/(?:^|\/)catalogo\/nossos-produtos\/([^/]+)\/([^/]+)(?:\/index\.html)?\/?$/);
+    const allProductsProductMatch = location.pathname.match(/(?:^|\/)catalogo\/nossos-produtos\/([^/]+)(?:\/index\.html)?\/?$/);
+    const pathMatch = categoryProductMatch || legacyCategoryProductMatch || allProductsProductMatch || location.pathname.match(/(?:^|\/)(?:catalogo|produtos)\/([^/]+)(?:\/index\.html)?\/?$/);
     const hashMatch = location.hash.match(/^#produto\/([^/]+)\/?$/);
     const match = pathMatch || hashMatch;
     if (!match) return null;
-    try { return getProduct(decodeURIComponent(match[1])); } catch { return null; }
+    try { return getProduct(decodeURIComponent(categoryProductMatch || legacyCategoryProductMatch ? match[2] : match[1])); } catch { return null; }
   }
   function categoryFromPath() {
-    const match = location.pathname.match(/(?:^|\/)catalogo\/nossos-produtos\/([^/]+)(?:\/index\.html)?\/?$/);
+    const match = location.pathname.match(/(?:^|\/)catalogo\/(?:nossos-produtos\/)?([^/]+)(?:\/index\.html)?\/?$/);
     if (!match) return null;
-    try { return decodeURIComponent(match[1]); } catch { return null; }
+    try {
+      const slug = decodeURIComponent(match[1]);
+      if (slug === 'nossos-produtos' || !categoryBySlug.has(slug)) return null;
+      return slug;
+    } catch { return null; }
   }
   function allProductsPath() { return /(?:^|\/)catalogo\/nossos-produtos(?:\/index\.html)?\/?$/.test(location.pathname); }
   function setMeta(selector, value, attribute = 'content') {
@@ -297,13 +367,26 @@
   function syncProductRoute() {
     const product = productFromPath();
     if (!product || !isCatalogPage) return false;
-    const canonicalRoute = productRoute(product.id);
+    const pathCategory = productPathCategory(product.id);
+    const canonicalRoute = productRoute(product.id, pathCategory || undefined);
     const isCanonicalProductPath = location.pathname === canonicalRoute;
     const shouldMigrateLegacyUrl = location.protocol !== 'file:' && !isCanonicalProductPath;
+    const recalled = recalledProductReturn(product.id);
+    const inAllProducts = allProductsProductPath(product.id);
+    const returnUrl = pathCategory ? categoryRoute(pathCategory) : inAllProducts ? allProductsRoute() : recalled?.returnUrl || productReturnUrl(product.id);
+    if (pathCategory) {
+      // Ao recarregar um produto, primeiro restaura a categoria que fica atrás do modal.
+      showCategory(pathCategory, { scroll:false });
+      if (recalled?.scrollY != null) requestAnimationFrame(() => window.scrollTo({ top:recalled.scrollY, behavior:'auto' }));
+    } else if (inAllProducts) {
+      // Restaura a listagem completa atrás do modal em URLs /nossos-produtos/{produto}.
+      showAllProducts({ scroll:false });
+      if (recalled?.scrollY != null) requestAnimationFrame(() => window.scrollTo({ top:recalled.scrollY, behavior:'auto' }));
+    }
     if (shouldMigrateLegacyUrl) {
-      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl:catalogReturnUrl() }, '', canonicalRoute);
+      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl }, '', canonicalRoute);
     } else if (!history.state?.cubicProductModal && !history.state?.cubicProductDirect) {
-      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl:catalogReturnUrl() }, '', location.href);
+      history.replaceState({ ...(history.state || {}), cubicProductDirect:true, productId:product.id, returnUrl }, '', location.href);
     }
     setProductMetadata(product);
     if (!dialog.open || $('#detailForm')?.dataset.product !== product.id) openDetails(product.id, 'economica', { updateHistory:false });
@@ -541,14 +624,14 @@
   }
   function updateCategoryPageHeading(category) {
     const desktopCategoryLayout = matchMedia('(min-width: 701px)').matches;
-    $('#categoryPageTitle').textContent = desktopCategoryLayout ? 'Nossos Produtos' : category.name;
+    $('#categoryPageTitle').textContent = category.name;
     $('#categoryPageIntro').textContent = desktopCategoryLayout
       ? 'Conheça nossas peças impressas em 3D. Encontre opções para decorar, organizar e presentear.'
       : category.groupTitle === 'Empresas e profissionais'
         ? 'Possibilidades de suportes, organizadores, expositores, brindes e peças personalizadas, sujeitas à viabilidade técnica.'
         : category.groupIntro;
   }
-  function showCategory(slug) {
+  function showCategory(slug, { scroll = true } = {}) {
     if (!isCatalogPage) return;
     const category = categoryBySlug.get(slug);
     if (!category) { renderCatalogLanding(); return; }
@@ -563,7 +646,7 @@
     updateCategoryPageHeading(category);
     renderCategories();
     renderProducts();
-    window.scrollTo({top:0,behavior:'smooth'});
+    if (scroll) window.scrollTo({top:0,behavior:'smooth'});
   }
   function openCategory(slug) {
     pushCatalogRoute(categoryRoute(slug), `#catalogo/${slug}`);
@@ -577,7 +660,7 @@
     pushCatalogRoute(allProductsRoute(), '#produtos');
     showAllProducts();
   }
-  function showAllProducts() {
+  function showAllProducts({ scroll = true } = {}) {
     if (!isCatalogPage || !$('#allProductsView')) return;
     currentCategory = null;
     setCatalogRouteMetadata(allProductsRoute(), 'Nossos Produtos | Cubic Maker', 'Conheça as peças impressas em 3D da Cubic Maker. Explore produtos para decorar, organizar e presentear.');
@@ -588,7 +671,7 @@
     $('#allProductsView').hidden = false;
     $('#allProductsSearch').value = '';
     renderAllProducts();
-    window.scrollTo({top:0,behavior:'smooth'});
+    if (scroll) window.scrollTo({top:0,behavior:'smooth'});
   }
   function routeFromHash() {
     if (!isCatalogPage) return;
@@ -886,8 +969,9 @@
       const route = productRoute(product.id);
       const alreadyAtProductRoute = location.pathname === route;
       if (!alreadyAtProductRoute) {
-        const returnUrl = `${location.pathname}${location.search}${location.hash}`;
-        try { history.pushState({ cubicProductModal:true, productId:product.id, returnUrl }, '', route); }
+        const returnUrl = productReturnUrl(product.id) || `${location.pathname}${location.search}${location.hash}`;
+        rememberProductReturn(product.id, returnUrl);
+        try { history.pushState({ cubicProductModal:true, productId:product.id, returnUrl, scrollY:window.scrollY }, '', route); }
         catch { /* file:// não aceita rotas History API; o modal continua abrindo na prévia local. */ }
       }
     }
@@ -941,6 +1025,7 @@
     </div>`;
     $('#dialogContent').scrollTop = 0;
     if (!dialog.open) dialog.showModal();
+    document.documentElement.removeAttribute('data-product-route-pending');
     $('#closeDialog').focus({preventScroll:true});
   }
   function buildWhatsAppMessage() {
@@ -1012,7 +1097,12 @@
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
-  if (isCatalogPage) { renderCategoryGroups(); routeFromHash(); }
+  if (isCatalogPage) {
+    renderCategoryGroups();
+    routeFromHash();
+    // Se a rota não identificar um produto válido, nunca deixar o catálogo oculto.
+    if (!dialog.open) document.documentElement.removeAttribute('data-product-route-pending');
+  }
   renderCart();
   initTrendingCarousel();
   const year = $('#year'); if (year) year.textContent = new Date().getFullYear();
@@ -1341,6 +1431,8 @@
   });
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   dialog.addEventListener('close', () => {
+    const closedProduct = getProduct($('#detailForm')?.dataset.product);
+    if (closedProduct) clearProductReturn(closedProduct.id);
     if (syncingProductHistory) syncingProductHistory = false;
     else if (productFromPath()) {
       if (history.state?.cubicProductModal) {
@@ -1351,7 +1443,10 @@
         const returnUrl = history.state?.returnUrl || catalogReturnUrl();
         setProductMetadata(null);
         if (location.protocol === 'file:') location.replace(returnUrl);
-        else history.replaceState(null, '', returnUrl);
+        else {
+          history.replaceState(null, '', returnUrl);
+          routeFromHash();
+        }
       }
     } else if (!productFromPath()) setProductMetadata(null);
     renderTrendingCarousel();
