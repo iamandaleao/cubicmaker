@@ -75,7 +75,7 @@ window.CUBIC_PRODUCTS = [
     categories:['Organizadores'],
     price:15.00,
     description:'Suporte de parede para controles remotos, celulares e pequenos acessórios, com preço a partir de R$ 15,00.',
-    cardDescription:'Organize controles e celulares na parede. A partir de R$ 15,00.',
+    cardDescription:'Mantenha seus controles remotos, celulares e acessórios organizados e sempre à mão com um suporte de parede moderno e funcional.',
     fullDescription:'Organize seus controles remotos, celulares e pequenos acessórios com praticidade e estilo! O suporte de parede possui design moderno e funcional, ideal para manter seus objetos sempre à mão e evitar que fiquem espalhados pela casa. Produzido em impressão 3D com PLA, possui formato ergonômico que facilita colocar e retirar os objetos. Pode ser fabricado com encaixe para fita dupla face ou furos para parafusos. As medidas internas podem ser personalizadas sob consulta.',
     detailContent:{
       paragraphs:['Organize seus controles remotos, celulares e pequenos acessórios com praticidade e estilo! O suporte de parede possui design moderno e funcional, ideal para manter seus objetos sempre à mão e evitar que fiquem espalhados pela casa.','Produzido em impressão 3D, possui formato ergonômico que facilita colocar e retirar os objetos, além de permitir diferentes opções de fixação.'],
@@ -87,7 +87,7 @@ window.CUBIC_PRODUCTS = [
       ],
       note:'Por ser produzida em impressão 3D, pode apresentar pequenas marcas características do processo de fabricação, sem comprometer a qualidade ou utilização da peça.'
     },
-    notePlaceholder:'Informe se prefere a versão com encaixe para fita dupla face ou furos para parafusos. Para medidas internas personalizadas, descreva seu pedido.',
+    notePlaceholder:'Opcional: informe personalização ou detalhes do pedido.',
     image:'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-celular-parede-organizacao-principal.webp',
     cardImage:'assets/photos/products/suporte-parede-controle/suporte-porta-controle-remoto-celular-parede-organizacao-principal.webp',
     imageAlt:'Suportes de parede para controles remotos e controles de videogame em painel de madeira',

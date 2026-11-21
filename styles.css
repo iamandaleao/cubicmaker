@@ -711,5 +711,10 @@ html{scrollbar-gutter:stable}
   .category-products-view .catalog-tools .results-line{grid-column:2;grid-row:2;justify-content:flex-end;margin:0;white-space:nowrap}
 }
 
+@media(max-width:600px){
+  .affiliate-product-copy h3{display:block;width:100%;height:1.22em;min-height:1.22em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .affiliate-product-description{display:-webkit-box;height:3.2em;min-height:3.2em;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.6!important}
+}
+
 /* O X e a confirmação ficam fora da área interna que rola. */
 .product-dialog>.dialog-close{position:absolute;top:12px;right:17px;z-index:50;margin:0}
